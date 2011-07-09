@@ -22,6 +22,7 @@ def main(global_config, **settings):
     config.add_route('logout', '/logout')
     config.add_route('job_new', '/job/new')
     config.add_route('job', '/job/{id}')
+    config.add_route('user', '/profile')
     config.add_route('osmproxy', '/osmproxy')
     config.add_route('oauth_callback', '/oauth_callback')
     config.scan()

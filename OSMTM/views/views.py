@@ -124,3 +124,7 @@ def job(request):
     session = DBSession()
     job = session.query(Job).get(id)
     return dict(job=job) 
+
+@view_config(route_name='user', renderer='user.mako')
+def user(request):
+    return {}

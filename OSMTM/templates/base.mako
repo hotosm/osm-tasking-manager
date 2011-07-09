@@ -23,6 +23,7 @@
             <nav> 
             You are ${user}
             <ul> 
+                <li><a href="${request.route_url('user')}">profile</a></li> 
                 <li><a href="${request.route_url('home')}">Jobs list</a></li> 
                 <li><a href="/logout">Log Out</a></li> 
             </ul> 
