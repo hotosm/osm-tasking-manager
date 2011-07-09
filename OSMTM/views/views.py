@@ -72,8 +72,14 @@ def oauth_callback(request):
     user_elt = ElementTree.XML(content).find('user')
     # save the user's "display name" in the session
     if 'display_name' in user_elt.attrib:
-        session['user'] = user_elt.attrib['display_name']
+        username = user_elt.attrib['display_name']
+        session['user'] = username 
         session.save()
+        db_session = DBSession()
+        if db_session.query(User).get(username) is None:
+            db_session.add(User(username))
+            db_session.flush()
+
     # and redirect to the main page
     return HTTPFound(location=request.route_url('home'))
 
