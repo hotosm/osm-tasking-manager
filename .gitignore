@@ -1,0 +1,6 @@
+OSMTM.egg-info/
+data/
+*.pyc
+env/
+build/
+dist/
