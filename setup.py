@@ -11,12 +11,13 @@ requires = [
     'pyramid',
     'pyramid_beaker',
     'SQLAlchemy',
+    'Shapely',
     'transaction',
     'repoze.tm2>=1.0b1', # default_commit_veto
     'zope.sqlalchemy',
     'WebError',
-    'papyrus_ogcproxy',
     'oauth2==1.2.0',
+    'imposm.parser'
     ]
 
 if sys.version_info[:3] < (2,5,0):

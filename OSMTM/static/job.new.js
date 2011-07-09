@@ -12,7 +12,7 @@ $('#id_relation')
          
         var url = "http://www.openstreetmap.org/api/0.6/relation/" + this.value + '/full';
         var layer = new OpenLayers.Layer.GML("Objects", url, {
-            format: OpenLayers.Format.OSM,
+            format: OpenLayers.Format.WKT,
             style: {
                 strokeColor: "blue",
                 strokeWidth: 3,

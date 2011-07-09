@@ -1,17 +1,12 @@
-from urlparse import urlparse
-from httplib2 import Http
+import tempfile
+import urllib
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import (HTTPForbidden, HTTPBadRequest,
-                                    HTTPBadGateway, HTTPNotAcceptable)
+from pyramid.httpexceptions import (HTTPBadRequest)
 from pyramid.response import Response
 
-
-
-allowed_hosts = (
-    "www.openstreetmap.org",
-    "www.google.com"
-    )
+from imposm.parser import OSMParser
+from shapely.geometry import Polygon
 
 @view_config(route_name='osmproxy')
 def osmproxy(request):
@@ -19,30 +14,69 @@ def osmproxy(request):
     if url is None:
         return HTTPBadRequest()
 
-    # check for full url
-    parsed_url = urlparse(url)
-    if not parsed_url.netloc or parsed_url.scheme not in ("http", "https"):
-        return HTTPBadRequest()
+    # instantiate parser and parser and start parsing
+    parser = RelationParser()
+    p = OSMParser(concurrency=4,
+            coords_callback=parser.get_coords,
+            relations_callback=parser.get_relations,
+            ways_callback=parser.get_ways)
 
-    # forward request to target (without Host Header)
-    http = Http()
-    h = dict(request.headers)
-    h.pop("Host", h)
-    try:
-        resp, content = http.request(url)
-    except:
-        return HTTPBadGateway()
+    temp = tempfile.NamedTemporaryFile(suffix='.osm')
+    urllib.urlretrieve(url, temp.name)
+    p.parse(temp.name)
+    temp.close()
 
-    # check for allowed content types
-    if resp.has_key("content-type"):
-        ct = resp["content-type"]
-        # allow any content type from allowed hosts (any port)
-        if not parsed_url.netloc in allowed_hosts:
-            return HTTPForbidden()
-    else:
-        return HTTPNotAcceptable()
+    ordered_ways = []
+    for r in parser.relations:
+        prev = parser.ways[r[0]]
+        ordered_ways.append(prev)
+        r.pop(0)
+        while len(r):
+            match = False
+            for i in range(0, len(r)):
+                w = parser.ways[r[i]]
+                # first node of the next way matches the last of the previous one
+                if w[0] == prev[len(prev) - 1]:
+                    match = w
+                # or maybe the way has to be reversed 
+                elif w[len(w) - 1] == prev[len(prev) - 1]:
+                    match = w[::-1]
+                if match:
+                    prev = match
+                    ordered_ways.append(match)
+                    r.pop(i)
+                    break
 
-    response = Response(content, status=resp.status,
-                        headers={"Content-Type": ct})
+    # now that ways are correctly ordered, we can create a unique geometry
+    nodes = []
+    for way in ordered_ways:
+        for node in way:
+            nodes.append(parser.nodes[node])
+    # make sure that first and last node are similar
+    if nodes[0] != nodes[len(nodes) - 1]:
+        raise
+    # create a shapely polygon with the nodes
+    polygon = Polygon(nodes)
+    return Response(polygon.to_wkt())
 
-    return response
+# simple class that handles the parsed OSM data.
+class RelationParser(object):
+    def __init__(self):
+        self.nodes = {} 
+        self.ways =  {} 
+        self.relations = []
+
+    def get_coords(self, coords):
+        # callback method for nodes
+        for osm_id, lon, lat in coords:
+            self.nodes[osm_id] = (lon, lat)
+
+    def get_ways(self, ways):
+        # callback method for ways
+        for way in ways:
+            self.ways[way[0]] = way[2]
+
+    def get_relations(self, relations):
+        # callback method for relations
+        for relation in relations:
+            self.relations.append([way[0] for way in relation[2]])
