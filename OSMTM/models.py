@@ -32,6 +32,14 @@ class Job(Base):
         self.workflow = workflow
         self.zoom = zoom
 
+class User(Base):
+    __tablename__ = "users"
+    username = Column(Unicode, primary_key=True)
+    role = Column(Integer) # 0 - newbie, 1 - advanced, 2 - admin
+
+    def __init__(self, username, role=0):
+        self.username = username
+
 def populate():
     session = DBSession()
     job = Job(u'Sendai Quake, Spot Imagery Tracing',
@@ -40,6 +48,9 @@ def populate():
             u'Trace buildings from satellite imagery, Survey buildings to create attribute information, Enter survey information, Quality Assurance Check by Work Lead',
             12)
     session.add(job)
+    user = User(u'pgiraud')
+    user.role = 2
+    session.add(user)
     session.flush()
     transaction.commit()
     

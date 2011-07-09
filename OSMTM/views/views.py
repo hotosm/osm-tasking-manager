@@ -7,7 +7,7 @@ from pyramid.renderers import render_to_response
 
 from OSMTM.models import DBSession
 from OSMTM.models import Job
-from OSMTM.security import ADMIN_USERS
+from OSMTM.models import User
 
 import oauth2 as oauth
 
@@ -91,10 +91,11 @@ def home(request):
     else:
         session = DBSession()
         jobs = session.query(Job).all()
-        user = request.session.get("user")
+        username = request.session.get("user")
+        user = session.query(User).get(username)
         return dict(jobs=jobs,
                 user=user,
-                admin=(user in ADMIN_USERS))
+                admin=user.role == 2)
 
 @view_config(route_name='job_new', renderer='job.new.mako')
 def job_new(request):
