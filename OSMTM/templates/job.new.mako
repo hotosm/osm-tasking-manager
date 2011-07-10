@@ -1,6 +1,6 @@
 <%inherit file="/base.mako"/>
 <%def name="id()">job_new</%def>
-<%def name="title()">HOT Task Server - New Job</%def>
+<%def name="title()">New Job</%def>
 
 <div class="content group wrap">
     <section class="new">

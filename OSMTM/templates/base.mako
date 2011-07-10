@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>${self.title()}</title>
+        <title>OSM Tasking Server - ${self.title()}</title>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
         <meta name="keywords" content="HOT task server" />
         <meta name="description" content="HOT task server" />
+        <link rel="stylesheet"
+              href="${request.static_url('OSMTM:static/reset.css')}"
+              text="text/css" media="screen" />
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/main.css')}"
               text="text/css" media="screen" />
@@ -15,7 +18,7 @@
     <body id="${self.id()}">
         <header class="group"> 
         <div class="wrap"> 
-            <a class="logo" href="/">HOT Task Server</a> 
+            <a class="logo" href="/">OSM Tasking Server</a> 
             <%
                 user = request.session.get('user')
             %>

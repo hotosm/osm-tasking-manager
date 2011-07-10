@@ -1,6 +1,6 @@
 <%inherit file="/base.mako"/>
 <%def name="id()">home</%def>
-<%def name="title()">HOT Task Server on QualityStreetMap.org</%def>
+<%def name="title()">Login</%def>
 
 <div class="content group wrap">
     <section class="about">
