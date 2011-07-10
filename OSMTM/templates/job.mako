@@ -8,6 +8,8 @@
         <p>${job.description}</p>
         <h3>Workflow</h3>
         <p>${job.workflow}</p>
+        <h3>Tiles</h3>
+        <p>Number of tiles : ${len(job.tiles)}</p>
     </section>
     <section class="map">
         <div id="map"></div>

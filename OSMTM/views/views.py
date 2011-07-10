@@ -8,8 +8,12 @@ from pyramid.renderers import render_to_response
 from OSMTM.models import DBSession
 from OSMTM.models import Job
 from OSMTM.models import User
+from OSMTM.models import Tile
 
 import oauth2 as oauth
+
+from OSMTM.views.tiles import get_tiles_in_geom
+from shapely.wkt import loads
 
 #
 # Constants
@@ -113,6 +117,12 @@ def job_new(request):
         job.geometry = request.params['geometry']
         job.workflow = request.params['workflow']
         job.zoom = request.params['zoom']
+
+        tiles = []
+        for i in get_tiles_in_geom(loads(job.geometry), int(job.zoom)):
+            tiles.append(Tile(i[0], i[1]))
+        job.tiles = tiles
+
         session.add(job)
         session.flush()
         return HTTPFound(location = route_url('job', request, id=job.id))

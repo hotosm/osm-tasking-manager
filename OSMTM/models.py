@@ -3,17 +3,36 @@ import transaction
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Unicode
+from sqlalchemy import Table
+from sqlalchemy import Column
+from sqlalchemy import ForeignKey
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import relationship
 
 from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
+
+class Tile(Base):
+    __tablename__ = "tiles"
+    id = Column(Integer, primary_key=True)
+    x = Column(Integer)
+    y = Column(Integer)
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+job_tiles = Table('job_tiles', Base.metadata,
+    Column('job_id', Integer, ForeignKey('jobs.id')),
+    Column('tile_id', Integer, ForeignKey('tiles.id'))
+)
 
 class Job(Base):
     """ The SQLAlchemy declarative model class for a Page object. """
@@ -24,6 +43,7 @@ class Job(Base):
     geometry = Column(Unicode)
     workflow = Column(Unicode)
     zoom = Column(Integer)
+    tiles = relationship(Tile, secondary=job_tiles)
 
     def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None):
         self.title = title
