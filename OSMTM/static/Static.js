@@ -50,6 +50,13 @@ OpenLayers.Layer.Static = OpenLayers.Class(OpenLayers.Layer.Grid, {
     selectedTiles: [],
 
     /**
+     * APIProperty: zoom
+     * The zoom at which the tiles will be of 256x256 px size.
+     * Defaults to 12
+     */
+    zoom: 12,
+
+    /**
      * Property: EVENT_TYPES
      */
     EVENT_TYPES: [
@@ -76,7 +83,8 @@ OpenLayers.Layer.Static = OpenLayers.Class(OpenLayers.Layer.Grid, {
             maxResolution: 156543.0339,
             numZoomLevels: 19,
             units: "m",
-            projection: "EPSG:900913"
+            projection: "EPSG:900913",
+            zoom: 12,
         }, options);
         var url = '';
         name = name || this.name;
@@ -103,7 +111,8 @@ OpenLayers.Layer.Static = OpenLayers.Class(OpenLayers.Layer.Grid, {
         // we want to update the layer only once dragging is finished
         if (!dragging) {
             this.clearGrid();
-            var s = Math.pow(2, this.map.getZoom() - 7);
+            // Math.pow(2, 8) = 256
+            var s = Math.pow(2, 8 - (this.zoom - this.map.getZoom()));
             this.tileSize = new OpenLayers.Size(s, s);
             OpenLayers.Layer.Grid.prototype.moveTo.apply(this, arguments);
 

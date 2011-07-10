@@ -15,6 +15,7 @@
 </div>
 <script type="text/javascript">
     var geometry = "${job.geometry}";
+    var zoom = ${job.zoom};
 </script>
 <script type="text/javascript" src="http://openlayers.org/dev/OpenLayers.js"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>

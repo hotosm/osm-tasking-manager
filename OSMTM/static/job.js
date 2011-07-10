@@ -23,6 +23,7 @@ layer.addFeatures(format.read(geometry));
 map.zoomToExtent(layer.getDataExtent());
 
 var tiles = new OpenLayers.Layer.Static("Static Layer", '', {
-    buffer: 0
+    buffer: 0,
+    zoom: zoom || 12
 });
 map.addLayer(tiles);
