@@ -21,3 +21,9 @@ map.addLayer(layer);
 var format = new OpenLayers.Format.WKT();
 layer.addFeatures(format.read(geometry));
 map.zoomToExtent(layer.getDataExtent());
+
+var tiles = new OpenLayers.Layer.Static("Static Layer", '', {
+    maxResolution: 76.43702827148438,                                                                                                            
+    buffer: 0
+});
+map.addLayer(tiles);

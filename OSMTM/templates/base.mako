@@ -11,9 +11,11 @@
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/main.css')}"
               text="text/css" media="screen" />
+        <link rel="stylesheet"
+              href="${request.static_url('OSMTM:static/map.css')}"
+              text="text/css" media="screen" />
         <script type="text/javascript" src="${request.static_url('OSMTM:static/less.js')}"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-        <script type="text/javascript" src="http://openlayers.org/dev/OpenLayers.js"></script>
     </head>
     <body id="${self.id()}">
         <header class="group"> 
