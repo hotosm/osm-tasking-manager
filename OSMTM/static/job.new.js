@@ -1,8 +1,9 @@
 var map = null,
     tiles = null;
 $('#id_relation')
-    .blur(function() {
-        $('#relation_map').show();
+    .change(function() {
+        $('section.map').show();
+        $('#relation_loading_msg').show();
         map && map.destroy();
         map = new OpenLayers.Map('map', {
             controls: []
@@ -27,6 +28,7 @@ $('#id_relation')
         });
 
         layer.events.register("loadend", layer, function() {
+            $('#relation_loading_msg').hide();
             map.zoomToExtent(layer.getDataExtent());
             var format = new OpenLayers.Format.WKT();
             $('#geometry')[0].value = format.write(layer.features[0]);

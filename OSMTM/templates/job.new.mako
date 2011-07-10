@@ -3,7 +3,7 @@
 <%def name="title()">New Job</%def>
 
 <div class="content group wrap">
-    <section class="new">
+    <section class="job">
         <h1>New Job</h1>
         <form method="post" action="">
             <div class="field"> 
@@ -18,9 +18,6 @@
             <label for="id_relation">Area of interest</label> 
             <input type="text" class="text" id="id_relation" name="relation" value="" /> 
             <input type="hidden" id="geometry" name="geometry" value="" />
-            <div id="relation_map">
-                <div id="map"></div>
-            </div>
             </div>
             <div class="field"> 
             <label for="id_workflow">Workflow</label> 
@@ -52,6 +49,14 @@
             <input type="submit" class="submit" value="Create the job" name="form.submitted" /> 
             </div>
         </form>
+    </section>
+    <section class="map">
+        <div id="map">
+            <div id="relation_loading_msg">
+            <img src="${request.static_url('OSMTM:static/ajax-loader.gif')}" /><br />
+            We're currently loading and analysing the relation you asked for. Please be patient.
+            </div>
+        </div>
     </section>
 </div>
 <script type="text/javascript" src="http://openlayers.org/dev/OpenLayers.js"></script>
