@@ -8,10 +8,6 @@ from pyramid.response import Response
 from imposm.parser import OSMParser
 from shapely.geometry import Polygon
 
-import logging
-logging.basicConfig()
-log = logging.getLogger(__file__)
-
 @view_config(route_name='osmproxy')
 def osmproxy(request):
     url = request.params.get("url")
@@ -29,8 +25,6 @@ def osmproxy(request):
     urllib.urlretrieve(url, temp.name)
     p.parse(temp.name)
     temp.close()
-
-    log.info(parser.relation)
 
     ordered_ways = []
     r = parser.relation
@@ -85,6 +79,8 @@ class RelationParser(object):
     def get_relations(self, relations):
         # callback method for relations
         # there should be only one in our case
+        if len(relations) == 0:
+            return
         for member in relations[0][2]:
             if member[1] == 'way':
                 self.relation.append(member[0])
