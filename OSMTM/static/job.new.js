@@ -2,6 +2,7 @@ var map = null,
     tiles = null;
 $('#id_relation')
     .change(function() {
+        $('#id_submit')[0].disabled = true;
         $('section.map').show();
         $('#relation_loading_msg').show();
         map && map.destroy();
@@ -32,6 +33,7 @@ $('#id_relation')
             map.zoomToExtent(layer.getDataExtent());
             var format = new OpenLayers.Format.WKT();
             $('#geometry')[0].value = format.write(layer.features[0]);
+            $('#id_submit')[0].disabled = false;
         });
 
         map.addLayer(layer);

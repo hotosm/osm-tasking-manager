@@ -46,7 +46,7 @@
             </select>
             </div> 
             <div class="clear">
-            <input type="submit" class="submit" value="Create the job" name="form.submitted" /> 
+            <input type="submit" class="submit" value="Create the job" id="id_submit" name="form.submitted" disabled="disabled"/> 
             </div>
         </form>
     </section>
