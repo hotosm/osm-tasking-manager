@@ -1,4 +1,5 @@
-var map = null;
+var map = null,
+    tiles = null;
 $('#id_relation')
     .blur(function() {
         $('#relation_map').show();
@@ -34,5 +35,16 @@ $('#id_relation')
         map.addLayer(layer);
 
         layer.loadGML();
+
+        tiles = new OpenLayers.Layer.Static("Static Layer", '', {
+            buffer: 0,
+            zoom: parseInt($('#id_zoom')[0].value, 0)
+        });
+        map.addLayer(tiles);
+    });
+$('#id_zoom')
+    .change(function() {
+        tiles.zoom = this.value; 
+        tiles.redraw();
     });
 
