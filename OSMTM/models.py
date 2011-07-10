@@ -51,6 +51,12 @@ def populate():
     user = User(u'pgiraud')
     user.role = 2
     session.add(user)
+    user = User(u'vdb')
+    user.role = 2
+    session.add(user)
+    user = User(u'wonderchook')
+    user.role = 2
+    session.add(user)
     session.flush()
     transaction.commit()
     
