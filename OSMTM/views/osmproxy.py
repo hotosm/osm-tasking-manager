@@ -8,6 +8,10 @@ from pyramid.response import Response
 from imposm.parser import OSMParser
 from shapely.geometry import Polygon
 
+import logging
+logging.basicConfig()
+log = logging.getLogger(__file__)
+
 @view_config(route_name='osmproxy')
 def osmproxy(request):
     url = request.params.get("url")
@@ -26,26 +30,28 @@ def osmproxy(request):
     p.parse(temp.name)
     temp.close()
 
+    log.info(parser.relation)
+
     ordered_ways = []
-    for r in parser.relations:
-        prev = parser.ways[r[0]]
-        ordered_ways.append(prev)
-        r.pop(0)
-        while len(r):
-            match = False
-            for i in range(0, len(r)):
-                w = parser.ways[r[i]]
-                # first node of the next way matches the last of the previous one
-                if w[0] == prev[len(prev) - 1]:
-                    match = w
-                # or maybe the way has to be reversed 
-                elif w[len(w) - 1] == prev[len(prev) - 1]:
-                    match = w[::-1]
-                if match:
-                    prev = match
-                    ordered_ways.append(match)
-                    r.pop(i)
-                    break
+    r = parser.relation
+    prev = parser.ways[r[0]]
+    ordered_ways.append(prev)
+    r.pop(0)
+    while len(r):
+        match = False
+        for i in range(0, len(r)):
+            w = parser.ways[r[i]]
+            # first node of the next way matches the last of the previous one
+            if w[0] == prev[len(prev) - 1]:
+                match = w
+            # or maybe the way has to be reversed 
+            elif w[len(w) - 1] == prev[len(prev) - 1]:
+                match = w[::-1]
+            if match:
+                prev = match
+                ordered_ways.append(match)
+                r.pop(i)
+                break
 
     # now that ways are correctly ordered, we can create a unique geometry
     nodes = []
@@ -64,7 +70,7 @@ class RelationParser(object):
     def __init__(self):
         self.nodes = {} 
         self.ways =  {} 
-        self.relations = []
+        self.relation = [] 
 
     def get_coords(self, coords):
         # callback method for nodes
@@ -78,5 +84,7 @@ class RelationParser(object):
 
     def get_relations(self, relations):
         # callback method for relations
-        for relation in relations:
-            self.relations.append([way[0] for way in relation[2]])
+        # there should be only one in our case
+        for member in relations[0][2]:
+            if member[1] == 'way':
+                self.relation.append(member[0])
