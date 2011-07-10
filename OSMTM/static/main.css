@@ -47,8 +47,8 @@ body > header {
         float: left;
         font-size: @size1;
         font-weight: bold;
-        color: #222;
-        text-shadow: 0px 1px 1px rgba(212, 150, 150, 0.7);
+        color: #FFF;
+        text-shadow: 0px 1px 1px rgba(50, 0, 0, 0.7);
         margin-top: @rhythm;
 
         &:hover {
