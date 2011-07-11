@@ -10,8 +10,6 @@ MAXRESOLUTION = 156543.0339
 # X/Y axis limit
 max = MAXRESOLUTION*256/2
 
-from wkt import WKT
-
 class TileBuilder(object):
     def __init__(self, parameter):
         self.a = parameter
