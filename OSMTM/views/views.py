@@ -13,7 +13,15 @@ from OSMTM.models import Tile
 import oauth2 as oauth
 
 from OSMTM.views.tiles import get_tiles_in_geom
+from OSMTM.views.tiles import TileBuilder
+from OSMTM.views.tiles import max 
 from shapely.wkt import loads
+
+from geojson import Feature, FeatureCollection
+from geojson import dumps
+
+import logging
+log = logging.getLogger(__file__)
 
 #
 # Constants
@@ -133,7 +141,15 @@ def job(request):
     id = request.matchdict['id']
     session = DBSession()
     job = session.query(Job).get(id)
-    return dict(job=job) 
+    z = job.zoom
+    # tile size (in meters) at the required zoom level
+    step = max/(2**(z - 1))
+    tb = TileBuilder(step)
+    tiles = []
+    for tile in job.tiles:
+        geometry = tb.create_square(tile.x, tile.y)
+        tiles.append(Feature(geometry=geometry))
+    return dict(job=job, tiles=dumps(FeatureCollection(tiles))) 
 
 @view_config(route_name='user', renderer='user.mako')
 def user(request):

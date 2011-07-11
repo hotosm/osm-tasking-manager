@@ -22,8 +22,10 @@ var format = new OpenLayers.Format.WKT();
 layer.addFeatures(format.read(geometry));
 map.zoomToExtent(layer.getDataExtent());
 
-var tiles = new OpenLayers.Layer.Static("Static Layer", '', {
-    buffer: 0,
-    zoom: zoom || 12
+var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
+    renderers: ['Canvas']
 });
-map.addLayer(tiles);
+format = new OpenLayers.Format.GeoJSON();
+var features = format.read(tiles);
+tilesLayer.addFeatures(features);
+map.addLayer(tilesLayer);
