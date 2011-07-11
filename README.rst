@@ -23,6 +23,10 @@ Python environment execute the ``setup.py`` script::
     $ cd OSMTM
     $ python setup.py install
 
+Previously, you may need to install some packages::
+
+    $ sudo apt-get install build-essential protobuf-compiler libprotobuf-dev
+
 Run OSMTM
 ---------
 
