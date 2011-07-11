@@ -26,11 +26,13 @@
             %>
             % if user:
             <nav> 
-            You are ${user}
+            <div id="login">
+                You are ${user}
+            </div>
             <ul> 
-                <li><a href="${request.route_url('user')}">profile</a></li> 
-                <li><a href="${request.route_url('home')}">Jobs list</a></li> 
-                <li><a href="/logout">Log Out</a></li> 
+                <li class="first"><a href="${request.route_url('home')}">Jobs list</a></li> 
+                <li class="last"><a href="/logout">Log Out</a></li> 
+                <li class="last"><a href="${request.route_url('user')}">Profile</a></li> 
             </ul> 
             </nav> 
             % endif

@@ -56,42 +56,49 @@ body > header {
         }
     }
     nav {
-        float: right;
-
+        position: relative;
         ul {
             list-style-type: none;
             padding: 0;
             margin: 0;
-            margin-right: -29px;
 
             li {
                 float: left;
+                margin-top: 20px;
                 margin-right: 10px;
-
+                line-height: 34px;
+                display: block;
+                position: relative;
                 a {
                     padding: 0px 10px;
                     display: block;
-                    border: 1px solid #555;
-                    font: bold 14px/28px @sans;
-                    text-transform: lowercase;
-                    color: #222;
-                    text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.7);
-
-                    .vertical-gradient(#eee, #bbb);
-                    .border-radius(5px);
-                    .box-shadow(0, 2px, 2px, rgba(0, 0, 0, 0.25));
+                    font: bold @sans;
+                    color: #ccc;
+                    text-shadow: 0px -1px 0 rgba(50, 0, 0, 0.7);
 
                     &:hover {
                         text-decoration: none;
-                        border: 1px solid #777;
-                        .vertical-gradient(#fff, #ccc);
-                        .border-radius(5px);
+                        background: #B2222C;
+                        color: white;
                     }
                 }
                 &:last-child {
                     margin-right: 0;
                 }
             }
+            li.first {
+                margin-left: 20px;
+            }
+            li.last {
+                float: right;
+            }
+        }
+        div#login {
+            display: block;
+            position: absolute;
+            right: 0;
+            color: #ccc;
+            font-size: 0.8em;
         }
     }
 }
