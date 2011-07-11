@@ -24,15 +24,11 @@ class Tile(Base):
     id = Column(Integer, primary_key=True)
     x = Column(Integer)
     y = Column(Integer)
+    job_id = Column(Integer, ForeignKey('jobs.id'))
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
-
-job_tiles = Table('job_tiles', Base.metadata,
-    Column('job_id', Integer, ForeignKey('jobs.id')),
-    Column('tile_id', Integer, ForeignKey('tiles.id'))
-)
 
 class Job(Base):
     """ The SQLAlchemy declarative model class for a Page object. """
@@ -43,7 +39,7 @@ class Job(Base):
     geometry = Column(Unicode)
     workflow = Column(Unicode)
     zoom = Column(Integer)
-    tiles = relationship(Tile, secondary=job_tiles)
+    tiles = relationship(Tile, backref='job')
 
     def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None):
         self.title = title
