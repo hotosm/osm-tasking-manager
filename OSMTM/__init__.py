@@ -26,8 +26,5 @@ def main(global_config, **settings):
     config.add_route('osmproxy', '/osmproxy')
     config.add_route('oauth_callback', '/oauth_callback')
     config.scan()
-
-    import papyrus_ogcproxy
-    config.include(papyrus_ogcproxy)
     return config.make_wsgi_app()
 
