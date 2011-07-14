@@ -102,20 +102,18 @@ def logout(request):
     session.save()
     return HTTPFound(location=request.route_url('home'))
 
-@view_config(route_name='home', renderer='home.mako')
+@view_config(route_name='home', renderer='home.mako', permission='edit')
 def home(request):
-    if not request.session.get("user"):
-        return render_to_response('login.mako', {}, request)
-    else:
-        session = DBSession()
-        jobs = session.query(Job).all()
-        username = request.session.get("user")
-        user = session.query(User).get(username)
-        return dict(jobs=jobs,
-                user=user,
-                admin=user.role == 2)
+    session = DBSession()
+    jobs = session.query(Job).all()
+    username = request.session.get("user")
+    user = session.query(User).get(username)
+    return dict(jobs=jobs,
+            user=user,
+            admin=user.role == 2)
 
-@view_config(route_name='job_new', renderer='job.new.mako')
+@view_config(route_name='job_new', renderer='job.new.mako',
+        permission='edit')
 def job_new(request):
     if 'form.submitted' in request.params:
         session = DBSession()
