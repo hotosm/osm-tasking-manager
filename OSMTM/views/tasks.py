@@ -1,4 +1,4 @@
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 from pyramid.url import route_url
 
@@ -18,6 +18,7 @@ def task(request):
     y = request.matchdict['y']
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
+    if tile is None:
+        return HTTPNotFound()
     polygon=tile.to_polygon()
-    log.info(tile.to_polygon())
     return dict(tile=tile, feature=dumps(polygon)) 
