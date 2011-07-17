@@ -40,15 +40,15 @@ $('#id_relation')
 
         layer.loadGML();
 
-        tiles = new OpenLayers.Layer.Static("Static Layer", '', {
-            buffer: 0,
-            zoom: parseInt($('#id_zoom')[0].value, 0)
-        });
-        map.addLayer(tiles);
+        //tiles = new OpenLayers.Layer.Static("Static Layer", '', {
+            //buffer: 0,
+            //zoom: parseInt($('#id_zoom')[0].value, 0)
+        //});
+        //map.addLayer(tiles);
     });
 $('#id_zoom')
     .change(function() {
-        tiles.zoom = this.value; 
-        tiles.redraw();
+        //tiles.zoom = this.value; 
+        //tiles.redraw();
     });
 
