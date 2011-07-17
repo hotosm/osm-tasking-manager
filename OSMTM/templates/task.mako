@@ -5,6 +5,12 @@
     <h1>${tile.job.title}</h1>
     <section class="task">
         <h2>${tile.x} / ${tile.y}</h2>
+        <p id="export">
+            Open with <a href="javascript:void(0);" id="josm">JOSM</a>, 
+            <a href="javascript:void(0);" id="potlatch">Potlatch</a>, 
+            <a href="javascript:void(0);" id="potlatch2">Potlatch 2</a>, 
+            <a href="javascript:void(0);" id="wp">Walking Papers</a>
+        </p>
     </section>
     <section class="map">
         <div id="map"></div>
