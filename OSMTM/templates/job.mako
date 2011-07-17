@@ -10,6 +10,11 @@
         <p>${job.workflow}</p>
         <h3>Tiles</h3>
         <p>Number of tiles : ${len(job.tiles)}</p>
+        % if not admin:
+        <h2>Tasks</h2>
+        <h3>Task you are currently working on</h3>
+        <h3>Assigned tasks</h3>
+        % endif
     </section>
     <section class="map">
         <div id="map"></div>
