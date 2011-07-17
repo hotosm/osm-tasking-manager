@@ -20,7 +20,6 @@ map.addLayer(layer);
 
 var format = new OpenLayers.Format.WKT();
 layer.addFeatures(format.read(geometry));
-map.zoomToExtent(layer.getDataExtent());
 
 var colors = ["grey", "red", "yellow", "green"];
 var context = {
@@ -43,4 +42,5 @@ var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
 format = new OpenLayers.Format.GeoJSON();
 var features = format.read(tiles);
 tilesLayer.addFeatures(features);
+map.zoomToExtent(tilesLayer.getDataExtent());
 map.addLayer(tilesLayer);
