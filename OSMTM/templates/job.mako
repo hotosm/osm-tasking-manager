@@ -22,6 +22,11 @@
         % endif
         <h3>Assigned tasks</h3>
         % endif
+        <div>
+            <form action="${request.route_url('task_take', job=job.id)}">
+                <input type="submit" value="Take a task randomly"/>
+            </form>
+        </div>
     </section>
     <section class="map">
         <div id="map"></div>

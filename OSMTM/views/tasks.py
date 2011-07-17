@@ -11,6 +11,7 @@ from geojson import Feature
 from geojson import dumps
 
 from datetime import datetime
+import random
 
 import logging
 log = logging.getLogger(__file__)
@@ -57,3 +58,13 @@ def done(request):
     session.add(tile)
     log.info(tile.checkin)
     return HTTPFound(location=request.route_url('job', id=job_id))
+
+@view_config(route_name='task_take', permission='edit')
+def take(request):
+    job_id = request.matchdict['job']
+    session = DBSession()
+    user = session.query(User).get(request.session.get('user'))
+    tiles = session.query(Tile).filter(Tile.checkin==int(user.role) - 1).all()
+    tile = tiles[random.randrange(0, len(tiles))]
+
+    return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
