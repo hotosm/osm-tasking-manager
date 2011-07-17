@@ -134,7 +134,7 @@ def job_new(request):
         return HTTPFound(location = route_url('job', request, id=job.id))
     return {} 
 
-@view_config(route_name='job', renderer='job.mako')
+@view_config(route_name='job', renderer='job.mako', permission='edit')
 def job(request):
     id = request.matchdict['id']
     session = DBSession()
@@ -149,6 +149,6 @@ def job(request):
         tiles.append(Feature(geometry=geometry))
     return dict(job=job, tiles=dumps(FeatureCollection(tiles))) 
 
-@view_config(route_name='user', renderer='user.mako')
+@view_config(route_name='user', renderer='user.mako', permission='edit')
 def user(request):
     return {}
