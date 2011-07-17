@@ -12,9 +12,9 @@ from OSMTM.models import Tile
 
 import oauth2 as oauth
 
-from OSMTM.views.tiles import get_tiles_in_geom
-from OSMTM.views.tiles import TileBuilder
-from OSMTM.views.tiles import max 
+from OSMTM.utils import get_tiles_in_geom
+from OSMTM.utils import TileBuilder
+from OSMTM.utils import max 
 from shapely.wkt import loads
 
 from geojson import Feature, FeatureCollection

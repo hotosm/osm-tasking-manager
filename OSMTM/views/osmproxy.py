@@ -7,6 +7,10 @@ from pyramid.response import Response
 
 from imposm.parser import OSMParser
 from shapely.geometry import Polygon
+from shapely.geometry import MultiPolygon
+
+import logging
+log = logging.getLogger(__file__)
 
 @view_config(route_name='osmproxy')
 def osmproxy(request):
@@ -26,38 +30,53 @@ def osmproxy(request):
     p.parse(temp.name)
     temp.close()
 
-    ordered_ways = []
+    polygons = []
     r = parser.relation
-    prev = parser.ways[r[0]]
-    ordered_ways.append(prev)
-    r.pop(0)
-    while len(r):
-        match = False
-        for i in range(0, len(r)):
-            w = parser.ways[r[i]]
-            # first node of the next way matches the last of the previous one
-            if w[0] == prev[len(prev) - 1]:
-                match = w
-            # or maybe the way has to be reversed 
-            elif w[len(w) - 1] == prev[len(prev) - 1]:
-                match = w[::-1]
-            if match:
-                prev = match
-                ordered_ways.append(match)
-                r.pop(i)
-                break
 
-    # now that ways are correctly ordered, we can create a unique geometry
-    nodes = []
-    for way in ordered_ways:
-        for node in way:
-            nodes.append(parser.nodes[node])
-    # make sure that first and last node are similar
-    if nodes[0] != nodes[len(nodes) - 1]:
-        raise
-    # create a shapely polygon with the nodes
-    polygon = Polygon(nodes)
-    return Response(polygon.to_wkt())
+    # first check for self closing ways
+    for i in range(len(r) - 1, 0, -1):
+        w = parser.ways[r[i]]
+        if w[len(w) - 1] == w[0]:
+            r.pop(i)
+            nodes = []
+            polygon = Polygon([parser.nodes[node] for node in w])
+            polygons.append(polygon)
+
+    if len(r) > 0:
+        prev = parser.ways[r[0]]
+        ordered_ways = []
+        ordered_ways.append(prev)
+        r.pop(0)
+        while len(r):
+            match = False
+            for i in range(0, len(r)):
+                w = parser.ways[r[i]]
+                # first node of the next way matches the last of the previous one
+                if w[0] == prev[len(prev) - 1]:
+                    match = w
+                # or maybe the way has to be reversed 
+                elif w[len(w) - 1] == prev[len(prev) - 1]:
+                    match = w[::-1]
+                if match:
+                    prev = match
+                    ordered_ways.append(match)
+                    r.pop(i)
+                    break
+
+        if len(ordered_ways) > 0:
+            # now that ways are correctly ordered, we can create a unique geometry
+            nodes = []
+            for way in ordered_ways:
+                for node in way:
+                    nodes.append(parser.nodes[node])
+            # make sure that first and last node are similar
+            if nodes[0] != nodes[len(nodes) - 1]:
+                raise
+            # create a shapely polygon with the nodes
+            polygons.append(Polygon(nodes))
+
+    multipolygon = MultiPolygon(polygons)
+    return Response(multipolygon.to_wkt())
 
 # simple class that handles the parsed OSM data.
 class RelationParser(object):
