@@ -64,6 +64,10 @@ def take(request):
     session = DBSession()
     user = session.query(User).get(request.session.get('user'))
     tiles = session.query(Tile).filter(Tile.checkin==int(user.role) - 1).all()
-    tile = tiles[random.randrange(0, len(tiles))]
+    try:
+        tile = tiles[random.randrange(0, len(tiles))]
+        return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
+    except:
+        # FIXME # no available tile
+        return HTTPNotFound()
 
-    return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
