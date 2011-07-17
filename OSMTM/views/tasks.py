@@ -28,11 +28,11 @@ def task(request):
     return dict(tile=tile,
             feature=dumps(polygon),
             job_url=request.route_url('job', id=job_id),
-            take_url=request.route_url('task_take', job=job_id, x=x, y=y),
+            accept_url=request.route_url('task_accept', job=job_id, x=x, y=y),
             done_url=request.route_url('task_done', job=job_id, x=x, y=y))
 
-@view_config(route_name='task_take', permission='edit', renderer='json')
-def take(request):
+@view_config(route_name='task_accept', permission='edit', renderer='json')
+def accept(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
     y = request.matchdict['y']

@@ -22,8 +22,8 @@
                     <a href="javascript:void(0);" id="wp">Walking Papers</a>
                 </p>
             % else:
-                <form action="${request.route_url('task_take', job=tile.job_id, x=tile.x, y=tile.y)}">
-                    <input type="submit" value="Take the task"/>
+                <form action="${request.route_url('task_accept', job=tile.job_id, x=tile.x, y=tile.y)}">
+                    <input type="submit" value="accept the task"/>
                 </form>
             % endif
         </div>
@@ -34,9 +34,6 @@
 </div>
 <script type="text/javascript">
     var tiles = ${feature|n};
-    var jobURL = "${job_url}";
-    var takeURL = "${take_url}";
-    var doneURL = "${done_url}";
 </script>
 <script type="text/javascript" src="http://openlayers.org/dev/OpenLayers.js"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>
