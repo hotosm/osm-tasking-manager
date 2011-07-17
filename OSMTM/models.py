@@ -75,7 +75,7 @@ class Job(Base):
 class User(Base):
     __tablename__ = "users"
     username = Column(Unicode, primary_key=True)
-    role = Column(Integer) # 0 - newbie, 1 - advanced, 2 - admin
+    role = Column(Integer) # 1 - newbie, 2 - advanced, 3 - admin
     task = relationship(Tile, backref='user')
 
     def __init__(self, username, role=0):
@@ -91,13 +91,13 @@ def populate():
             12)
     session.add(job)
     user = User(u'pgiraud')
-    user.role = 2
+    user.role = 3
     session.add(user)
     user = User(u'vdb')
-    user.role = 2
+    user.role = 3
     session.add(user)
     user = User(u'wonderchook')
-    user.role = 2
+    user.role = 3
     session.add(user)
     session.flush()
     transaction.commit()

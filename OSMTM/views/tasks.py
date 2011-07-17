@@ -53,7 +53,7 @@ def done(request):
     tile.username = None 
     tile.checkout = None 
     user = session.query(User).get(request.session.get('user'))
-    tile.checkin = int(user.role) + 1
+    tile.checkin = int(user.role)
     session.add(tile)
     log.info(tile.checkin)
     return HTTPFound(location=request.route_url('job', id=job_id))
