@@ -22,7 +22,22 @@ var format = new OpenLayers.Format.WKT();
 layer.addFeatures(format.read(geometry));
 map.zoomToExtent(layer.getDataExtent());
 
+var colors = ["grey", "red", "yellow", "green"];
+var context = {
+    getColor: function(feature) {
+        checkin = feature.attributes.checkin || 0;
+        return colors[checkin];
+    }
+};
+var template = {
+    fillColor: "${getColor}",
+    fillOpacity: 0.3,
+    strokeColor: "${getColor}",
+    strokeOpacity: 0.5
+};
+var style = new OpenLayers.Style(template, {context: context});
 var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
+    styleMap: new OpenLayers.StyleMap(style),
     renderers: ['Canvas']
 });
 format = new OpenLayers.Format.GeoJSON();

@@ -5,6 +5,7 @@ from pyramid.url import route_url
 
 from OSMTM.models import DBSession
 from OSMTM.models import Tile
+from OSMTM.models import User
 
 from geojson import Feature
 from geojson import dumps
@@ -51,5 +52,8 @@ def done(request):
     tile = session.query(Tile).get((x, y, job_id))
     tile.username = None 
     tile.checkout = None 
+    user = session.query(User).get(request.session.get('user'))
+    tile.checkin = int(user.role) + 1
     session.add(tile)
+    log.info(tile.checkin)
     return HTTPFound(location=request.route_url('job', id=job_id))

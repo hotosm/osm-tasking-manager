@@ -45,6 +45,7 @@ class Tile(Base):
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.checkin = 0
 
     def to_polygon(self):
         z = self.job.zoom
@@ -79,6 +80,7 @@ class User(Base):
 
     def __init__(self, username, role=0):
         self.username = username
+        self.role = role
 
 def populate():
     session = DBSession()
