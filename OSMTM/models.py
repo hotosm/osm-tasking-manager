@@ -78,29 +78,15 @@ class User(Base):
     role = Column(Integer) # 1 - newbie, 2 - advanced, 3 - admin
     task = relationship(Tile, backref='user')
 
-    def __init__(self, username, role=0):
+    def __init__(self, username, role=1):
         self.username = username
         self.role = role
 
 def populate():
-    session = DBSession()
-    job = Job(u'Sendai Quake, Spot Imagery Tracing',
-            u'A short description',
-            'POLYGON((15682967.276231 4613965.847168, 15683464.116915 4611581.6652221, 15686330.505475 4612019.5348445, 15687247.749814 4613868.5228206, 15686330.505475 4616058.5430414, 15685260.387079 4615961.1989223, 15682967.276231 4613965.847168))',
-            u'Trace buildings from satellite imagery, Survey buildings to create attribute information, Enter survey information, Quality Assurance Check by Work Lead',
-            12)
-    session.add(job)
-    user = User(u'pgiraud')
-    user.role = 3
-    session.add(user)
-    user = User(u'vdb')
-    user.role = 3
-    session.add(user)
-    user = User(u'wonderchook')
-    user.role = 3
-    session.add(user)
-    session.flush()
-    transaction.commit()
+    pass
+    #session = DBSession()
+    #session.flush()
+    #transaction.commit()
     
 def initialize_sql(engine):
     DBSession.configure(bind=engine)
