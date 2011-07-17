@@ -20,6 +20,9 @@ from pyramid.security import Allow
 from pyramid.security import Everyone
 from pyramid.security import Authenticated
 
+from OSMTM.utils import TileBuilder
+from OSMTM.utils import max 
+
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
 
@@ -31,14 +34,20 @@ class RootFactory(object):
 
 class Tile(Base):
     __tablename__ = "tiles"
-    id = Column(Integer, primary_key=True)
-    x = Column(Integer)
-    y = Column(Integer)
-    job_id = Column(Integer, ForeignKey('jobs.id'))
+    x = Column(Integer, primary_key=True)
+    y = Column(Integer, primary_key=True)
+    job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
+    def to_polygon(self):
+        z = self.job.zoom
+        # tile size (in meters) at the required zoom level
+        step = max/(2**(z - 1))
+        tb = TileBuilder(step)
+        return tb.create_square(self.x, self.y)
 
 class Job(Base):
     """ The SQLAlchemy declarative model class for a Page object. """

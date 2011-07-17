@@ -200,8 +200,8 @@ form {
         display: none;
     }
 }
-#job, #job_new {
-    section.job {
+#job, #job_new, #task {
+    section.job, section.task {
         float: left;
         text-align: left;
         width: (@content-width/2)*0.95 - 20px;
