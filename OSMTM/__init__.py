@@ -33,7 +33,8 @@ def main(global_config, **settings):
     config.add_route('task_accept', '/job/{job}/task/{x}/{y}/accept')
     config.add_route('task_done', '/job/{job}/task/{x}/{y}/done')
     config.add_route('task_take', '/job/{job}/take')
-    config.add_route('user', '/profile')
+    config.add_route('profile', '/profile')
+    config.add_route('profile_update', '/profile/update')
     config.add_route('osmproxy', '/osmproxy')
     config.add_route('oauth_callback', '/oauth_callback')
     config.add_view('OSMTM.views.security.login',
