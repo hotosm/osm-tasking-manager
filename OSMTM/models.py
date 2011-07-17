@@ -3,6 +3,7 @@ import transaction
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Unicode
+from sqlalchemy import DateTime
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -37,6 +38,9 @@ class Tile(Base):
     x = Column(Integer, primary_key=True)
     y = Column(Integer, primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
+    username = Column(Unicode, ForeignKey('users.username'))
+    checkout = Column(DateTime)
+    checkin = Column(Integer)
 
     def __init__(self, x, y):
         self.x = x
@@ -71,6 +75,7 @@ class User(Base):
     __tablename__ = "users"
     username = Column(Unicode, primary_key=True)
     role = Column(Integer) # 0 - newbie, 1 - advanced, 2 - admin
+    task = relationship(Tile, backref='user')
 
     def __init__(self, username, role=0):
         self.username = username

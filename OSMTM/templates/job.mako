@@ -13,6 +13,13 @@
         % if not admin:
         <h2>Tasks</h2>
         <h3>Task you are currently working on</h3>
+        % if current_task:
+            <a href="${request.route_url('task', job=current_task.job_id, x=current_task.x, y=current_task.y)}">
+                ${current_task.x} - ${current_task.y}
+            </a>
+        % else:
+            None
+        % endif
         <h3>Assigned tasks</h3>
         % endif
     </section>

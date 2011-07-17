@@ -18,6 +18,8 @@ from shapely.wkt import loads
 from geojson import Feature, FeatureCollection
 from geojson import dumps
 
+from sqlalchemy.orm.exc import NoResultFound
+
 import logging
 log = logging.getLogger(__file__)
 
@@ -140,7 +142,12 @@ def job(request):
     tiles = []
     for tile in job.tiles:
         tiles.append(Feature(geometry=tile.to_polygon()))
-    return dict(job=job, tiles=dumps(FeatureCollection(tiles))) 
+    try:
+        current_task = session.query(Tile).filter(Tile.username==request.session.get('user')).one()
+    except NoResultFound, e:
+        current_task = None
+    return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
+            current_task=current_task) 
 
 @view_config(route_name='user', renderer='user.mako', permission='edit')
 def user(request):

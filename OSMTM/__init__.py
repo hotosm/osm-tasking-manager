@@ -30,6 +30,8 @@ def main(global_config, **settings):
     config.add_route('job_new', '/job/new')
     config.add_route('job', '/job/{id}')
     config.add_route('task', '/job/{job}/task/{x}/{y}')
+    config.add_route('task_take', '/job/{job}/task/{x}/{y}/take')
+    config.add_route('task_done', '/job/{job}/task/{x}/{y}/done')
     config.add_route('user', '/profile')
     config.add_route('osmproxy', '/osmproxy')
     config.add_route('oauth_callback', '/oauth_callback')

@@ -1,3 +1,4 @@
+from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPNotFound
 from pyramid.view import view_config
 from pyramid.url import route_url
@@ -7,6 +8,8 @@ from OSMTM.models import Tile
 
 from geojson import Feature
 from geojson import dumps
+
+from datetime import datetime
 
 import logging
 log = logging.getLogger(__file__)
@@ -21,4 +24,32 @@ def task(request):
     if tile is None:
         return HTTPNotFound()
     polygon=tile.to_polygon()
-    return dict(tile=tile, feature=dumps(polygon)) 
+    return dict(tile=tile,
+            feature=dumps(polygon),
+            job_url=request.route_url('job', id=job_id),
+            take_url=request.route_url('task_take', job=job_id, x=x, y=y),
+            done_url=request.route_url('task_done', job=job_id, x=x, y=y))
+
+@view_config(route_name='task_take', permission='edit', renderer='json')
+def take(request):
+    job_id = request.matchdict['job']
+    x = request.matchdict['x']
+    y = request.matchdict['y']
+    session = DBSession()
+    tile = session.query(Tile).get((x, y, job_id))
+    tile.username = request.session.get("user")
+    tile.checkout = datetime.now()
+    session.add(tile)
+    return HTTPFound(location=request.route_url('task', job=job_id, x=x, y=y))
+
+@view_config(route_name='task_done', permission='edit', renderer='json')
+def done(request):
+    job_id = request.matchdict['job']
+    x = request.matchdict['x']
+    y = request.matchdict['y']
+    session = DBSession()
+    tile = session.query(Tile).get((x, y, job_id))
+    tile.username = None 
+    tile.checkout = None 
+    session.add(tile)
+    return HTTPFound(location=request.route_url('job', id=job_id))
