@@ -65,7 +65,7 @@ def take(request):
     user = session.query(User).get(request.session.get('user'))
     tiles = session.query(Tile).filter(Tile.checkin==int(user.role) - 1).all()
     try:
-        tile = tiles[random.randrange(0, len(tiles))]
+        tile = tiles[random.randrange(0, len(tiles) - 1)]
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:
         # FIXME # no available tile
