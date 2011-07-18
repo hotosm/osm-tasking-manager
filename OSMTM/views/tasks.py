@@ -9,6 +9,7 @@ from OSMTM.models import User
 
 from geojson import Feature
 from geojson import dumps
+from sqlalchemy.sql.expression import and_
 
 from datetime import datetime
 import random
@@ -64,7 +65,8 @@ def take(request):
     job_id = request.matchdict['job']
     session = DBSession()
     user = session.query(User).get(request.session.get('user'))
-    tiles = session.query(Tile).filter(Tile.checkin==int(user.role) - 1).all()
+    filter = and_(Tile.checkin==int(user.role) - 1, Tile.job_id==job_id)
+    tiles = session.query(Tile).filter(filter).all()
     try:
         tile = tiles[random.randrange(0, len(tiles) - 1)]
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
