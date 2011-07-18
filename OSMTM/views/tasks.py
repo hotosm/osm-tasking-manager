@@ -72,6 +72,6 @@ def take(request):
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:
         # FIXME # no available tile
-        request.session.flash('Sorry. No task available for you role currently')
+        request.session.flash('Sorry. No task available for your role currently')
         return HTTPFound(location=request.referrer)
 
