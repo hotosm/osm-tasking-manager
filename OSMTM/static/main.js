@@ -1,3 +1,3 @@
 $().ready(function() {
-    $('#flash').delay(2000).fadeOut(400);
+    $('#flash').fadeIn().delay(2000).fadeOut(400);
 });
