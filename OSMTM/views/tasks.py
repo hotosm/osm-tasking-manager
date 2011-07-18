@@ -56,6 +56,7 @@ def done(request):
     user = session.query(User).get(request.session.get('user'))
     tile.checkin = int(user.role)
     session.add(tile)
+    request.session.flash('Task marked as done')
     return HTTPFound(location=request.route_url('job', id=job_id))
 
 @view_config(route_name='task_take', permission='edit')
