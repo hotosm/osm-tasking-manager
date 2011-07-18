@@ -16,6 +16,7 @@
               text="text/css" media="screen" />
         <script type="text/javascript" src="${request.static_url('OSMTM:static/less.js')}"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/main.js')}"></script>
     </head>
     <body id="${self.id()}">
         <header class="group"> 
@@ -38,6 +39,14 @@
             % endif
         </div> 
         </header> 
+        % if request.session.peek_flash():
+            <div id="flash">
+                 <% flash = request.session.pop_flash() %>
+                 % for message in flash:
+                 ${message}<br>
+                 % endfor
+            </div>
+        % endif
         ${self.body()}
     </body>
 </html>

@@ -164,4 +164,5 @@ def profile_update(request):
         user = session.query(User).get(username)
         user.role = request.params['role']
         session.flush()
+        request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('profile'))
