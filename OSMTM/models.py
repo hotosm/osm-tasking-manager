@@ -24,7 +24,9 @@ from pyramid.security import Authenticated
 from OSMTM.utils import TileBuilder
 from OSMTM.utils import max 
 
-DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+from OSMTM.history_meta import VersionedMeta, VersionedListener
+
+DBSession = scoped_session(sessionmaker(extension=[ZopeTransactionExtension(), VersionedListener()]))
 Base = declarative_base()
 
 class RootFactory(object):
@@ -34,6 +36,7 @@ class RootFactory(object):
         pass
 
 class Tile(Base):
+    __metaclass__ = VersionedMeta
     __tablename__ = "tiles"
     x = Column(Integer, primary_key=True)
     y = Column(Integer, primary_key=True)
