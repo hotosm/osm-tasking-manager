@@ -65,6 +65,13 @@ def take(request):
     job_id = request.matchdict['job']
     session = DBSession()
     user = session.query(User).get(request.session.get('user'))
+    # first check if user has no task he's currently working on
+    filter = Tile.username==request.session.get('user')
+    tiles = session.query(Tile).filter(filter).all()
+    if len(tiles) > 0:
+        request.session.flash('You already have a task to work on. Finish it before you can accept a new one.')
+        return HTTPFound(location=request.route_url('job', id=job_id))
+
     filter = and_(Tile.checkin==int(user.role) - 1, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
     try:
