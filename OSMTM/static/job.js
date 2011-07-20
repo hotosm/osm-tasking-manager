@@ -21,7 +21,7 @@ map.addLayer(layer);
 var format = new OpenLayers.Format.WKT();
 layer.addFeatures(format.read(geometry));
 
-var colors = ["grey", "red", "yellow", "green"];
+var colors = ["#aaa", "red", "green"];
 var context = {
     getColor: function(feature) {
         checkin = feature.attributes.checkin || 0;
@@ -30,7 +30,7 @@ var context = {
 };
 var template = {
     fillColor: "${getColor}",
-    fillOpacity: 0.3,
+    fillOpacity: 0.5,
     strokeColor: "black",
     strokeWidth: 0.3,
     strokeOpacity: 0.5

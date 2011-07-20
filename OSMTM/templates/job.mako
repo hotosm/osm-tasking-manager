@@ -8,8 +8,6 @@
         <p>${job.description}</p>
         <h3>Workflow</h3>
         <p>${job.workflow}</p>
-        <h3>Tiles</h3>
-        <p>Number of tiles : ${len(job.tiles)}</p>
         % if not admin:
         <h2>Tasks</h2>
         <h3>Task you are currently working on</h3>
@@ -31,6 +29,13 @@
     </section>
     <section class="map">
         <div id="map"></div>
+        <div id="stats">
+            <ul class="legend">
+                <li><div class=""></div>Total (${len(job.tiles)})</li>
+                <li><div class="checkin1"></div>Done (${len([x for x in job.tiles if x.checkin == 1])})</li>
+                <li><div class="checkin2"></div>Validated (${len([x for x in job.tiles if x.checkin == 2])})</li>
+            </ul>
+        </div>
     </section>
 </div>
 <script type="text/javascript">
