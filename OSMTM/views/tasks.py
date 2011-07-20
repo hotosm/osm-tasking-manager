@@ -27,8 +27,11 @@ def task(request):
     if tile is None:
         return HTTPNotFound()
     polygon=tile.to_polygon()
+    username = request.session.get("user")
+    user = session.query(User).get(username)
     return dict(tile=tile,
             feature=dumps(polygon),
+            user=user,
             job_url=request.route_url('job', id=job_id),
             accept_url=request.route_url('task_accept', job=job_id, x=x, y=y),
             done_url=request.route_url('task_done', job=job_id, x=x, y=y))
@@ -54,10 +57,13 @@ def done(request):
     tile = session.query(Tile).get((x, y, job_id))
     tile.username = None 
     tile.checkout = None 
-    user = session.query(User).get(request.session.get('user'))
-    tile.checkin = int(user.role)
+    if 'invalidate' in request.params:
+        # task goes back to the queue
+        tile.checkin = 0
+    else:
+        user = session.query(User).get(request.session.get('user'))
+        tile.checkin = int(user.role)
     session.add(tile)
-    request.session.flash('Task marked as done')
     return HTTPFound(location=request.route_url('job', id=job_id))
 
 @view_config(route_name='task_take', permission='edit')

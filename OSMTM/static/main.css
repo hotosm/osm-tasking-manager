@@ -175,9 +175,6 @@ form {
             .border-radius;
         }
     }
-    input[type=submit] {
-        margin-left: 160px;
-    }
 }
 
 // Specific Pages
@@ -220,6 +217,9 @@ form {
     section.map {
         display: none;
     }
+    input[type=submit] {
+        margin-left: 160px;
+    }
 }
 #job, #job_new, #task {
     section.job, section.task {
@@ -228,6 +228,14 @@ form {
         width: (@content-width/2)*0.95 - 20px;
         margin-right: (@content-width/2)*0.05;
         margin-left: @rhythm / 2;
+
+        button[type="submit"] {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        button img {
+            vertical-align: middle;
+        }
     }
     section.map {
         float: right;
