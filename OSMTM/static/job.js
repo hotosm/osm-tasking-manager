@@ -31,7 +31,8 @@ var context = {
 var template = {
     fillColor: "${getColor}",
     fillOpacity: 0.3,
-    strokeColor: "${getColor}",
+    strokeColor: "black",
+    strokeWidth: 0.3,
     strokeOpacity: 0.5
 };
 var style = new OpenLayers.Style(template, {context: context});
