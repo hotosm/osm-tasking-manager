@@ -2,7 +2,7 @@
 <%def name="id()">task</%def>
 <%def name="title()">Tile - ${tile.x} / ${tile.y}</%def>
 <div class="content group wrap">
-    <h1>${tile.job.title}</h1>
+    <h1>Job: <a href="${request.route_url('job', id=tile.job_id)}">${tile.job.title}</a></h1>
     <section class="task">
         <h2>${tile.x} / ${tile.y}</h2>
         <div> 
