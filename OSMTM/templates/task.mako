@@ -34,15 +34,6 @@
                     <a href="javascript:void(0);" id="potlatch2">Potlatch 2</a>, 
                     <a href="javascript:void(0);" id="wp">Walking Papers</a>
                 </p>
-            % else:
-                % if user.role == 1:
-
-                % else:
-                    <p>If you accept the task, your job is to <b>review</b> the done by xxxxxxx on this task.</p>
-                % endif
-                <form action="${request.route_url('task_accept', job=tile.job_id, x=tile.x, y=tile.y)}">
-                    <input type="submit" value="accept the task"/>
-                </form>
             % endif
         </div>
         <hr />
