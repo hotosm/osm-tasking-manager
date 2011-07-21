@@ -33,20 +33,7 @@ def task(request):
             feature=dumps(polygon),
             user=user,
             job_url=request.route_url('job', id=job_id),
-            accept_url=request.route_url('task_accept', job=job_id, x=x, y=y),
             done_url=request.route_url('task_done', job=job_id, x=x, y=y))
-
-@view_config(route_name='task_accept', permission='edit', renderer='json')
-def accept(request):
-    job_id = request.matchdict['job']
-    x = request.matchdict['x']
-    y = request.matchdict['y']
-    session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
-    tile.username = request.session.get("user")
-    tile.checkout = datetime.now()
-    session.add(tile)
-    return HTTPFound(location=request.route_url('task', job=job_id, x=x, y=y))
 
 @view_config(route_name='task_done', permission='edit', renderer='json')
 def done(request):
@@ -82,6 +69,9 @@ def take(request):
     tiles = session.query(Tile).filter(filter).all()
     try:
         tile = tiles[random.randrange(0, len(tiles))]
+        tile.username = request.session.get("user")
+        tile.checkout = datetime.now()
+        session.add(tile)
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:
         # FIXME # no available tile
