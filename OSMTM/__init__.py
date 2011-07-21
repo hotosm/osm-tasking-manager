@@ -30,7 +30,7 @@ def main(global_config, **settings):
     config.add_route('job_new', '/job/new')
     config.add_route('job', '/job/{id}')
     config.add_route('task', '/job/{job}/task/{x}/{y}')
-    #config.add_route('task_accept', '/job/{job}/task/{x}/{y}/accept')
+    config.add_route('task_unlock', '/job/{job}/task/{x}/{y}/unlock')
     config.add_route('task_done', '/job/{job}/task/{x}/{y}/done')
     config.add_route('task_take', '/job/{job}/take')
     config.add_route('profile', '/profile')

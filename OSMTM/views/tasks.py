@@ -53,6 +53,18 @@ def done(request):
     session.add(tile)
     return HTTPFound(location=request.route_url('job', id=job_id))
 
+@view_config(route_name='task_unlock', permission='edit')
+def unlock(request):
+    job_id = request.matchdict['job']
+    x = request.matchdict['x']
+    y = request.matchdict['y']
+    session = DBSession()
+    tile = session.query(Tile).get((x, y, job_id))
+    tile.username = None 
+    tile.checkout = None 
+    session.add(tile)
+    return HTTPFound(location=request.route_url('job', id=job_id))
+
 @view_config(route_name='task_take', permission='edit')
 def take(request):
     job_id = request.matchdict['job']

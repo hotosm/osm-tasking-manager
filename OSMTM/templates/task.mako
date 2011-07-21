@@ -26,6 +26,10 @@
                         Invalidate
                     </button>
                 % endif 
+                <p>
+                Can't work on this task right now? No problem.
+                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}">Unlock it!</a>
+                </p>
                 </form>
                 <br />
                 <p id="export">
