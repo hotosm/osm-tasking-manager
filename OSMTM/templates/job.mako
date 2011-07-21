@@ -19,8 +19,7 @@
         % else:
         <div>
             <form action="${request.route_url('task_take', job=job.id)}">
-                <% disabled = current_task and 'disabled="disabled"' or '' %>
-                <input type="submit" value="Take a task randomly" ${disabled|n}/>
+                <input type="submit" value="Take a task randomly"/>
             </form>
         </div>
         % endif
