@@ -8,24 +8,23 @@
         <p>${job.description}</p>
         <h3>Workflow</h3>
         <p>${job.workflow}</p>
+        <hr />
         % if not admin:
-        <h2>Tasks</h2>
-        <h3>Task you are currently working on</h3>
         % if current_task:
+            <p>You are currently working on
             <a href="${request.route_url('task', job=current_task.job_id, x=current_task.x, y=current_task.y)}">
                 ${current_task.x} - ${current_task.y}
             </a>
+            </p>
         % else:
-            None
-        % endif
-        <h3>Assigned tasks</h3>
-        % endif
         <div>
             <form action="${request.route_url('task_take', job=job.id)}">
                 <% disabled = current_task and 'disabled="disabled"' or '' %>
                 <input type="submit" value="Take a task randomly" ${disabled|n}/>
             </form>
         </div>
+        % endif
+        % endif
     </section>
     <section class="map">
         <div id="map"></div>
