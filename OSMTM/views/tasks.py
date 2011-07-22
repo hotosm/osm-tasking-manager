@@ -44,6 +44,7 @@ def done(request):
     tile = session.query(Tile).get((x, y, job_id))
     tile.username = None 
     tile.checkout = None 
+    tile.comment = request.params['comment']
     if 'invalidate' in request.params:
         # task goes back to the queue
         tile.checkin = 0

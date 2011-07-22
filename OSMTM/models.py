@@ -44,6 +44,7 @@ class Tile(Base):
     username = Column(Unicode, ForeignKey('users.username'))
     checkout = Column(DateTime)
     checkin = Column(Integer)
+    comment = Column(Unicode)
 
     def __init__(self, x, y):
         self.x = x

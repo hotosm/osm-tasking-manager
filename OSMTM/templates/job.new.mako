@@ -45,7 +45,7 @@
                  <option>16</option>
             </select>
             </div> 
-            <div class="clear">
+            <div class="field">
             <input type="submit" class="submit" value="Create the job" id="id_submit" name="form.submitted" disabled="disabled"/> 
             </div>
         </form>
