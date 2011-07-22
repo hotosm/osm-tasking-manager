@@ -7,6 +7,12 @@
         <h1>New Job</h1>
         <form method="post" action="">
             <div class="field"> 
+                <label for="id_relation">Area of interest</label> 
+                <input type="text" class="text" id="id_relation" name="relation" value="" /> 
+                <input type="hidden" id="geometry" name="geometry" value="" />
+            </div>
+            <br />
+            <div class="field"> 
             <label for="id_title">Title</label> 
             <input type="text" class="text" id="id_title" name="title" value="" /> 
             </div> 
@@ -14,11 +20,6 @@
             <label for="id_description">Description</label> 
             <textarea class="text" id="id_description" name="description"></textarea> 
             </div> 
-            <div class="field"> 
-            <label for="id_relation">Area of interest</label> 
-            <input type="text" class="text" id="id_relation" name="relation" value="" /> 
-            <input type="hidden" id="geometry" name="geometry" value="" />
-            </div>
             <div class="field"> 
             <label for="id_workflow">Workflow</label> 
             <textarea class="text" id="id_workflow" name="workflow"></textarea> 
