@@ -2,8 +2,8 @@
 <%def name="id()">job</%def>
 <%def name="title()">Job - ${job.title}</%def>
 <div class="content group wrap">
-    <h1>Job: ${job.title}</h1>
     <section class="job">
+        <h1>Job: ${job.title}</h1>
         <h3>Description</h3>
         <p>${job.description}</p>
         <h3>Workflow</h3>
