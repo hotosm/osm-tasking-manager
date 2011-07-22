@@ -1,6 +1,7 @@
 var map = null,
     tiles = null;
 $('#id_relation')
+    .focus()
     .change(function() {
         $('#id_submit')[0].disabled = true;
         $('section.map').show();
