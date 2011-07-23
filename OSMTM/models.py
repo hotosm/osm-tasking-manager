@@ -25,6 +25,7 @@ from OSMTM.utils import TileBuilder
 from OSMTM.utils import max 
 
 from OSMTM.history_meta import VersionedMeta, VersionedListener
+from OSMTM.history_meta import _history_mapper 
 
 DBSession = scoped_session(sessionmaker(extension=[ZopeTransactionExtension(), VersionedListener()]))
 Base = declarative_base()
@@ -57,6 +58,8 @@ class Tile(Base):
         step = max/(2**(z - 1))
         tb = TileBuilder(step)
         return tb.create_square(self.x, self.y)
+
+TileHistory = Tile.__history_mapper__.class_
 
 class Job(Base):
     """ The SQLAlchemy declarative model class for a Page object. """

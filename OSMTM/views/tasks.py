@@ -5,6 +5,7 @@ from pyramid.url import route_url
 
 from OSMTM.models import DBSession
 from OSMTM.models import Tile
+from OSMTM.models import TileHistory
 from OSMTM.models import User
 
 from geojson import Feature
@@ -80,8 +81,23 @@ def take(request):
 
     filter = and_(Tile.checkin==int(user.role) - 1, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
-    try:
+    filter = and_(TileHistory.username==request.session.get('user'), TileHistory.job_id==job_id)
+    # get the tile the user worked on previously
+    p = session.query(TileHistory).filter(filter).order_by(TileHistory.checkout.desc()).limit(4).all()
+    tile = None
+    if p is not None and len(p) > 0:
+        p = p[len(p) -1]
+        neighbours = [
+            (p.x - 1, p.y - 1), (p.x - 1, p.y), (p.x - 1, p.y + 1),
+            (p.x, p.y - 1), (p.x, p.y + 1),
+            (p.x + 1, p.y - 1), (p.x + 1, p.y), (p.x + 1, p.y + 1)]
+        for t in tiles:
+            if (t.x, t.y) in neighbours:
+                tile = t
+                break
+    if tile is None:
         tile = tiles[random.randrange(0, len(tiles))]
+    try:
         tile.username = request.session.get("user")
         tile.checkout = datetime.now()
         session.add(tile)
