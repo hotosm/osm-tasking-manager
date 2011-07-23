@@ -72,7 +72,7 @@ def take(request):
     session = DBSession()
     user = session.query(User).get(request.session.get('user'))
     # first check if user has no task he's currently working on
-    filter = Tile.username==request.session.get('user')
+    filter = and_(Tile.username==request.session.get('user'), Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
     if len(tiles) > 0:
         request.session.flash('You already have a task to work on. Finish it before you can accept a new one.')

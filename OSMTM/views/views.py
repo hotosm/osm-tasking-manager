@@ -19,6 +19,7 @@ from geojson import Feature, FeatureCollection
 from geojson import dumps
 
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.sql.expression import and_
 
 import logging
 log = logging.getLogger(__file__)
@@ -143,7 +144,8 @@ def job(request):
     for tile in job.tiles:
         tiles.append(Feature(geometry=tile.to_polygon(), properties={'checkin': tile.checkin}))
     try:
-        current_task = session.query(Tile).filter(Tile.username==request.session.get('user')).one()
+        filter = and_(Tile.username==request.session.get('user'), Tile.job_id==job.id)
+        current_task = session.query(Tile).filter(filter).one()
     except NoResultFound, e:
         current_task = None
     return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
