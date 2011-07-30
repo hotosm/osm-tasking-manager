@@ -29,7 +29,51 @@ class TileModelTests(unittest.TestCase):
         self.assertEqual(instance.x, 1)
         self.assertEqual(instance.y, 2)
         self.assertEqual(instance.checkin, 0)
-        
+
+class JobModelTests(unittest.TestCase):
+
+    def setUp(self):
+        self.config = testing.setUp()
+        _initTestingDB()
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def _getTargetClass(self):
+        from OSMTM.models import Job
+        return Job
+
+    def _makeOne(self, title='SomeTitle', description='some description', geometry='some geometry', workflow='some workflow', zoom=1):
+        return self._getTargetClass()(title, description, geometry, workflow, zoom)
+
+    def test_constructor(self):
+        instance = self._makeOne()
+        self.assertEqual(instance.title, 'SomeTitle')
+        self.assertEqual(instance.description, 'some description')
+        self.assertEqual(instance.geometry, 'some geometry')
+        self.assertEqual(instance.workflow, 'some workflow')
+        self.assertEqual(instance.zoom, 1)
+
+class UserModelTests(unittest.TestCase):
+
+    def setUp(self):
+        self.config = testing.setUp()
+        _initTestingDB()
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def _getTargetClass(self):
+        from OSMTM.models import User
+        return User
+
+    def _makeOne(self, username='foo', role=2):
+        return self._getTargetClass()(username, role)
+
+    def test_constructor(self):
+        instance = self._makeOne()
+        self.assertEqual(instance.username, 'foo')
+        self.assertEqual(instance.role, 2)
 
 #class TestMyView(unittest.TestCase):
     #def setUp(self):

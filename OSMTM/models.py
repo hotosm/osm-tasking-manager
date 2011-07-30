@@ -74,7 +74,7 @@ class Job(Base):
 
     def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None):
         self.title = title
-        self.descript = description
+        self.description = description
         self.geometry = geometry
         self.workflow = workflow
         self.zoom = zoom
