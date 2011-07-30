@@ -18,7 +18,8 @@ requires = [
     'WebError',
     'oauth2==1.2.0',
     'imposm.parser',
-    'geojson'
+    'geojson',
+    'WebTest'
     ]
 
 if sys.version_info[:3] < (2,5,0):
