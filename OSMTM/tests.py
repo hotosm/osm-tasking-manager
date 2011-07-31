@@ -8,6 +8,9 @@ def _initTestingDB():
     session = initialize_sql(create_engine('sqlite:///:memory:'))
     return session
 
+def _registerRoutes(config):
+    config.add_route('job', 'job/{id}')
+
 class TileModelTests(unittest.TestCase):
 
     def setUp(self):
@@ -75,17 +78,45 @@ class UserModelTests(unittest.TestCase):
         self.assertEqual(instance.username, 'foo')
         self.assertEqual(instance.role, 2)
 
-#class TestMyView(unittest.TestCase):
-    #def setUp(self):
-        #self.config = testing.setUp()
-        #_initTestingDB()
+class TestHome(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        _initTestingDB()
 
-    #def tearDown(self):
-        #testing.tearDown()
+    def tearDown(self):
+        testing.tearDown()
 
-    #def test_it(self):
-        #from OSMTM.views import my_view
-        #request = testing.DummyRequest()
-        #info = my_view(request)
-        #self.assertEqual(info['root'].name, 'root')
-        #self.assertEqual(info['project'], 'OSMTM')
+    def test_it(self):
+        from OSMTM.views.views import home 
+        request = testing.DummyRequest()
+        request.session['user'] = 'foo'
+        info = home(request)
+        self.assertEqual(len(info['jobs']), 1)
+        self.assertEqual(info['user'].username, 'foo')
+        self.assertEqual(info['admin'], False)
+
+class TestJobNew(unittest.TestCase):
+    def setUp(self):
+        self.config = testing.setUp()
+        self.session = _initTestingDB()
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_it(self):
+        _registerRoutes(self.config)
+        from OSMTM.views.views import job_new
+        request = testing.DummyRequest()
+        request.params = {
+            'form.submitted': True,
+            'title':'NewJob',
+            'description':'SomeDescription',
+            'geometry':'POLYGON((0 0, 100 0, 100 100, 0 100, 0 0))',
+            'workflow':'SomeWorflow',
+            'zoom':20
+        }
+        response = job_new(request)
+        self.assertEqual(response.location, 'http://example.com/job/2')
+        from OSMTM.models import Job
+        self.assertEqual(len(self.session.query(Job).get(2).tiles),
+            9)

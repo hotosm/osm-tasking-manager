@@ -90,10 +90,12 @@ class User(Base):
         self.role = role
 
 def populate():
-    pass
-    #session = DBSession()
-    #session.flush()
-    #transaction.commit()
+    transaction.begin()
+    session = DBSession()
+    user = User('foo', 1)
+    session.add(user)
+    job = Job('SomeTitle', 'Some description', 'Some workflow', 'Some geometry', 10)
+    session.add(job)
     
 def initialize_sql(engine):
     DBSession.configure(bind=engine)
@@ -101,6 +103,8 @@ def initialize_sql(engine):
     Base.metadata.create_all(engine)
     try:
         populate()
+        transaction.commit()
     except IntegrityError:
         # already created
-        pass
+        transaction.abort()
+    return DBSession
