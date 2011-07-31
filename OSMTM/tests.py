@@ -96,6 +96,7 @@ class TestHome(unittest.TestCase):
         self.assertEqual(info['admin'], False)
 
 class TestJobNew(unittest.TestCase):
+    
     def setUp(self):
         self.config = testing.setUp()
         self.session = _initTestingDB()
@@ -120,3 +121,21 @@ class TestJobNew(unittest.TestCase):
         from OSMTM.models import Job
         self.assertEqual(len(self.session.query(Job).get(2).tiles),
             9)
+
+class TestJob(unittest.TestCase):
+    
+    def setUp(self):
+        self.config = testing.setUp()
+        self.session = _initTestingDB()
+
+    def tearDown(self):
+        testing.tearDown()
+
+    def test_it(self):
+        _registerRoutes(self.config)
+        from OSMTM.views.views import job
+        request = testing.DummyRequest()
+        request.matchdict = {'id': 1}
+        info = job(request)
+        from OSMTM.models import Job
+        self.assertEqual(info['job'], self.session.query(Job).get(1))
