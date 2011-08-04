@@ -12,7 +12,6 @@ $('#id_relation')
         });
         var osm = new OpenLayers.Layer.OSM();
         map.addLayer(osm);
-        OpenLayers.ProxyHost = '/osmproxy?url=';
          
         var url = "http://www.openstreetmap.org/api/0.6/relation/" + this.value + '/full';
         var layer = new OpenLayers.Layer.GML("Objects", url, {
