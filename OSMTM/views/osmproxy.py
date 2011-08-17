@@ -20,7 +20,7 @@ def osmproxy(request):
 
     # instantiate parser and parser and start parsing
     parser = RelationParser()
-    p = OSMParser(concurrency=4,
+    p = OSMParser(concurrency=1,
             coords_callback=parser.get_coords,
             relations_callback=parser.get_relations,
             ways_callback=parser.get_ways)
