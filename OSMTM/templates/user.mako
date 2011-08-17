@@ -21,7 +21,4 @@
             <input type="submit" name="form.submitted" value="Apply changes"/>
         </form>
     </section>
-    <section class="tasks">
-        <h1>Assigned tasks</h1>
-    </section>
 </div>
