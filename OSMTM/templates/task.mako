@@ -67,7 +67,7 @@
 <script type="text/javascript">
     var tiles = ${feature|n};
 </script>
-<script type="text/javascript" src="http://openlayers.org/dev/OpenLayers.js"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Static.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/task.js')}"></script>
