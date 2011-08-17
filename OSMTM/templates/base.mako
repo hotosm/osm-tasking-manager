@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>OSM Tasking Server - ${self.title()}</title>
+        <title>OSM Tasking Manager - ${self.title()}</title>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
         <meta name="keywords" content="HOT task server" />
         <meta name="description" content="HOT task server" />
