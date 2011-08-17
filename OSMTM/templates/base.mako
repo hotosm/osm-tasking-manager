@@ -21,7 +21,7 @@
     <body id="${self.id()}">
         <header class="group"> 
         <div class="wrap"> 
-            <a class="logo" href="/">OSM Tasking Server</a> 
+            <a class="logo" href="/">OSM Tasking Manager</a> 
             <%
                 user = request.session.get('user')
             %>
