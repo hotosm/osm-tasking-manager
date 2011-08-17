@@ -137,6 +137,10 @@ h2 {
     margin-top: 8px;
     margin-bottom: 12px;
 }
+h2 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
 a {
     text-decoration: none;
     color: @c-link;
