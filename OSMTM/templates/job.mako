@@ -5,9 +5,9 @@
     <section class="job">
         <h1>Job: ${job.title}</h1>
         <h3>Description</h3>
-        <p>${job.description}</p>
+        <p>${job.description|n}</p>
         <h3>Workflow</h3>
-        <p>${job.workflow}</p>
+        <p>${job.workflow|n}</p>
         <hr />
         % if not admin:
         % if current_task:
