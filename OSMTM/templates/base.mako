@@ -32,7 +32,7 @@
             </div>
             <ul> 
                 <li class="first"><a href="${request.route_url('home')}">Jobs list</a></li> 
-                <li class="last"><a href="/logout">Log Out</a></li> 
+                <li class="last"><a href="${request.route_url('logout')}">Log Out</a></li> 
                 <li class="last"><a href="${request.route_url('profile')}">Profile</a></li> 
             </ul> 
             </nav> 
