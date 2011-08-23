@@ -67,3 +67,4 @@
     OpenLayers.ProxyHost = '${request.route_url('osmproxy')}?url=';
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/job.new.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/CLEditor/jquery.cleditor.min.js')}"></script>

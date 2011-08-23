@@ -191,6 +191,9 @@ form {
             height: 100px - 2px;
             width: 230px;
         }
+        .cleditorMain {
+            display: inline-block;
+        }
     }
 }
 

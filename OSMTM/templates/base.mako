@@ -14,9 +14,13 @@
         <link rel="stylesheet"
               href="${request.static_url('OSMTM:static/map.css')}"
               text="text/css" media="screen" />
+        <link rel="stylesheet"
+              href="${request.static_url('OSMTM:static/CLEditor/jquery.cleditor.css')}"
+              text="text/css" media="screen" />
         <script type="text/javascript" src="${request.static_url('OSMTM:static/less.js')}"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/main.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/CLEditor/jquery.cleditor.min.js')}"></script>
     </head>
     <body id="${self.id()}">
         <header class="group"> 
