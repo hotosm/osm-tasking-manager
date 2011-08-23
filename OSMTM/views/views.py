@@ -142,7 +142,11 @@ def job(request):
     job = session.query(Job).get(id)
     tiles = []
     for tile in job.tiles:
-        tiles.append(Feature(geometry=tile.to_polygon(), properties={'checkin': tile.checkin}))
+        checkout = None
+        if tile.checkout is not None:
+            checkout = tile.checkout.isoformat()
+        tiles.append(Feature(geometry=tile.to_polygon(),
+            properties={'checkin': tile.checkin, 'checkout': checkout}))
     try:
         filter = and_(Tile.username==request.session.get('user'), Tile.job_id==job.id)
         current_task = session.query(Tile).filter(filter).one()

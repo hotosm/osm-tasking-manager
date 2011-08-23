@@ -298,6 +298,10 @@ form {
                 div.checkin2 {
                     background-color: green;
                 }
+                div.checkout {
+                    border-color: orange;
+                    background-color: transparent;
+                }
             }
         }
     }
