@@ -52,3 +52,10 @@ $('#id_zoom')
         //tiles.redraw();
     });
 
+
+$(document).ready(function() {
+    $.cleditor.defaultOptions.width = 230;
+    $.cleditor.defaultOptions.height = 150;
+    $.cleditor.defaultOptions.controls = "bold italic underline | color highlight | bullets numbering | link unlink";
+    $("textarea").cleditor();
+});
