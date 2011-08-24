@@ -89,10 +89,9 @@ class TestHome(unittest.TestCase):
     def test_it(self):
         from OSMTM.views.views import home 
         request = testing.DummyRequest()
-        request.session['user'] = 'foo'
+        self.config.testing_securitypolicy(userid='foo')
         info = home(request)
         self.assertEqual(len(info['jobs']), 1)
-        self.assertEqual(info['user'].username, 'foo')
         self.assertEqual(info['admin'], False)
 
 class TestJobNew(unittest.TestCase):
