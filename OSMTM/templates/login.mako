@@ -11,7 +11,7 @@
     <section class="login">
         <h1>Login</h1>
         <div> 
-            <a href="${request.route_url('login')}">Log in using your OpenStreetMap account</a>
+            <a href="${request.route_url('login', _query=[('came_from', request.url)])}">Log in using your OpenStreetMap account</a>
         </div>
     </section>
 </div>

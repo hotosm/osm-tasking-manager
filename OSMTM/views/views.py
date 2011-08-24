@@ -58,6 +58,7 @@ def login(request):
     # store the request token in the session, we'll need in the callback
     session = request.session
     session['request_token'] = request_token
+    session['came_from'] = request.params.get('came_from')
     session.save()
     oauth_callback = request.route_url('oauth_callback')
     redirect_url = "%s?oauth_token=%s&oauth_callback=%s" % \
@@ -95,7 +96,7 @@ def oauth_callback(request):
         headers = remember(request, username, max_age=2*24*60*60)
 
     # and redirect to the main page
-    return HTTPFound(location=request.route_url('home'), headers=headers)
+    return HTTPFound(location=session.get('came_from'), headers=headers)
 
 @view_config(route_name='logout')
 def logout(request):
