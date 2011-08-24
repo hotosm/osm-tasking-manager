@@ -23,7 +23,8 @@
         <div class="wrap"> 
             <a class="logo" href="/">OSM Tasking Manager</a> 
             <%
-                user = request.session.get('user')
+                from pyramid.security import authenticated_userid
+                user = authenticated_userid(request)
             %>
             % if user:
             <nav> 

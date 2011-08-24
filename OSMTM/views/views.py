@@ -21,6 +21,8 @@ from geojson import dumps
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import and_
 
+from pyramid.security import remember, forget, authenticated_userid
+
 import logging
 log = logging.getLogger(__file__)
 
@@ -86,31 +88,28 @@ def oauth_callback(request):
     # save the user's "display name" in the session
     if 'display_name' in user_elt.attrib:
         username = user_elt.attrib['display_name']
-        session['user'] = username 
-        session.save()
         db_session = DBSession()
         if db_session.query(User).get(username) is None:
             db_session.add(User(username))
             db_session.flush()
+        headers = remember(request, username, max_age=2*24*60*60)
 
     # and redirect to the main page
-    return HTTPFound(location=request.route_url('home'))
+    return HTTPFound(location=request.route_url('home'), headers=headers)
 
 @view_config(route_name='logout')
 def logout(request):
-    session = request.session
-    session.clear()
-    session.save()
-    return HTTPFound(location=request.route_url('home'))
+    headers = forget(request)
+    return HTTPFound(location=request.route_url('home'), headers=headers)
 
 @view_config(route_name='home', renderer='home.mako', permission='edit')
 def home(request):
     session = DBSession()
     jobs = session.query(Job).all()
-    username = request.session.get("user")
+    username = authenticated_userid(request)
     user = session.query(User).get(username)
     return dict(jobs=jobs,
-            user=user,
+            user=username,
             admin=user.username in ['pgiraud', 'wonderchook', 'Harry%20Wood', 'mikelmaron'])
 
 @view_config(route_name='job_new', renderer='job.new.mako',
@@ -144,7 +143,8 @@ def job(request):
     for tile in job.tiles:
         tiles.append(Feature(geometry=tile.to_polygon(), properties={'checkin': tile.checkin}))
     try:
-        filter = and_(Tile.username==request.session.get('user'), Tile.job_id==job.id)
+        username = authenticated_userid(request)
+        filter = and_(Tile.username==username, Tile.job_id==job.id)
         current_task = session.query(Tile).filter(filter).one()
     except NoResultFound, e:
         current_task = None
@@ -154,7 +154,7 @@ def job(request):
 @view_config(route_name='profile', renderer='user.mako', permission='edit')
 def profile(request):
     session = DBSession()
-    username = request.session.get("user")
+    username = authenticated_userid(request)
     user = session.query(User).get(username)
     return dict(user=user)
 

@@ -15,6 +15,8 @@ from sqlalchemy.sql.expression import and_
 from datetime import datetime
 import random
 
+from pyramid.security import authenticated_userid
+
 import logging
 log = logging.getLogger(__file__)
 
@@ -28,7 +30,7 @@ def task(request):
     if tile is None:
         return HTTPNotFound()
     polygon=tile.to_polygon()
-    username = request.session.get("user")
+    username = authenticated_userid(request)
     user = session.query(User).get(username)
     return dict(tile=tile,
             feature=dumps(polygon),
@@ -50,7 +52,8 @@ def done(request):
         # task goes back to the queue
         tile.checkin = 0
     else:
-        user = session.query(User).get(request.session.get('user'))
+        username = authenticated_userid(request)
+        user = session.query(User).get(username)
         tile.checkin = int(user.role)
     session.add(tile)
     return HTTPFound(location=request.route_url('job', id=job_id))
@@ -71,9 +74,10 @@ def unlock(request):
 def take(request):
     job_id = request.matchdict['job']
     session = DBSession()
-    user = session.query(User).get(request.session.get('user'))
+    username = authenticated_userid(request)
+    user = session.query(User).get(username)
     # first check if user has no task he's currently working on
-    filter = and_(Tile.username==request.session.get('user'), Tile.job_id==job_id)
+    filter = and_(Tile.username==username, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
     if len(tiles) > 0:
         request.session.flash('You already have a task to work on. Finish it before you can accept a new one.')
@@ -81,7 +85,7 @@ def take(request):
 
     filter = and_(Tile.checkin==int(user.role) - 1, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
-    filter = and_(TileHistory.username==request.session.get('user'), TileHistory.job_id==job_id)
+    filter = and_(TileHistory.username==username, TileHistory.job_id==job_id)
     # get the tile the user worked on previously
     p = session.query(TileHistory).filter(filter).order_by(TileHistory.checkout.desc()).limit(4).all()
     tile = None
@@ -98,7 +102,7 @@ def take(request):
     if tile is None:
         tile = tiles[random.randrange(0, len(tiles))]
     try:
-        tile.username = request.session.get("user")
+        tile.username = username 
         tile.checkout = datetime.now()
         session.add(tile)
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
