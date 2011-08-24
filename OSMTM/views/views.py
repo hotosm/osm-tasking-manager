@@ -109,8 +109,8 @@ def home(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     return dict(jobs=jobs,
-            user=username,
-            admin=user.username in ['pgiraud', 'wonderchook', 'Harry%20Wood', 'mikelmaron'])
+            user=user,
+            admin=user.username in ['pgiraud', 'wonderchook', 'Harry%20Wood', 'mikelmaron', 'Schuyler%20Erle', 'Nicolas%20Chavent'])
 
 @view_config(route_name='job_new', renderer='job.new.mako',
         permission='edit')
@@ -166,7 +166,7 @@ def profile(request):
 def profile_update(request):
     if 'form.submitted' in request.params:
         session = DBSession()
-        username = request.session.get("user")
+        username = authenticated_userid(request)
         user = session.query(User).get(username)
         user.role = request.params['role']
         session.flush()
