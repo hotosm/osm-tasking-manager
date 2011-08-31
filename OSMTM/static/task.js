@@ -86,4 +86,4 @@ var exportOpen = function() {
         break;
     }
 };
-$('p#export a').click(exportOpen);
+$('#export a').click(exportOpen);

@@ -1,7 +1,7 @@
 from pyramid_beaker import session_factory_from_settings
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
-from OSMTM.security import OSMTMAuthenticationPolicy
+from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 
 from OSMTM.models import initialize_sql
@@ -13,7 +13,7 @@ def main(global_config, **settings):
     settings['mako.directories'] = 'OSMTM:templates'
     engine = engine_from_config(settings, 'sqlalchemy.')
     initialize_sql(engine)
-    authn_policy = OSMTMAuthenticationPolicy()
+    authn_policy = AuthTktAuthenticationPolicy('super_secret')
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings,
             root_factory='OSMTM.models.RootFactory',

@@ -26,13 +26,21 @@ var context = {
     getColor: function(feature) {
         checkin = feature.attributes.checkin || 0;
         return colors[checkin];
+    },
+    getStrokeColor: function(feature) {
+        return (feature.attributes.checkout !== null) ?
+            "orange" : "black";
+    },
+    getStrokeWidth: function(feature) {
+        return (feature.attributes.checkout !== null) ?
+            1.5 : 0.3;
     }
 };
 var template = {
     fillColor: "${getColor}",
     fillOpacity: 0.5,
-    strokeColor: "black",
-    strokeWidth: 0.3,
+    strokeColor: "${getStrokeColor}",
+    strokeWidth: "${getStrokeWidth}",
     strokeOpacity: 0.5
 };
 var style = new OpenLayers.Style(template, {context: context});

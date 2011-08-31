@@ -55,9 +55,9 @@
         <hr />
         <div>
         <h3>Job Description</h3>
-        <p>${tile.job.description}</p>
+        <p>${tile.job.description|n}</p>
         <h3>Job Workflow</h3>
-        <p>${tile.job.workflow}</p>
+        <p>${tile.job.workflow|n}</p>
         </div>
     </section>
     <section class="map">

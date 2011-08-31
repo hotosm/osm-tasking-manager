@@ -5,9 +5,9 @@
     <section class="job">
         <h1>Job: ${job.title}</h1>
         <h3>Description</h3>
-        <p>${job.description}</p>
+        <p>${job.description|n}</p>
         <h3>Workflow</h3>
-        <p>${job.workflow}</p>
+        <p>${job.workflow|n}</p>
         <hr />
         % if not admin:
         % if current_task:
@@ -32,6 +32,7 @@
                 <li><div class=""></div>Total (${len(job.tiles)})</li>
                 <li><div class="checkin1"></div>Done (${len([x for x in job.tiles if x.checkin == 1])})</li>
                 <li><div class="checkin2"></div>Validated (${len([x for x in job.tiles if x.checkin == 2])})</li>
+                <li><div class="checkout"></div>Curr. worked on (${len([x for x in job.tiles if x.checkout != None])})</li>
             </ul>
         </div>
     </section>

@@ -137,6 +137,10 @@ h2 {
     margin-top: 8px;
     margin-bottom: 12px;
 }
+h2 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
 a {
     text-decoration: none;
     color: @c-link;
@@ -186,6 +190,9 @@ form {
         textarea {
             height: 100px - 2px;
             width: 230px;
+        }
+        .cleditorMain {
+            display: inline-block;
         }
     }
 }
@@ -290,6 +297,10 @@ form {
                 }
                 div.checkin2 {
                     background-color: green;
+                }
+                div.checkout {
+                    border-color: orange;
+                    background-color: transparent;
                 }
             }
         }
