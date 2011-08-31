@@ -38,6 +38,7 @@ Installation as a mod_wsgi Application
 --------------------------------------
 
 Install and enable mod_wsgi module in Apache::
+
     $ sudo apt-get install libapache2-mod-wsgi
 
 Create a new Apache config file with the following::
