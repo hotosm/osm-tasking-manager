@@ -87,3 +87,14 @@ var exportOpen = function() {
     }
 };
 $('#export a').click(exportOpen);
+
+$(function(){
+    var count = time_left;
+    var countdown = setInterval(function(){
+        $("span#countdown").html(Math.floor(count/60));
+        if (count === 0) {
+            window.location = window.location;
+        }
+        count--;
+    }, 1000);
+});

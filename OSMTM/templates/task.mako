@@ -50,6 +50,7 @@
                 <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}">Unlock it!</a>
                 </p>
                 </form>
+                <div class="comment"><span id="countdown"></span> minutes left</div>
             % endif
         </div>
         <hr />
@@ -66,6 +67,7 @@
 </div>
 <script type="text/javascript">
     var tiles = ${feature|n};
+    var time_left = ${time_left};
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>

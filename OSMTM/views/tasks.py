@@ -8,6 +8,8 @@ from OSMTM.models import Tile
 from OSMTM.models import TileHistory
 from OSMTM.models import User
 
+from OSMTM.views.views import EXPIRATION_DURATION, checkTask
+
 from geojson import Feature
 from geojson import dumps
 from sqlalchemy.sql.expression import and_
@@ -27,12 +29,18 @@ def task(request):
     y = request.matchdict['y']
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
+    checkTask(tile)
     if tile is None:
         return HTTPNotFound()
     polygon=tile.to_polygon()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    time_left = 0
+    if tile.checkout:
+        time_left = (tile.checkout - (datetime.now() - EXPIRATION_DURATION)) \
+            .seconds
     return dict(tile=tile,
+            time_left=time_left,
             feature=dumps(polygon),
             user=user,
             job_url=request.route_url('job', id=job_id),

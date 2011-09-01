@@ -23,6 +23,8 @@ from sqlalchemy.sql.expression import and_
 
 from pyramid.security import remember, forget, authenticated_userid
 
+from datetime import datetime, timedelta
+
 import logging
 log = logging.getLogger(__file__)
 
@@ -142,6 +144,9 @@ def job(request):
     job = session.query(Job).get(id)
     tiles = []
     for tile in job.tiles:
+        checkTask(tile)
+
+    for tile in job.tiles:
         checkout = None
         if tile.checkout is not None:
             checkout = tile.checkout.isoformat()
@@ -173,3 +178,15 @@ def profile_update(request):
         session.flush()
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('profile'))
+
+# the time delta after which the task is unlocked (in seconds)
+EXPIRATION_DURATION = timedelta(seconds=2 * 60 * 60)
+
+# unlock the tile if expired
+def checkTask(tile):
+    session = DBSession()
+    if tile.checkout is not None:
+        if datetime.now() > tile.checkout + EXPIRATION_DURATION:
+            tile.username = None 
+            tile.checkout = None 
+            session.add(tile)
