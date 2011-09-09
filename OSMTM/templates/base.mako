@@ -32,15 +32,19 @@
             %>
             % if user:
             <nav> 
-            <div id="login">
-                You are ${user}
-            </div>
             <ul> 
                 <li class="first"><a href="${request.route_url('home')}">Jobs list</a></li> 
-                <li class="last"><a href="${request.route_url('logout')}">Log Out</a></li> 
-                <li class="last"><a href="${request.route_url('profile')}">Profile</a></li> 
             </ul> 
             </nav> 
+            <div id="logged_in_topnav">
+              <div id="topnav_element">
+                You are ${user}
+              </div>
+              <ul id="logged_in_drodown">
+                <li><a href="${request.route_url('profile')}">Profile</a></li> 
+                <li><a id="logout_link" href="${request.route_url('logout')}">Log Out</a></li> 
+              </ul>
+            </div>
             % endif
         </div> 
         </header> 

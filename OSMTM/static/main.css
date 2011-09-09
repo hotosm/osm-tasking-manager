@@ -43,6 +43,7 @@ html, body {
 .wrap {
     width: @content-width;
     margin: 0 auto;
+    position: relative;
 }
 body > header {
     text-align: left;
@@ -95,16 +96,59 @@ body > header {
             li.first {
                 margin-left: 20px;
             }
-            li.last {
-                float: right;
+        }
+    }
+    div#logged_in_topnav {
+        z-index: 2000;
+        display: block;
+        position: absolute;
+        right: 0;
+        color: #ccc;
+        font-size: 0.8em;
+        cursor: pointer;
+        height: 80px;
+
+        div#topnav_element {
+            padding: 10px 20px;
+            line-height: 34px;
+        }
+
+        ul#logged_in_drodown, #logout_link {
+            .border-radius(0 0 5px 5px);
+        }
+        ul#logged_in_drodown {
+            display: none;
+            background: white;
+            border: solid grey;
+            border-width: 0 1px 1px 1px;
+            text-align: center;
+
+            li:hover {
+                a {
+                    background: #B2222C;
+                    color: white;
+                }
+            }
+
+            a {
+                padding: 5px 0;
+                text-decoration: none;
+                display: block;
+                color: #222;
             }
         }
-        div#login {
-            display: block;
-            position: absolute;
-            right: 0;
-            color: #ccc;
-            font-size: 0.8em;
+        &:hover {
+            text-decoration: none;
+            background: white;
+            div#topnav_element {
+                color: #222;
+                text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.7);
+                border: solid grey;
+                border-width: 0 1px;
+            }
+            ul#logged_in_drodown {
+                display: block;
+            }
         }
     }
 }
