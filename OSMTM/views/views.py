@@ -113,7 +113,7 @@ def home(request):
     user = session.query(User).get(username)
     return dict(jobs=jobs,
             user=user,
-            admin=user.username in ['pgiraud', 'wonderchook', 'Harry%20Wood', 'mikelmaron', 'Schuyler%20Erle', 'Nicolas%20Chavent'])
+            admin=user.username in ['pgiraud', 'wonderchook', 'Harry Wood', 'mikelmaron', 'Schuyler Erle', 'Nicolas Chavent'])
 
 @view_config(route_name='job_new', renderer='job.new.mako',
         permission='edit')
