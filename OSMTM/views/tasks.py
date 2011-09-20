@@ -107,9 +107,9 @@ def take(request):
             if (t.x, t.y) in neighbours:
                 tile = t
                 break
-    if tile is None:
-        tile = tiles[random.randrange(0, len(tiles))]
     try:
+        if tile is None:
+            tile = tiles[random.randrange(0, len(tiles))]
         tile.username = username 
         tile.checkout = datetime.now()
         session.add(tile)
