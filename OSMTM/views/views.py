@@ -179,6 +179,22 @@ def profile_update(request):
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('profile'))
 
+@view_config(route_name='user', renderer='user.mako', permission='admin')
+def user(request):
+    session = DBSession()
+    user = session.query(User).get(request.matchdict["id"])
+    return dict(user=user)
+
+@view_config(route_name='user_update', permission='admin')
+def user_update(request):
+    if 'form.submitted' in request.params:
+        session = DBSession()
+	user = session.query(User).get(request.matchdict["id"])
+        user.role = request.params['role']
+        session.flush()
+        request.session.flash('Profile correctly updated!')
+    return HTTPFound(location=request.route_url('user'))
+
 # the time delta after which the task is unlocked (in seconds)
 EXPIRATION_DURATION = timedelta(seconds=2 * 60 * 60)
 
