@@ -18,6 +18,14 @@
                 % endif
             />
             <label for="role_2">Advanced mapper</label>
+	    % if admin or user.role == 3:
+            <input type="radio" id="role_3" name="role" value="3"
+                % if user.role == 3:
+                checked="checked"
+                % endif
+            />
+            <label for="role_3">Admin</label>
+	    % endif
             <input type="submit" name="form.submitted" value="Apply changes"/>
         </form>
     </section>

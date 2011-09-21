@@ -183,7 +183,7 @@ def profile_update(request):
 def user(request):
     session = DBSession()
     user = session.query(User).get(request.matchdict["id"])
-    return dict(user=user)
+    return dict(user=user, admin=True)
 
 @view_config(route_name='user_update', permission='admin')
 def user_update(request):
