@@ -97,9 +97,9 @@ def group_membership(username, request):
     session = DBSession()
     user = session.query(User).get(username)
     if user and user.is_admin():
-	return ('admin',)
+	return ['group:admin']
     else:
-	return ()
+	return []
 
 def populate():
     transaction.begin()
