@@ -32,7 +32,8 @@ Base = declarative_base()
 
 class RootFactory(object):
     __acl__ = [ (Allow, Everyone, 'view'),
-                (Allow, Authenticated, 'edit') ]
+                (Allow, Authenticated, 'edit'),
+		(Allow, 'group:admin', 'admin') ]
     def __init__(self, request):
         pass
 
@@ -88,6 +89,17 @@ class User(Base):
     def __init__(self, username, role=1):
         self.username = username
         self.role = role
+
+    def is_admin(self):
+	return self.role == 3
+
+def group_membership(username, request):
+    session = DBSession()
+    user = session.query(User).get(username)
+    if user and user.is_admin():
+	return ('admin',)
+    else:
+	return ()
 
 def populate():
     transaction.begin()
