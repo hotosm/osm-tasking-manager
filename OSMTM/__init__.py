@@ -38,6 +38,7 @@ def main(global_config, **settings):
     config.add_route('profile_update', '/profile/update')
     config.add_route('user', '/user/{id}')
     config.add_route('user_update', '/user/{id}/update')
+    config.add_route('users', '/users')
     config.add_route('osmproxy', '/osmproxy')
     config.add_route('oauth_callback', '/oauth_callback')
     config.add_view('OSMTM.views.security.login',
