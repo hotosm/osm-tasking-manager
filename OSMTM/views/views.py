@@ -33,9 +33,9 @@ log = logging.getLogger(__file__)
 #
 
 # our oauth key and secret (we're the consumer in the oauth protocol)
-# <http://www.openstreetmap.org/user/erilem/oauth_clients/217>
-CONSUMER_KEY = 'fxGma7joOqfMiG97vxGzg'
-CONSUMER_SECRET = '7kZ81u3zjlGTLtjgX7j4rfSNRJHwHyX8UNBBIvXb55k'
+# consumer key and secret created by Kate Chapman
+CONSUMER_KEY = 'BOFkVgLDXTSMP6VHfiX8MQ'
+CONSUMER_SECRET = '4o4uLSqLWMciG2fE2zGncLcdewPNi9wU1To51Iz2E'
 
 # OSM oauth URLs
 BASE_URL = 'http://www.openstreetmap.org/oauth'
