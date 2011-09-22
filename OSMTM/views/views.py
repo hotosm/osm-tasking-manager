@@ -189,7 +189,7 @@ def user(request):
 def user_update(request):
     if 'form.submitted' in request.params:
         session = DBSession()
-	user = session.query(User).get(request.matchdict["id"])
+        user = session.query(User).get(request.matchdict["id"])
         user.role = request.params['role']
         session.flush()
         request.session.flash('Profile correctly updated!')

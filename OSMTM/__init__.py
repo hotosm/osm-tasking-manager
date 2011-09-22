@@ -14,7 +14,7 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     initialize_sql(engine)
     authn_policy = AuthTktAuthenticationPolicy(
-	    secret='super_secret', callback=group_membership)
+            secret='super_secret', callback=group_membership)
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings,
             root_factory='OSMTM.models.RootFactory',
