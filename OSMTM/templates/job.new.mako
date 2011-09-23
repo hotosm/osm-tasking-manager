@@ -36,8 +36,6 @@
                  <option>16</option>
                  <option>17</option>
                  <option>18</option>
-                 <option>19</option>
-                 <option>20</option>
             </select>
             </div> 
             <div class="field">
