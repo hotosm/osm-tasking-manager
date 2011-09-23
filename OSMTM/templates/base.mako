@@ -28,17 +28,22 @@
             <a class="logo" href="/">OSM Tasking Manager</a> 
             <%
                 from pyramid.security import authenticated_userid
-                user = authenticated_userid(request)
+                from OSMTM.models import DBSession, User
+                username = authenticated_userid(request)
+                user = DBSession().query(User).get(username)
             %>
             % if user:
             <nav> 
             <ul> 
-                <li class="first"><a href="${request.route_url('home')}">Jobs list</a></li> 
+                <li class="first"><a href="${request.route_url('home')}">Jobs</a></li> 
+                % if user.is_admin():
+                <li class="first"><a href="${request.route_url('users')}">Users</a></li> 
+                % endif
             </ul> 
             </nav> 
             <div id="logged_in_topnav">
               <div id="topnav_element">
-                You are ${user}
+                You are ${user.username}
               </div>
               <ul id="logged_in_drodown">
                 <li><a href="${request.route_url('profile')}">Profile</a></li> 
