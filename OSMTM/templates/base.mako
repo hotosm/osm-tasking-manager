@@ -30,7 +30,10 @@
                 from pyramid.security import authenticated_userid
                 from OSMTM.models import DBSession, User
                 username = authenticated_userid(request)
-                user = DBSession().query(User).get(username)
+                if username is not None:
+                    user = DBSession().query(User).get(username)
+                else:
+                    user = None
             %>
             % if user:
             <nav> 
