@@ -158,8 +158,11 @@ def job(request):
         current_task = session.query(Tile).filter(filter).one()
     except NoResultFound, e:
         current_task = None
+    username = authenticated_userid(request)
+    user = session.query(User).get(username)
     return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
-            current_task=current_task) 
+            current_task=current_task,
+            admin=user.is_admin())
 
 @view_config(route_name='profile', renderer='user.mako', permission='edit')
 def profile(request):
