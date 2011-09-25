@@ -8,8 +8,8 @@
         <p>${job.description|n}</p>
         <h3>Workflow</h3>
         <p>${job.workflow|n}</p>
-        <hr />
         % if not admin:
+        <hr />
         % if current_task:
             <p>You are currently working on
             <a href="${request.route_url('task', job=current_task.job_id, x=current_task.x, y=current_task.y)}">
@@ -23,6 +23,14 @@
             </form>
         </div>
         % endif
+        % else:
+        <h3>Statistics</h3>
+        <ul>
+          Users currently working on tasks:
+          % for user in stats['current_users']:
+          <li>${user}</li>
+          % endfor
+        </ul>
         % endif
     </section>
     <section class="map">

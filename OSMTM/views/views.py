@@ -160,9 +160,11 @@ def job(request):
         current_task = None
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    stats = get_stats(job) if user.is_admin() else None
     return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
             current_task=current_task,
-            admin=user.is_admin())
+            admin=user.is_admin(),
+            stats=stats)
 
 @view_config(route_name='profile', renderer='user.mako', permission='edit')
 def profile(request):
@@ -216,3 +218,14 @@ def checkTask(tile):
             tile.username = None 
             tile.checkout = None 
             session.add(tile)
+
+def get_stats(job):
+    session = DBSession()
+    tiles = session.query(Tile).filter(Tile.job_id==job.id) \
+        .filter(Tile.checkout!=None).all()
+    current_users = [tile.username for tile in tiles]
+
+    done_and_validated = session.query(Tile).filter(Tile.checkin==2).all()
+    log.info(done_and_validated)
+
+    return dict(current_users=current_users)
