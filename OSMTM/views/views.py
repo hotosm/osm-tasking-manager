@@ -9,6 +9,7 @@ from OSMTM.models import DBSession
 from OSMTM.models import Job
 from OSMTM.models import User
 from OSMTM.models import Tile
+from OSMTM.models import TileHistory
 
 import oauth2 as oauth
 
@@ -221,11 +222,12 @@ def checkTask(tile):
 
 def get_stats(job):
     session = DBSession()
-    tiles = session.query(Tile).filter(Tile.job_id==job.id) \
-        .filter(Tile.checkout!=None).all()
-    current_users = [tile.username for tile in tiles]
+    filter = and_(Tile.job_id==job.id, Tile.checkout!=None)
+    users = session.query(Tile.username).filter(filter)
+    current_users = [user.username for user in users]
 
-    done_and_validated = session.query(Tile).filter(Tile.checkin==2).all()
-    log.info(done_and_validated)
+    filter = and_(TileHistory.job_id==job.id, TileHistory.username!=None)
+    users = session.query(TileHistory.username).filter(filter).distinct()
+    all_time_users = [user.username for user in users]
 
-    return dict(current_users=current_users)
+    return dict(current_users=current_users, all_time_users=all_time_users)

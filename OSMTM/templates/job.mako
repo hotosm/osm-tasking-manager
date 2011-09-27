@@ -25,12 +25,26 @@
         % endif
         % else:
         <h3>Statistics</h3>
+        % if stats['current_users']:
         <ul>
           Users currently working on tasks:
           % for user in stats['current_users']:
-          <li>${user}</li>
+          <li>
+            <a href="${request.route_url('user',id=user)}">${user}</a>
+          </li>
           % endfor
         </ul>
+        % endif
+        % if stats['all_time_users']:
+        <ul>
+          Contributors on this job:
+          % for user in stats['all_time_users']:
+          <li>
+            <a href="${request.route_url('user',id=user)}">${user}</a>
+          </li>
+          % endfor
+        </ul>
+        % endif
         % endif
     </section>
     <section class="map">

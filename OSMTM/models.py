@@ -84,7 +84,6 @@ class User(Base):
     __tablename__ = "users"
     username = Column(Unicode, primary_key=True)
     role = Column(Integer) # 1 - newbie, 2 - advanced, 3 - admin
-    task = relationship(Tile, backref='user')
 
     def __init__(self, username, role=1):
         self.username = username
