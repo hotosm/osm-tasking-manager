@@ -108,9 +108,9 @@ def logout(request):
 @view_config(route_name='home', renderer='home.mako', permission='edit')
 def home(request):
     session = DBSession()
-    jobs = session.query(Job).all()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    jobs = [job for job in session.query(Job).all() if not job.is_private] + user.private_jobs
     return dict(jobs=jobs,
             user=user,
             admin=user.is_admin())
