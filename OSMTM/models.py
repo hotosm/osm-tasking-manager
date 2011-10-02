@@ -73,11 +73,13 @@ class User(Base):
     __tablename__ = "users"
     username = Column(Unicode, primary_key=True)
     role = Column(Integer) # 1 - newbie, 2 - advanced, 3 - admin
+    accepted_nextview = Column(Boolean)
     task = relationship(Tile, backref='user')
 
-    def __init__(self, username, role=1):
+    def __init__(self, username, role=1, accepted_nextview=False):
         self.username = username
         self.role = role
+        self.accepted_nextview = accepted_nextview
 
     def is_admin(self):
         return self.role == 3
