@@ -135,7 +135,7 @@ def job_new(request):
 
         session.add(job)
         session.flush()
-        return HTTPFound(location = route_url('job', request, id=job.id))
+        return HTTPFound(location = route_url('job', request, job=job.id))
     return {} 
 
 @view_config(route_name='job', renderer='job.mako', permission='job')
