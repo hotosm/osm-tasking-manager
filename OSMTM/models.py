@@ -69,6 +69,19 @@ job_whitelist_table = Table('job_whitelists', Base.metadata,
     Column('user_id', Unicode, ForeignKey('users.username'))
 )
 
+class User(Base):
+    __tablename__ = "users"
+    username = Column(Unicode, primary_key=True)
+    role = Column(Integer) # 1 - newbie, 2 - advanced, 3 - admin
+    task = relationship(Tile, backref='user')
+
+    def __init__(self, username, role=1):
+        self.username = username
+        self.role = role
+
+    def is_admin(self):
+        return self.role == 3
+
 class Job(Base):
     """ The SQLAlchemy declarative model class for a Page object. """
     __tablename__ = 'jobs'
@@ -91,19 +104,6 @@ class Job(Base):
         self.workflow = workflow
         self.zoom = zoom
         self.is_private = is_private
-
-class User(Base):
-    __tablename__ = "users"
-    username = Column(Unicode, primary_key=True)
-    role = Column(Integer) # 1 - newbie, 2 - advanced, 3 - admin
-    task = relationship(Tile, backref='user')
-
-    def __init__(self, username, role=1):
-        self.username = username
-        self.role = role
-
-    def is_admin(self):
-        return self.role == 3
 
 def group_membership(username, request):
     session = DBSession()
