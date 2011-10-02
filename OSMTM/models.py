@@ -90,20 +90,26 @@ class Job(Base):
     description = Column(Unicode)
     geometry = Column(Unicode)
     workflow = Column(Unicode)
+    imagery = Column(Unicode)
     zoom = Column(Integer)
     is_private = Column(Boolean)
+    requires_nextview = Column(Boolean)
     tiles = relationship(Tile, backref='job')
     users = relationship(User,
                 secondary=job_whitelist_table,
                 backref='private_jobs')
 
-    def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None, is_private=False):
+    def __init__(self, title=None, description=None, geometry=None,
+                 workflow=None, zoom=None, is_private=False, imagery=None,
+                 requires_nextview=False):
         self.title = title
         self.description = description
         self.geometry = geometry
         self.workflow = workflow
+        self.imagery = imagery
         self.zoom = zoom
         self.is_private = is_private
+        self.requires_nextview = requires_nextview
 
 def group_membership(username, request):
     session = DBSession()
@@ -121,7 +127,7 @@ def populate():
     session = DBSession()
     user = User('foo', 1)
     session.add(user)
-    job = Job('SomeTitle', 'Some description', 'Some workflow', 'Some geometry', 10, False)
+    job = Job('SomeTitle', 'Some description', 'Some workflow', 'Some geometry', 10, False, 'Some URL', False)
     session.add(job)
     
 def initialize_sql(engine):
