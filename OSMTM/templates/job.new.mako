@@ -39,6 +39,10 @@
             </select>
             </div> 
             <div class="field">
+            <label for="id_is_private">Is private?</label>
+            <input type="checkbox" id="id_is_private" name="is_private" value="1" />
+            </div>
+            <div class="field">
             <input type="submit" class="submit" value="Create the job" id="id_submit" name="form.submitted" disabled="disabled"/> 
             </div>
         </form>

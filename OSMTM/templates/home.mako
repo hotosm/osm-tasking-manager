@@ -6,7 +6,7 @@
         <ul>
         % if jobs:
             % for job in jobs:
-                <li><a href="${request.route_url('job', id=job.id)}">${job.title}</a></li>
+                <li><a href="${request.route_url('job', job=job.id)}">${job.title}</a></li>
             % endfor
         % else:
             <li>No job to show</li>

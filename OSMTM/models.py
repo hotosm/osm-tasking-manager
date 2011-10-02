@@ -3,6 +3,7 @@ import transaction
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Unicode
+from sqlalchemy import Boolean
 from sqlalchemy import DateTime
 from sqlalchemy import Table
 from sqlalchemy import Column
@@ -33,6 +34,7 @@ Base = declarative_base()
 class RootFactory(object):
     __acl__ = [ (Allow, Everyone, 'view'),
                 (Allow, Authenticated, 'edit'),
+                (Allow, Authenticated, 'job'),
                 (Allow, 'group:admin', 'admin') ]
     def __init__(self, request):
         pass
@@ -62,23 +64,10 @@ class Tile(Base):
 
 TileHistory = Tile.__history_mapper__.class_
 
-class Job(Base):
-    """ The SQLAlchemy declarative model class for a Page object. """
-    __tablename__ = 'jobs'
-    id = Column(Integer, primary_key=True)
-    title = Column(Unicode, unique=True)
-    description = Column(Unicode)
-    geometry = Column(Unicode)
-    workflow = Column(Unicode)
-    zoom = Column(Integer)
-    tiles = relationship(Tile, backref='job')
-
-    def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None):
-        self.title = title
-        self.description = description
-        self.geometry = geometry
-        self.workflow = workflow
-        self.zoom = zoom
+job_whitelist_table = Table('job_whitelists', Base.metadata,
+    Column('job_id', Integer, ForeignKey('jobs.id')),
+    Column('user_id', Unicode, ForeignKey('users.username'))
+)
 
 class User(Base):
     __tablename__ = "users"
@@ -93,20 +82,46 @@ class User(Base):
     def is_admin(self):
         return self.role == 3
 
+class Job(Base):
+    """ The SQLAlchemy declarative model class for a Page object. """
+    __tablename__ = 'jobs'
+    id = Column(Integer, primary_key=True)
+    title = Column(Unicode, unique=True)
+    description = Column(Unicode)
+    geometry = Column(Unicode)
+    workflow = Column(Unicode)
+    zoom = Column(Integer)
+    is_private = Column(Boolean)
+    tiles = relationship(Tile, backref='job')
+    users = relationship(User,
+                secondary=job_whitelist_table,
+                backref='private_jobs')
+
+    def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None, is_private=False):
+        self.title = title
+        self.description = description
+        self.geometry = geometry
+        self.workflow = workflow
+        self.zoom = zoom
+        self.is_private = is_private
+
 def group_membership(username, request):
     session = DBSession()
     user = session.query(User).get(username)
-    if user and user.is_admin():
-        return ['group:admin']
-    else:
-        return []
+    perms = []
+    if user:
+        for job in user.private_jobs:
+            perms += ['job:'+str(job.id)]
+        if user.is_admin():
+            perms += ['group:admin']
+    return perms
 
 def populate():
     transaction.begin()
     session = DBSession()
     user = User('foo', 1)
     session.add(user)
-    job = Job('SomeTitle', 'Some description', 'Some workflow', 'Some geometry', 10)
+    job = Job('SomeTitle', 'Some description', 'Some workflow', 'Some geometry', 10, False)
     session.add(job)
     
 def initialize_sql(engine):

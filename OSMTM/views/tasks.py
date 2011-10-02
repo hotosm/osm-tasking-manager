@@ -22,7 +22,7 @@ from pyramid.security import authenticated_userid
 import logging
 log = logging.getLogger(__file__)
 
-@view_config(route_name='task', renderer='task.mako', permission='edit')
+@view_config(route_name='task', renderer='task.mako', permission='job')
 def task(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
@@ -43,10 +43,10 @@ def task(request):
             time_left=time_left,
             feature=dumps(polygon),
             user=user,
-            job_url=request.route_url('job', id=job_id),
+            job_url=request.route_url('job', job=job_id),
             done_url=request.route_url('task_done', job=job_id, x=x, y=y))
 
-@view_config(route_name='task_done', permission='edit', renderer='json')
+@view_config(route_name='task_done', permission='job', renderer='json')
 def done(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
@@ -64,9 +64,9 @@ def done(request):
         user = session.query(User).get(username)
         tile.checkin = int(user.role)
     session.add(tile)
-    return HTTPFound(location=request.route_url('job', id=job_id))
+    return HTTPFound(location=request.route_url('job', job=job_id))
 
-@view_config(route_name='task_unlock', permission='edit')
+@view_config(route_name='task_unlock', permission='job')
 def unlock(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
@@ -76,9 +76,9 @@ def unlock(request):
     tile.username = None 
     tile.checkout = None 
     session.add(tile)
-    return HTTPFound(location=request.route_url('job', id=job_id))
+    return HTTPFound(location=request.route_url('job', job=job_id))
 
-@view_config(route_name='task_take', permission='edit')
+@view_config(route_name='task_take', permission='job')
 def take(request):
     job_id = request.matchdict['job']
     session = DBSession()
@@ -89,7 +89,7 @@ def take(request):
     tiles = session.query(Tile).filter(filter).all()
     if len(tiles) > 0:
         request.session.flash('You already have a task to work on. Finish it before you can accept a new one.')
-        return HTTPFound(location=request.route_url('job', id=job_id))
+        return HTTPFound(location=request.route_url('job', job=job_id))
 
     filter = and_(Tile.checkin==int(user.role) - 1, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
