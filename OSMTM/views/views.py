@@ -165,6 +165,23 @@ def job(request):
             current_task=current_task,
             admin=user.is_admin())
 
+@view_config(route_name='job_users', renderer='job.mako', permission='admin')
+def job_users(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    if 'form.submitted' in request.params:
+        username = request.params['username']
+        user = session.query(User).get(username)
+        if user:
+            job.users.append(user)
+            session.flush()
+            request.session.flash('User "%s" added to the whitelist!' % username)
+        else:
+            request.session.flash('User "%s" not found!' % username)
+    all_users = session.query(User).order_by('username').all()
+    return dict(job=job, all_users=all_users)
+
 @view_config(route_name='profile', renderer='user.mako', permission='edit')
 def profile(request):
     session = DBSession()
