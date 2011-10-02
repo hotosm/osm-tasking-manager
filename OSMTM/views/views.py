@@ -111,12 +111,15 @@ def home(request):
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    admin = False
     jobs = session.query(Job).all()
-    if not user.is_admin():
-        jobs = [job for job in jobs if not job.is_private] + user.private_jobs
-    return dict(jobs=jobs,
-            user=user,
-            admin=user.is_admin())
+    if user:
+        admin = user.is_admin()
+    if not admin:
+        jobs = [job for job in jobs if not job.is_private]
+        if user:
+            jobs += list(user.private_jobs)
+    return dict(jobs=jobs, user=user, admin=admin)
 
 @view_config(route_name='job_new', renderer='job.new.mako',
         permission='admin')
@@ -166,10 +169,11 @@ def job(request):
         current_task = None
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    stats = get_stats(job) if user.is_admin() else None
+    admin = user.is_admin() if user else False
+    stats = get_stats(job) if admin else None
     return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
             current_task=current_task,
-            admin=user.is_admin(),
+            admin=admin,
             stats=stats)
 
 @view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
