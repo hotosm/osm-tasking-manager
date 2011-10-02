@@ -63,6 +63,11 @@ class Tile(Base):
 
 TileHistory = Tile.__history_mapper__.class_
 
+job_whitelist_table = Table('job_whitelists', Base.metadata,
+    Column('job_id', Integer, ForeignKey('jobs.id')),
+    Column('user_id', Unicode, ForeignKey('users.username'))
+)
+
 class Job(Base):
     """ The SQLAlchemy declarative model class for a Page object. """
     __tablename__ = 'jobs'
@@ -74,7 +79,9 @@ class Job(Base):
     zoom = Column(Integer)
     is_private = Column(Boolean)
     tiles = relationship(Tile, backref='job')
-    users = relationship(User)
+    users = relationship(User,
+                secondary=job_whitelist_table,
+                backref='private_jobs')
 
     def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None, is_private=False):
         self.title = title
@@ -100,10 +107,13 @@ class User(Base):
 def group_membership(username, request):
     session = DBSession()
     user = session.query(User).get(username)
-    if user and user.is_admin():
-        return ['group:admin']
-    else:
-        return []
+    perms = []
+    if user:
+        for job in user.private_jobs:
+            perms += ['job:'+str(job.id)]
+        if user.is_admin():
+            perms += ['group:admin']
+    return perms
 
 def populate():
     transaction.begin()

@@ -5,6 +5,7 @@ from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 
 from OSMTM.models import initialize_sql, group_membership
+from OSMTM.resources import JobResource
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -29,11 +30,11 @@ def main(global_config, **settings):
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.add_route('job_new', '/job/new')
-    config.add_route('job', '/job/{id}')
-    config.add_route('task', '/job/{job}/task/{x}/{y}')
-    config.add_route('task_unlock', '/job/{job}/task/{x}/{y}/unlock')
-    config.add_route('task_done', '/job/{job}/task/{x}/{y}/done')
-    config.add_route('task_take', '/job/{job}/take')
+    config.add_route('job', '/job/{id}', factory='OSMTM.resources.JobFactory')
+    config.add_route('task', '/job/{job}/task/{x}/{y}', factory='OSMTM.resources.JobFactory')
+    config.add_route('task_unlock', '/job/{job}/task/{x}/{y}/unlock', factory='OSMTM.resources.JobFactory')
+    config.add_route('task_done', '/job/{job}/task/{x}/{y}/done', factory='OSMTM.resources.JobFactory')
+    config.add_route('task_take', '/job/{job}/take', factory='OSMTM.resources.JobFactory')
     config.add_route('profile', '/profile')
     config.add_route('profile_update', '/profile/update')
     config.add_route('user', '/user/{id}')
