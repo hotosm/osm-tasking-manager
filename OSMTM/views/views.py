@@ -116,7 +116,7 @@ def home(request):
             admin=user.is_admin())
 
 @view_config(route_name='job_new', renderer='job.new.mako',
-        permission='edit')
+        permission='admin')
 def job_new(request):
     if 'form.submitted' in request.params:
         session = DBSession()
