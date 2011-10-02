@@ -170,10 +170,12 @@ def job(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     admin = user.is_admin() if user else False
+    accepted_nextview = user.accepted_nextview if user else False
     stats = get_stats(job) if admin else None
     return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
             current_task=current_task,
             admin=admin,
+            accepted_nextview=accepted_nextview,
             stats=stats)
 
 @view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
@@ -235,7 +237,7 @@ def user_update(request):
     user = session.query(User).get(request.matchdict["id"])
     if 'form.submitted' in request.params:
         user.role = request.params['role']
-        user.role = request.params.get('accepted_nextview', 0)
+        user.accepted_nextview = request.params.get('accepted_nextview', 0)
         session.flush()
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('user',id=user.username))

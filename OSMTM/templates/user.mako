@@ -33,11 +33,11 @@
 	    % endif
             </div>
             <div>
-            % if admin
+            % if admin:
                 <input type="checkbox" id="id_accepted_nextview" name="accepted_nextview" value="1" />
-                Accepted NextView license agreement?
-            % elif user.accepted_nextview
-                You have accepted the NextView license agreement.
+                Acknowledged NextView license terms?
+            % elif user.accepted_nextview:
+                You have acknowledged the NextView license terms.
             % endif
             </div>
             <input type="submit" name="form.submitted" value="Apply changes"/>
