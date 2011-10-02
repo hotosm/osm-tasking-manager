@@ -6,9 +6,9 @@
     <section class="job">
         <h1>Job whitelist: ${job.title}</h1>
         <p>This job is
-        % if job.is_private
+        % if job.is_private:
         private.
-        % else
+        % else:
         public.
         % endif
         </p>
@@ -16,7 +16,7 @@
             <div class="field"> 
                 <label for="id_username">Add a user:</label> 
                 <select id="id_username" name="username">
-                % for user in all_users
+                % for user in all_users:
                 <option value="${user.username}">${user.username}</option>
                 % endfor
                 </select>
@@ -24,7 +24,7 @@
             </div>
         </form>
         <ul>
-        % for user in job.users
+        % for user in job.users:
             <li>${user.username}</li>
         % endfor
         </ul>

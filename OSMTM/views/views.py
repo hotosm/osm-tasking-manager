@@ -110,7 +110,9 @@ def home(request):
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    jobs = [job for job in session.query(Job).all() if not job.is_private] + user.private_jobs
+    jobs = session.query(Job).all()
+    if not user.is_admin():
+        jobs = [job for job in jobs if not job.is_private] + user.private_jobs
     return dict(jobs=jobs,
             user=user,
             admin=user.is_admin())
@@ -165,7 +167,7 @@ def job(request):
             current_task=current_task,
             admin=user.is_admin())
 
-@view_config(route_name='job_users', renderer='job.mako', permission='admin')
+@view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
 def job_users(request):
     id = request.matchdict['job']
     session = DBSession()

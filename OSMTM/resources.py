@@ -8,7 +8,8 @@ class JobFactory(RootFactory):
         job = session.query(Job).get(job_id)
         if job.is_private:
             acl = [
-                (Allow, ('group:admin', 'job:'+job_id), 'job'),
+                (Allow, 'job:'+job_id, 'job'),
+                (Allow, 'group:admin', 'job'),
                 (Deny, Everyone, 'job'),
             ]
             self.__acl__ = acl + list(self.__acl__)
