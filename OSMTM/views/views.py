@@ -212,11 +212,12 @@ def nextview(request):
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    redirect = request.params.get("redirect", request.route_url("profile"))
     if "accepted_terms" in request.params:
         user.accepted_nextview = request.params["accepted_terms"] == "I AGREE"
-        return HTTPFound(location=request.route_url('profile'))
+        return HTTPFound(location=redirect)
     else:
-        return dict(user=user)
+        return dict(user=user, redirect=redirect)
 
 @view_config(route_name='user', renderer='user.mako', permission='admin')
 def user(request):
