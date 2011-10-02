@@ -3,6 +3,7 @@ import transaction
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Unicode
+from sqlalchemy import Boolean
 from sqlalchemy import DateTime
 from sqlalchemy import Table
 from sqlalchemy import Column
@@ -71,14 +72,17 @@ class Job(Base):
     geometry = Column(Unicode)
     workflow = Column(Unicode)
     zoom = Column(Integer)
+    is_private = Column(Boolean)
     tiles = relationship(Tile, backref='job')
+    users = relationship(User)
 
-    def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None):
+    def __init__(self, title=None, description=None, geometry=None, workflow=None, zoom=None, is_private=False):
         self.title = title
         self.description = description
         self.geometry = geometry
         self.workflow = workflow
         self.zoom = zoom
+        self.is_private = is_private
 
 class User(Base):
     __tablename__ = "users"
@@ -106,7 +110,7 @@ def populate():
     session = DBSession()
     user = User('foo', 1)
     session.add(user)
-    job = Job('SomeTitle', 'Some description', 'Some workflow', 'Some geometry', 10)
+    job = Job('SomeTitle', 'Some description', 'Some workflow', 'Some geometry', 10, False)
     session.add(job)
     
 def initialize_sql(engine):
