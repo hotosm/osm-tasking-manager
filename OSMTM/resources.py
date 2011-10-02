@@ -11,4 +11,4 @@ class JobFactory(RootFactory):
                 (Allow, ('group:admin', 'job:'+job_id), 'job'),
                 (Deny, Everyone, 'job'),
             ]
-            self.__acl__ = acl + self.__acl__.clone()
+            self.__acl__ = acl + list(self.__acl__)
