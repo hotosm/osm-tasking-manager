@@ -219,6 +219,7 @@ def user_update(request):
     user = session.query(User).get(request.matchdict["id"])
     if 'form.submitted' in request.params:
         user.role = request.params['role']
+        user.role = request.params.get('accepted_nextview', 0)
         session.flush()
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('user',id=user.username))
