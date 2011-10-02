@@ -126,7 +126,7 @@ def job_new(request):
         job.geometry = request.params['geometry']
         job.workflow = request.params['workflow']
         job.zoom = request.params['zoom']
-        job.is_private = request.params['is_private']
+        job.is_private = request.params['is_private'] or 0
 
         tiles = []
         for i in get_tiles_in_geom(loads(job.geometry), int(job.zoom)):
