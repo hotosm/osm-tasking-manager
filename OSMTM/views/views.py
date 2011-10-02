@@ -128,8 +128,10 @@ def job_new(request):
         job.description = request.params['description']
         job.geometry = request.params['geometry']
         job.workflow = request.params['workflow']
+        job.imagery = request.params['imagery']
         job.zoom = request.params['zoom']
         job.is_private = request.params.get('is_private', 0)
+        job.requires_nextview = request.params.get('requires_nextview', 0)
 
         tiles = []
         for i in get_tiles_in_geom(loads(job.geometry), int(job.zoom)):
