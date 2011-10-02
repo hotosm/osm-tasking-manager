@@ -5,5 +5,4 @@ env/
 build/
 dist/
 *.db
-*.swp
-*.swo
+*.sw*
