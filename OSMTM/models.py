@@ -34,6 +34,7 @@ Base = declarative_base()
 class RootFactory(object):
     __acl__ = [ (Allow, Everyone, 'view'),
                 (Allow, Authenticated, 'edit'),
+                (Allow, Authenticated, 'job'),
                 (Allow, 'group:admin', 'admin') ]
     def __init__(self, request):
         pass

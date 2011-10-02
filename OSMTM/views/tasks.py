@@ -22,7 +22,7 @@ from pyramid.security import authenticated_userid
 import logging
 log = logging.getLogger(__file__)
 
-@view_config(route_name='task', renderer='task.mako', permission='edit')
+@view_config(route_name='task', renderer='task.mako', permission='job')
 def task(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
@@ -46,7 +46,7 @@ def task(request):
             job_url=request.route_url('job', id=job_id),
             done_url=request.route_url('task_done', job=job_id, x=x, y=y))
 
-@view_config(route_name='task_done', permission='edit', renderer='json')
+@view_config(route_name='task_done', permission='job', renderer='json')
 def done(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
@@ -66,7 +66,7 @@ def done(request):
     session.add(tile)
     return HTTPFound(location=request.route_url('job', id=job_id))
 
-@view_config(route_name='task_unlock', permission='edit')
+@view_config(route_name='task_unlock', permission='job')
 def unlock(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
@@ -78,7 +78,7 @@ def unlock(request):
     session.add(tile)
     return HTTPFound(location=request.route_url('job', id=job_id))
 
-@view_config(route_name='task_take', permission='edit')
+@view_config(route_name='task_take', permission='job')
 def take(request):
     job_id = request.matchdict['job']
     session = DBSession()
