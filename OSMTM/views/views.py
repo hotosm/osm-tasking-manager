@@ -207,6 +207,17 @@ def profile_update(request):
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('profile'))
 
+@view_config(route_name='nextview', renderer='nextview.mako', permission='edit')
+def nextview(request):
+    session = DBSession()
+    username = authenticated_userid(request)
+    user = session.query(User).get(username)
+    if "accepted_terms" in request.params:
+        user.accepted_nextview = request.params["accepted_terms"] == "I AGREE"
+        return HTTPFound(location=request.route_url('profile'))
+    else:
+        return dict(user=user)
+
 @view_config(route_name='user', renderer='user.mako', permission='admin')
 def user(request):
     session = DBSession()
