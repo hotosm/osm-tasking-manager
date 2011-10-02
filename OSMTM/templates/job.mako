@@ -8,8 +8,8 @@
         <p>${job.description|n}</p>
         <h3>Workflow</h3>
         <p>${job.workflow|n}</p>
-        <hr />
         % if not admin:
+        <hr />
         % if current_task:
             <p>You are currently working on
             <a href="${request.route_url('task', job=current_task.job_id, x=current_task.x, y=current_task.y)}">
@@ -22,6 +22,28 @@
                 <input type="submit" value="Take a task randomly"/>
             </form>
         </div>
+        % endif
+        % else:
+        <h3>Statistics</h3>
+        % if stats['current_users']:
+        <ul>
+          Users currently working on tasks:
+          % for user in stats['current_users']:
+          <li>
+            <a href="${request.route_url('user',id=user)}">${user}</a>
+          </li>
+          % endfor
+        </ul>
+        % endif
+        % if stats['all_time_users']:
+        <ul>
+          Contributors on this job:
+          % for user in stats['all_time_users']:
+          <li>
+            <a href="${request.route_url('user',id=user)}">${user}</a>
+          </li>
+          % endfor
+        </ul>
         % endif
         % endif
     </section>

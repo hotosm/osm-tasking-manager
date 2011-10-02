@@ -9,6 +9,7 @@ from OSMTM.models import DBSession
 from OSMTM.models import Job
 from OSMTM.models import User
 from OSMTM.models import Tile
+from OSMTM.models import TileHistory
 
 import oauth2 as oauth
 
@@ -163,9 +164,11 @@ def job(request):
         current_task = None
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    stats = get_stats(job) if user.is_admin() else None
     return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
             current_task=current_task,
-            admin=user.is_admin())
+            admin=user.is_admin(),
+            stats=stats)
 
 @view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
 def job_users(request):
@@ -236,3 +239,15 @@ def checkTask(tile):
             tile.username = None 
             tile.checkout = None 
             session.add(tile)
+
+def get_stats(job):
+    session = DBSession()
+    filter = and_(Tile.job_id==job.id, Tile.checkout!=None)
+    users = session.query(Tile.username).filter(filter)
+    current_users = [user.username for user in users]
+
+    filter = and_(TileHistory.job_id==job.id, TileHistory.username!=None)
+    users = session.query(TileHistory.username).filter(filter).distinct()
+    all_time_users = [user.username for user in users]
+
+    return dict(current_users=current_users, all_time_users=all_time_users)
