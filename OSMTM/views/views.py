@@ -108,15 +108,17 @@ def logout(request):
 @view_config(route_name='home', renderer='home.mako', permission='edit')
 def home(request):
     session = DBSession()
-    jobs = session.query(Job).all()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    jobs = session.query(Job).all()
+    if not user.is_admin():
+        jobs = [job for job in jobs if not job.is_private] + user.private_jobs
     return dict(jobs=jobs,
             user=user,
             admin=user.is_admin())
 
 @view_config(route_name='job_new', renderer='job.new.mako',
-        permission='edit')
+        permission='admin')
 def job_new(request):
     if 'form.submitted' in request.params:
         session = DBSession()
@@ -126,6 +128,7 @@ def job_new(request):
         job.geometry = request.params['geometry']
         job.workflow = request.params['workflow']
         job.zoom = request.params['zoom']
+        job.is_private = request.params.get('is_private', 0)
 
         tiles = []
         for i in get_tiles_in_geom(loads(job.geometry), int(job.zoom)):
@@ -134,12 +137,12 @@ def job_new(request):
 
         session.add(job)
         session.flush()
-        return HTTPFound(location = route_url('job', request, id=job.id))
+        return HTTPFound(location = route_url('job', request, job=job.id))
     return {} 
 
-@view_config(route_name='job', renderer='job.mako', permission='edit')
+@view_config(route_name='job', renderer='job.mako', permission='job')
 def job(request):
-    id = request.matchdict['id']
+    id = request.matchdict['job']
     session = DBSession()
     job = session.query(Job).get(id)
     tiles = []
@@ -163,6 +166,23 @@ def job(request):
     return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
             current_task=current_task,
             admin=user.is_admin())
+
+@view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
+def job_users(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    if 'form.submitted' in request.params:
+        username = request.params['username']
+        user = session.query(User).get(username)
+        if user:
+            job.users.append(user)
+            session.flush()
+            request.session.flash('User "%s" added to the whitelist!' % username)
+        else:
+            request.session.flash('User "%s" not found!' % username)
+    all_users = session.query(User).order_by('username').all()
+    return dict(job=job, all_users=all_users)
 
 @view_config(route_name='profile', renderer='user.mako', permission='edit')
 def profile(request):
