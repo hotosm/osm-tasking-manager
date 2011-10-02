@@ -5,7 +5,6 @@ from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 
 from OSMTM.models import initialize_sql, group_membership
-from OSMTM.resources import JobResource
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
