@@ -139,7 +139,7 @@ def job_new(request):
 
 @view_config(route_name='job', renderer='job.mako', permission='edit')
 def job(request):
-    id = request.matchdict['id']
+    id = request.matchdict['job']
     session = DBSession()
     job = session.query(Job).get(id)
     tiles = []
