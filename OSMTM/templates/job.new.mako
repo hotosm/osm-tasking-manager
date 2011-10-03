@@ -24,6 +24,14 @@
             <label for="id_workflow">Workflow</label> 
             <textarea class="text" id="id_workflow" name="workflow"></textarea> 
             </div> 
+            <div class="field"> 
+            <label for="id_imagery">Imagery URL</label>
+            <input type="text" class="text" id="id_imagery" name="imagery" value="" />
+            </div>
+            <div class="field">
+            <label for="id_requires_nextview">Requires NextView?</label>
+            <input type="checkbox" id="id_requires_nextview" name="requires_nextview" value="1" />
+            </div>
             <div class="field">
             <label for="id_zoom">Zoom level</label> 
             <select id="id_zoom" name="zoom">

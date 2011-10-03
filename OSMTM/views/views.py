@@ -111,12 +111,15 @@ def home(request):
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    admin = False
     jobs = session.query(Job).all()
-    if not user.is_admin():
-        jobs = [job for job in jobs if not job.is_private] + user.private_jobs
-    return dict(jobs=jobs,
-            user=user,
-            admin=user.is_admin())
+    if user:
+        admin = user.is_admin()
+    if not admin:
+        jobs = [job for job in jobs if not job.is_private]
+        if user:
+            jobs += list(user.private_jobs)
+    return dict(jobs=jobs, user=user, admin=admin)
 
 @view_config(route_name='job_new', renderer='job.new.mako',
         permission='admin')
@@ -128,8 +131,10 @@ def job_new(request):
         job.description = request.params['description']
         job.geometry = request.params['geometry']
         job.workflow = request.params['workflow']
+        job.imagery = request.params['imagery']
         job.zoom = request.params['zoom']
         job.is_private = request.params.get('is_private', 0)
+        job.requires_nextview = request.params.get('requires_nextview', 0)
 
         tiles = []
         for i in get_tiles_in_geom(loads(job.geometry), int(job.zoom)):
@@ -164,10 +169,13 @@ def job(request):
         current_task = None
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    stats = get_stats(job) if user.is_admin() else None
+    admin = user.is_admin() if user else False
+    accepted_nextview = user.accepted_nextview if user else False
+    stats = get_stats(job) if admin else None
     return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
             current_task=current_task,
-            admin=user.is_admin(),
+            admin=admin,
+            accepted_nextview=accepted_nextview,
             stats=stats)
 
 @view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
@@ -205,6 +213,18 @@ def profile_update(request):
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('profile'))
 
+@view_config(route_name='nextview', renderer='nextview.mako', permission='edit')
+def nextview(request):
+    session = DBSession()
+    username = authenticated_userid(request)
+    user = session.query(User).get(username)
+    redirect = request.params.get("redirect", request.route_url("profile"))
+    if "accepted_terms" in request.params:
+        user.accepted_nextview = request.params["accepted_terms"] == "I AGREE"
+        return HTTPFound(location=redirect)
+    else:
+        return dict(user=user, redirect=redirect)
+
 @view_config(route_name='user', renderer='user.mako', permission='admin')
 def user(request):
     session = DBSession()
@@ -217,6 +237,7 @@ def user_update(request):
     user = session.query(User).get(request.matchdict["id"])
     if 'form.submitted' in request.params:
         user.role = request.params['role']
+        user.accepted_nextview = request.params.get('accepted_nextview', 0)
         session.flush()
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('user',id=user.username))

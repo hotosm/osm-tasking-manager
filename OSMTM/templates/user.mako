@@ -10,6 +10,7 @@
         <h1>Profile</h1>
         <form method="post" action="${request.route_url('profile_update')}">
         % endif
+            <div>
             <input type="radio" id="role_1" name="role" value="1"
                 % if user.role == 1:
                 checked="checked"
@@ -30,6 +31,15 @@
             />
             <label for="role_3">Admin</label>
 	    % endif
+            </div>
+            <div>
+            % if admin:
+                <input type="checkbox" id="id_accepted_nextview" name="accepted_nextview" value="1" />
+                Acknowledged NextView license terms?
+            % elif user.accepted_nextview:
+                You have acknowledged the NextView license terms.
+            % endif
+            </div>
             <input type="submit" name="form.submitted" value="Apply changes"/>
         </form>
     </section>
