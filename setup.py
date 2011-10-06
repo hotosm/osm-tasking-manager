@@ -19,7 +19,8 @@ requires = [
     'oauth2==1.2.0',
     'imposm.parser',
     'geojson',
-    'WebTest'
+    'WebTest',
+    'sqlalchemy-migrate'
     ]
 
 if sys.version_info[:3] < (2,5,0):
