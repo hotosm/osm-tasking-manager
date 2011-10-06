@@ -12,34 +12,34 @@ Installing OSMTM in a Virtual Python environment is recommended.
 
 To create a virtual Python environment::
 
-    $ wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.5.1.tar.gz
-    $ tar xvzf virtualenv-1.5.1.tar.gz
-    $ python virtualenv-1.5.1/virtualenv.py --distribute --no-site-packages env
-    $ source env/bin/activate
+    wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.5.1.tar.gz
+    tar xvzf virtualenv-1.5.1.tar.gz
+    python virtualenv-1.5.1/virtualenv.py --distribute --no-site-packages env
+    source env/bin/activate
 
 To install OSMTM from source (the only option at this point) in the virtual
 Python environment execute the ``setup.py`` script::
 
-    $ cd OSMTM
-    $ python setup.py install
+    cd OSMTM
+    python setup.py install
 
 Previously, you may need to install some packages::
 
-    $ sudo apt-get install build-essential protobuf-compiler libprotobuf-dev libgeos-dev
+    sudo apt-get install build-essential protobuf-compiler libprotobuf-dev libgeos-dev
 
 Run OSMTM
 ---------
 
 To run OSMTM the easiest is to use ``paster serve``::
 
-    $ paster serve development.ini
+    paster serve development.ini
 
 Installation as a mod_wsgi Application
 --------------------------------------
 
 Install and enable mod_wsgi module in Apache::
 
-    $ sudo apt-get install libapache2-mod-wsgi
+    sudo apt-get install libapache2-mod-wsgi
 
 Create a new Apache config file with the following::
 
