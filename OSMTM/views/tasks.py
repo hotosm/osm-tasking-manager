@@ -22,7 +22,8 @@ from pyramid.security import authenticated_userid
 import logging
 log = logging.getLogger(__file__)
 
-@view_config(route_name='task', renderer='task.mako', permission='job')
+@view_config(route_name='task', renderer='task.mako', permission='job',
+        http_cache=0)
 def task(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']

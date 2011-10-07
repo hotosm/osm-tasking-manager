@@ -143,7 +143,8 @@ def job_new(request):
         return HTTPFound(location = route_url('job', request, job=job.id))
     return {} 
 
-@view_config(route_name='job', renderer='job.mako', permission='job')
+@view_config(route_name='job', renderer='job.mako', permission='job',
+        http_cache=0)
 def job(request):
     id = request.matchdict['job']
     session = DBSession()
