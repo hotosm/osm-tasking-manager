@@ -9,7 +9,7 @@ def _initTestingDB():
     return session
 
 def _registerRoutes(config):
-    config.add_route('job', 'job/{id}')
+    config.add_route('job', 'job/{job}')
 
 class TileModelTests(unittest.TestCase):
 
@@ -113,6 +113,7 @@ class TestJobNew(unittest.TestCase):
             'description':'SomeDescription',
             'geometry':'POLYGON((0 0, 100 0, 100 100, 0 100, 0 0))',
             'workflow':'SomeWorflow',
+            'imagery':'',
             'zoom':20
         }
         response = job_new(request)
@@ -134,7 +135,8 @@ class TestJob(unittest.TestCase):
         _registerRoutes(self.config)
         from OSMTM.views.views import job
         request = testing.DummyRequest()
-        request.matchdict = {'id': 1}
+        self.config.testing_securitypolicy(userid='foo')
+        request.matchdict = {'job': 1}
         info = job(request)
         from OSMTM.models import Job
         self.assertEqual(info['job'], self.session.query(Job).get(1))
