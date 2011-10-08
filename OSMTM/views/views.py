@@ -13,15 +13,6 @@ from OSMTM.models import TileHistory
 
 import oauth2 as oauth
 
-from OSMTM.utils import get_tiles_in_geom
-from shapely.wkt import loads
-
-from geojson import Feature, FeatureCollection
-from geojson import dumps
-
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql.expression import and_
-
 from pyramid.security import remember, forget, authenticated_userid
 
 from datetime import datetime, timedelta
@@ -118,81 +109,6 @@ def home(request):
             user=user,
             admin=user.is_admin())
 
-@view_config(route_name='job_new', renderer='job.new.mako',
-        permission='admin')
-def job_new(request):
-    if 'form.submitted' in request.params:
-        session = DBSession()
-        job = Job()
-        job.title = request.params['title']
-        job.description = request.params['description']
-        job.geometry = request.params['geometry']
-        job.workflow = request.params['workflow']
-        job.imagery = request.params['imagery']
-        job.zoom = request.params['zoom']
-        job.is_private = request.params.get('is_private', 0)
-        job.requires_nextview = request.params.get('requires_nextview', 0)
-
-        tiles = []
-        for i in get_tiles_in_geom(loads(job.geometry), int(job.zoom)):
-            tiles.append(Tile(i[0], i[1]))
-        job.tiles = tiles
-
-        session.add(job)
-        session.flush()
-        return HTTPFound(location = route_url('job', request, job=job.id))
-    return {} 
-
-@view_config(route_name='job', renderer='job.mako', permission='job',
-        http_cache=0)
-def job(request):
-    id = request.matchdict['job']
-    session = DBSession()
-    job = session.query(Job).get(id)
-    tiles = []
-    for tile in job.tiles:
-        checkTask(tile)
-
-    for tile in job.tiles:
-        checkout = None
-        if tile.checkout is not None:
-            checkout = tile.checkout.isoformat()
-        tiles.append(Feature(geometry=tile.to_polygon(),
-            properties={'checkin': tile.checkin, 'checkout': checkout}))
-    try:
-        username = authenticated_userid(request)
-        filter = and_(Tile.username==username, Tile.job_id==job.id)
-        current_task = session.query(Tile).filter(filter).one()
-    except NoResultFound, e:
-        current_task = None
-    username = authenticated_userid(request)
-    user = session.query(User).get(username)
-    accepted_nextview = user.accepted_nextview
-    admin = user.is_admin() if user else False
-    stats = get_stats(job) if admin else None
-    return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
-            current_task=current_task,
-            admin=admin,
-            accepted_nextview=accepted_nextview,
-            stats=stats)
-
-@view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
-def job_users(request):
-    id = request.matchdict['job']
-    session = DBSession()
-    job = session.query(Job).get(id)
-    if 'form.submitted' in request.params:
-        username = request.params['username']
-        user = session.query(User).get(username)
-        if user:
-            job.users.append(user)
-            session.flush()
-            request.session.flash('User "%s" added to the whitelist!' % username)
-        else:
-            request.session.flash('User "%s" not found!' % username)
-    all_users = session.query(User).order_by('username').all()
-    return dict(job=job, all_users=all_users)
-
 @view_config(route_name='profile', renderer='user.mako', permission='edit')
 def profile(request):
     session = DBSession()
@@ -258,15 +174,3 @@ def checkTask(tile):
             tile.username = None 
             tile.checkout = None 
             session.add(tile)
-
-def get_stats(job):
-    session = DBSession()
-    filter = and_(Tile.job_id==job.id, Tile.checkout!=None)
-    users = session.query(Tile.username).filter(filter)
-    current_users = [user.username for user in users]
-
-    filter = and_(TileHistory.job_id==job.id, TileHistory.username!=None)
-    users = session.query(TileHistory.username).filter(filter).distinct()
-    all_time_users = [user.username for user in users]
-
-    return dict(current_users=current_users, all_time_users=all_time_users)

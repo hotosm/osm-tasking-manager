@@ -105,7 +105,7 @@ class TestJobNew(unittest.TestCase):
 
     def test_it(self):
         _registerRoutes(self.config)
-        from OSMTM.views.views import job_new
+        from OSMTM.views.jobs import job_new
         request = testing.DummyRequest()
         request.params = {
             'form.submitted': True,
@@ -133,7 +133,7 @@ class TestJob(unittest.TestCase):
 
     def test_it(self):
         _registerRoutes(self.config)
-        from OSMTM.views.views import job
+        from OSMTM.views.jobs import job
         request = testing.DummyRequest()
         self.config.testing_securitypolicy(userid='foo')
         request.matchdict = {'job': 1}
