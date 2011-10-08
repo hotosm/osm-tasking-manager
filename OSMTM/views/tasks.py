@@ -36,7 +36,7 @@ def task(request):
     polygon=tile.to_polygon()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    time_left = 0
+    time_left = 'null'
     if tile.checkout:
         time_left = (tile.checkout - (datetime.now() - EXPIRATION_DURATION)) \
             .seconds
