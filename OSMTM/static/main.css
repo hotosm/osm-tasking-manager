@@ -1,10 +1,6 @@
-@serif: 'Palatino', 'Georgia', serif;
-@sans: 'Helvetica Neue', 'Arial', 'Helvetica', serif;
 @size1: 28px;
-@form-input-margin: 130px;
-@copy-size: 15px;
 @rhythm: 20px;
-@content-width: 860px;
+@content-width: 940px;
 @c-link: #417F90;
 
 // Mixins
@@ -79,7 +75,6 @@ body > header {
                 a {
                     padding: 0px 10px;
                     display: block;
-                    font: bold @sans;
                     color: #ccc;
                     text-shadow: 0px -1px 0 rgba(50, 0, 0, 0.7);
 
@@ -170,197 +165,57 @@ body > header {
     z-index: 1000;
 }
 // Default Typography
-body {
-    font: normal @sans;
-    line-height: @rhythm;
-}
-h1 {
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-h2 {
-    font-size: 18px;
-    margin-top: 8px;
-    margin-bottom: 12px;
-}
-h2 {
-    font-size: 16px;
-    margin-bottom: 6px;
-}
 a {
-    text-decoration: none;
     color: @c-link;
-
-    &:hover {
-        text-decoration: underline;
-    }
 }
-form {
-    .field {
-        margin-bottom: @rhythm / 2;
-        label {
-            display: block;
-            width: @form-input-margin;
-            margin-right: 10px;
-        }
-        input.text, input.password {
-            height: 24px;
-            border: 1px solid #999;
-            width: 100px;
-            font-size: 15px;
-            padding: 0 5px;
-            .border-radius;
-        }
-        textarea {
-            border: 1px solid #999;
-            height: 50px;
-            font-size: 15px;
-            width: 100%;
-            padding: 0 5px;
-            .border-radius;
-        }
-        input[type="submit"], button {
-            float: right;
-        }
-    }
-    .clear {
-        clear: both;
-    }
-}
-#job_new form {
-    .field {
-        label {
-            text-align: right;
-            float: left;
-        }
-        textarea {
-            height: 100px - 2px;
-            width: 230px;
-        }
-        .cleditorMain {
-            display: inline-block;
-        }
+#job_new {
+    #map {
+        display: none;
     }
 }
 
 // Specific Pages
-#home {
-    section.about {
-        float: left;
-        text-align: left;
-        width: (@content-width/2)*0.95 - 20px;
-        margin-right: (@content-width/2)*0.05;
-        margin-left: 20px;
-    }
-    section.login {
-        float: left;
-        text-align: left;
-        width: (@content-width/2)*0.95 - 20px;
-        margin-left: (@content-width/2)*0.05;
-        margin-right: 20px;
-
-        a {
-            padding: 0px 10px;
-            display: inline-block;
-            border: 1px solid #555;
-            font: bold 14px/28px @sans;
-            color: #222;
-            text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.7);
-            .vertical-gradient(#eee, #bbb);
-            .border-radius(5px);
-            .box-shadow(0, 2px, 2px, rgba(0, 0, 0, 0.25));
-
-            &:hover {
-                text-decoration: none;
-                border: 1px solid #777;
-                .vertical-gradient(#fff, #ccc);
-                .border-radius(5px);
-            }
-        }
-    }
-}
-#job_new {
-    section.map {
-        display: none;
-    }
-    input[type=submit] {
-        margin-left: 160px;
-    }
-}
 #job, #job_new, #task {
-    section.job, section.task {
-        float: left;
-        text-align: left;
-        width: (@content-width/2)*0.95 - 20px;
-        margin-right: (@content-width/2)*0.05;
-        margin-left: @rhythm / 2;
-
-        button[type="submit"] {
-            display: inline-block;
-            margin-left: 10px;
-        }
-        button img {
-            vertical-align: middle;
-        }
+    #map {
+        position: relative;
+        .box-shadow(0, 0, 10px, rgba(0, 0, 0, 0.5));
+        width: 100%;
+        height: 400px;
     }
-    section.map {
-        float: right;
-        text-align: left;
-        width: (@content-width/2)*0.95 - 20px;
-        margin-right: (@content-width/2)*0.05;
-        margin-left: @rhythm;
-        #map {
-            position: relative;
-            .box-shadow(0, 0, 10px, rgba(0, 0, 0, 0.5));
-            width: 100%;
-            height: 400px;
-        }
-        #relation_loading_msg {
-            position: absolute;
-            text-align: center;
-            margin: 100px 20px;
-            color: grey;
-        }
-        #stats > ul.legend {
-            margin-top: 5px;
-            list-style: none;
+    #relation_loading_msg {
+        position: absolute;
+        text-align: center;
+        margin: 100px 20px;
+        color: grey;
+    }
+    #stats > ul.legend {
+        margin-top: 5px;
+        list-style: none;
 
-            li {
-                float: left;
+        li {
+            float: left;
+            margin-right: 5px;
+            font-size: 0.8em;
+
+            div {
+                width: @rhythm / 2;
+                height: @rhythm / 2;
+                display: inline-block;
+                .opacity(50);
+                border: 1px solid rgba(0, 0, 0, 0.5);
+                background-color: #aaa;
                 margin-right: 5px;
-                font-size: 0.8em;
-
-                div {
-                    width: @rhythm / 2;
-                    height: @rhythm / 2;
-                    display: inline-block;
-                    .opacity(50);
-                    border: 1px solid rgba(0, 0, 0, 0.5);
-                    background-color: #aaa;
-                    margin-right: 5px;
-                }
-                div.checkin1 {
-                    background-color: red;
-                }
-                div.checkin2 {
-                    background-color: green;
-                }
-                div.checkout {
-                    border-color: orange;
-                    background-color: transparent;
-                }
+            }
+            div.checkin1 {
+                background-color: red;
+            }
+            div.checkin2 {
+                background-color: green;
+            }
+            div.checkout {
+                border-color: orange;
+                background-color: transparent;
             }
         }
     }
-}
-#task {
-    section.task {
-        #export {
-            font-size: 0.8em;
-        }
-    }
-}
-.comment {
-    color: grey;
-    font-size: 0.8em;
 }

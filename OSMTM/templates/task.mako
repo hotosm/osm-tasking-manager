@@ -1,17 +1,10 @@
 <%inherit file="/base.mako"/>
 <%def name="id()">task</%def>
 <%def name="title()">Tile - ${tile.x} / ${tile.y}</%def>
-<div class="content group wrap">
-    <section class="task">
-        <h1>Job: <a href="${request.route_url('job', job=tile.job_id)}">${tile.job.title}</a></h1>
-        <div>${tile.x} / ${tile.y}</div>
-        <div id="export">
-            Open with <a href="javascript:void(0);" id="josm">JOSM</a>, 
-            <a href="javascript:void(0);" id="potlatch">Potlatch</a>, 
-            <a href="javascript:void(0);" id="potlatch2">Potlatch 2</a>, 
-            <a href="javascript:void(0);" id="wp">Walking Papers</a>
-        </div>
-        <br />
+<div class="container">
+    <div class="row">
+    <div class="span8">
+        <h2>Job: <a href="${request.route_url('job', job=tile.job_id)}">${tile.job.title}</a></h2>
         <div> 
             % if tile.checkout:
                 <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y)}">
@@ -24,31 +17,30 @@
                 % else:
                     <p>Please review the task and give it a thumb up or send it back to the queue.</p>
                 % endif
-                    <div class="field">
-                    <label for="task_comment">Comment</label>
-                    <textarea id="task_comment" name="comment"></textarea>
+                    <div class="clearfix">
+                        <label for="task_comment">Comment</label>
+                        <div class="input">
+                            <textarea id="task_comment" name="comment"></textarea>
+                        </div>
                     </div>
-                % if user.role == 1:
-                    <div class="field">
-                    <input type="submit" value="Mark task as done"/>
+                    <div class="actions">
+                        % if user.role == 1:
+                            <input type="submit" class="btn" value="Mark task as done"/>
+                        % else:
+                            <button type="submit" value="Validate" class="btn thumbup">
+                                <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
+                                Validate
+                            </button>
+                            <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown">
+                                <img src="${request.static_url('OSMTM:static/thumb.png')}" />
+                                Invalidate
+                            </button>
+                        % endif 
                     </div>
-                % else:
-                    <div class="field">
-                    <button type="submit" value="Validate" class="thumbup">
-                        <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
-                        Validate
-                    </button>
-                    <button type="submit" value="Invalidate" name="invalidate" class="thumbdown">
-                        <img src="${request.static_url('OSMTM:static/thumb.png')}" />
-                        Invalidate
-                    </button>
-                    </div>
-                % endif 
-                <div class="clear"></div>
-                <p>
-                Can't work on this task right now? No problem.
-                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}">Unlock it!</a>
-                </p>
+                    <p>
+                        Can't work on this task right now? No problem.
+                        <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}">Unlock it!</a>
+                    </p>
                 </form>
                 <div class="comment"><span id="countdown"></span> minutes left</div>
             % endif
@@ -60,10 +52,18 @@
         <h3>Job Workflow</h3>
         <p>${tile.job.workflow|n}</p>
         </div>
-    </section>
-    <section class="map">
+    </div>
+    <div class="span8">
         <div id="map"></div>
-    </section>
+        <br />
+        <div id="export">
+            Open with <a href="javascript:void(0);" id="josm">JOSM</a>, 
+            <a href="javascript:void(0);" id="potlatch">Potlatch</a>, 
+            <a href="javascript:void(0);" id="potlatch2">Potlatch 2</a>, 
+            <a href="javascript:void(0);" id="wp">Walking Papers</a>
+        </div>
+    </div>
+    </div>
 </div>
 <script type="text/javascript">
     var tiles = ${feature|n};

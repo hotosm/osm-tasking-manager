@@ -1,16 +1,20 @@
 <%inherit file="/base.mako"/>
 <%def name="id()">home</%def>
 <%def name="title()">HOT Task Server - Home Page</%def>
-<div class="content group wrap">
-    <section class="jobs">
-        % if jobs:
-            % for job in jobs:
-                <h3><a href="${request.route_url('job', job=job.id)}">${job.title}</a></h3>
-                <p>${job.description|n}</p>
-            % endfor
-        % endif
-        % if admin:
-        <a href="${request.route_url('job_new')}">+ Create a new job</a>
-        % endif
-    </section>
+<div class="container">
+    <div class="row"> 
+    <div class="span6">
+    % if jobs:
+        % for job in jobs:
+            <h4><a href="${request.route_url('job', job=job.id)}">${job.title}</a></h4>
+            <p>${job.description|n}</p>
+        % endfor
+    % endif
+    </div>
+    </div>
+    % if admin:
+    <div class="actions">
+        <a href="${request.route_url('job_new')}" class="btn">+ Create a new job</a>
+    </div>
+    % endif
 </div>

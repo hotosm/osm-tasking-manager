@@ -1,9 +1,10 @@
 <%inherit file="/base.mako"/>
 <%def name="id()">job</%def>
 <%def name="title()">Job - ${job.title}</%def>
-<div class="content group wrap">
-    <section class="job">
-        <h1>Job: ${job.title}</h1>
+<div class="container">
+    <div class="row">
+    <div class="span8">
+        <h2>Job: ${job.title}</h2>
         <h3>Description</h3>
         <p>${job.description|n}</p>
         <h3>Workflow</h3>
@@ -35,7 +36,7 @@
         % else:
         <div>
             <form action="${request.route_url('task_take', job=job.id)}">
-                <input type="submit" value="Take a task randomly"/>
+                <input type="submit" class="btn primary" value="Take a task randomly"/>
             </form>
         </div>
         % endif
@@ -64,8 +65,8 @@
         % endif
         % endif
         </p>
-    </section>
-    <section class="map">
+    </div>
+    <div class="span8">
         <div id="map"></div>
         <div id="stats">
             <ul class="legend">
@@ -75,7 +76,8 @@
                 <li><div class="checkout"></div>Curr. worked on (${len([x for x in job.tiles if x.checkout != None])})</li>
             </ul>
         </div>
-    </section>
+    </div>
+    </div>
 </div>
 <script type="text/javascript">
     var geometry = "${job.geometry}";

@@ -4,7 +4,7 @@ $('#id_relation')
     .focus()
     .change(function() {
         $('#id_submit')[0].disabled = true;
-        $('section.map').show();
+        $('#map').show();
         $('#relation_loading_msg').show();
         map && map.destroy();
         map = new OpenLayers.Map('map', {
