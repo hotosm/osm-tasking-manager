@@ -53,7 +53,7 @@
         % endif
         % if stats['contributors']:
         <ul>
-          Contributors on this job (username [done] [invalidated]):
+          Contributors on this job:
           % for user in stats['contributors']:
           <li>
             <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
