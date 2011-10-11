@@ -3,15 +3,12 @@
 <%def name="title()">HOT Task Server - Home Page</%def>
 <div class="content group wrap">
     <section class="jobs">
-        <ul>
         % if jobs:
             % for job in jobs:
-                <li><a href="${request.route_url('job', job=job.id)}">${job.title}</a></li>
+                <h3><a href="${request.route_url('job', job=job.id)}">${job.title}</a></h3>
+                <p>${job.description|n}</p>
             % endfor
-        % else:
-            <li>No job to show</li>
         % endif
-        </ul>
         % if admin:
         <a href="${request.route_url('job_new')}">+ Create a new job</a>
         % endif

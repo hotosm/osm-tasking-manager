@@ -8,14 +8,17 @@
         <link rel="stylesheet"
               href="${request.static_url('OSMTM:static/reset.css')}"
               text="text/css" media="screen" />
-        <link rel="stylesheet/less"
-              href="${request.static_url('OSMTM:static/main.css')}"
-              text="text/css" media="screen" />
         <link rel="stylesheet"
               href="${request.static_url('OSMTM:static/map.css')}"
               text="text/css" media="screen" />
         <link rel="stylesheet"
               href="${request.static_url('OSMTM:static/CLEditor/jquery.cleditor.css')}"
+              text="text/css" media="screen" />
+        <link rel="stylesheet/less"
+              href="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/lib/bootstrap.less')}"
+              media="all" />
+        <link rel="stylesheet/less"
+              href="${request.static_url('OSMTM:static/main.css')}"
               text="text/css" media="screen" />
         <script type="text/javascript" src="${request.static_url('OSMTM:static/less.js')}"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>

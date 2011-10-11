@@ -104,7 +104,6 @@ body > header {
         position: absolute;
         right: 0;
         color: #ccc;
-        font-size: 0.8em;
         cursor: pointer;
         height: 80px;
 
@@ -122,6 +121,8 @@ body > header {
             border: solid grey;
             border-width: 0 1px 1px 1px;
             text-align: center;
+            list-style: none;
+            margin: 0;
 
             li:hover {
                 a {
@@ -170,7 +171,7 @@ body > header {
 }
 // Default Typography
 body {
-    font: normal @copy-size @sans;
+    font: normal @sans;
     line-height: @rhythm;
 }
 h1 {
@@ -322,6 +323,7 @@ form {
         }
         #stats > ul.legend {
             margin-top: 5px;
+            list-style: none;
 
             li {
                 float: left;

@@ -41,6 +41,7 @@
         % endif
         % else:
         <h3>Statistics</h3>
+        <p>
         % if stats['current_users']:
         <ul>
           Users currently working on tasks:
@@ -62,6 +63,7 @@
         </ul>
         % endif
         % endif
+        </p>
     </section>
     <section class="map">
         <div id="map"></div>
