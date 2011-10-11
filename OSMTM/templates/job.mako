@@ -51,12 +51,12 @@
           % endfor
         </ul>
         % endif
-        % if stats['all_time_users']:
+        % if stats['contributors']:
         <ul>
-          Contributors on this job:
-          % for user in stats['all_time_users']:
+          Contributors on this job (username [done] [invalidated]):
+          % for user in stats['contributors']:
           <li>
-            <a href="${request.route_url('user',id=user)}">${user}</a>
+            <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
           </li>
           % endfor
         </ul>

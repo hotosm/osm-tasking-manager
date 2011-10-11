@@ -97,14 +97,47 @@ def job_users(request):
     all_users = session.query(User).order_by('username').all()
     return dict(job=job, all_users=all_users)
 
+
+class StatUser():
+    done = 0
+    validated = 0
+    invalidated = 0
+
 def get_stats(job):
     session = DBSession()
     filter = and_(Tile.job_id==job.id, Tile.checkout!=None)
     users = session.query(Tile.username).filter(filter)
     current_users = [user.username for user in users]
 
-    filter = and_(TileHistory.job_id==job.id, TileHistory.username!=None)
-    users = session.query(TileHistory.username).filter(filter).distinct()
-    all_time_users = [user.username for user in users]
+    #filter = and_(TileHistory.job_id==job.id, TileHistory.username!=None)
+    #users = session.query(TileHistory.username).filter(filter).distinct()
+    #all_time_users = [user.username for user in users]
 
-    return dict(current_users=current_users, all_time_users=all_time_users)
+    # get the users who actually did some work
+    tiles_history = session.query(TileHistory) \
+            .filter(TileHistory.job_id==job.id) \
+            .order_by(TileHistory.x, TileHistory.y) \
+            .all()
+
+    users = {}
+    checkin = 0
+    for ndx, i in enumerate(tiles_history):
+        if i.username:
+            if not users.has_key(i.username):
+                users[i.username] = StatUser()
+            user = users[i.username]
+        if checkin != i.checkin:
+            user.done += 1
+            if (i.checkin - checkin) < 0:
+                user.invalidated += 1
+        checkin = i.checkin
+        if i.version == 0:
+            checkin = 0
+
+    users_tuples = []
+    for i in users:
+        if users[i].done != 0:
+            users_tuples.append((i, users[i].done, users[i].invalidated))
+    contributors = sorted(users_tuples, key=lambda user: user[1], reverse=True)
+
+    return dict(current_users=current_users, contributors=contributors)
