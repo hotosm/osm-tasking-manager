@@ -26,6 +26,7 @@ def main(global_config, **settings):
 
     config.add_static_view('static', 'OSMTM:static')
     config.add_route('home', '/')
+    config.add_route('credits', '/credits')
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.add_route('job_new', '/job/new')

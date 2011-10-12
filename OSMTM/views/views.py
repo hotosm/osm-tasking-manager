@@ -107,6 +107,10 @@ def home(request):
             user=user,
             admin=user.is_admin())
 
+@view_config(route_name='credits', renderer='credits.mako')
+def credits(request):
+    return dict()
+
 @view_config(route_name='profile', renderer='user.mako', permission='edit')
 def profile(request):
     session = DBSession()
