@@ -51,6 +51,7 @@
                         </label>
                     </li>
                 % endif
+            </div>
         </div>
         <div class="clearfix">
         % if admin:

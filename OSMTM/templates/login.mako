@@ -12,6 +12,6 @@
     <div class="span8">
         <h2>Login</h4>
         <a href="${request.route_url('login', _query=[('came_from', request.url)])}" class="btn">Log in using your OpenStreetMap account »</a>
-    </span>
+    </div>
     </div>
 </div>
