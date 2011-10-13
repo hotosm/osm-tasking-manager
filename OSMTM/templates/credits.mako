@@ -16,21 +16,24 @@
     <div class="row">
         <div class="span4">
             <h3>Softwares</h3>
-            <p>This application runs with the following softwares</p>
+            <p>This application runs thanks to the following softwares</p>
         </div>
         <div class="span4">
             <h4>Client-side</h4>
             <ul class="unstyled">
                 <li>OpenLayers</li>
-                <li>SQLite</li>
+                <li>JQuery</li>
                 <li>Twitter Bootstrap</li>
-                <li>Less css</li>
+                <li>Less CSS</li>
             </ul>
         </div>
         <div class="span4">
             <h4>Server-side</h4>
             <ul class="unstyled">
                 <li>Pyramid</li>
+                <li>SQLite</li>
+                <li>SQLAlchemy</li>
+                <li>Shapely</li>
                 <li>ImpOSM</li>
             </ul>
         </div>
