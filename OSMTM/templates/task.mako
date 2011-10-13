@@ -24,7 +24,9 @@
                 </div>
             % if user.role == 1:
                 <div class="well">
-                    <p>2. Trace the elements as asked in the job's description and workflow.</p>
+                    <p>2. Trace the elements as asked in the job's
+                    <a href="javascript:void(0);" rel="popover" data-content="${tile.job.description|n}" title="Description">description</a>
+                    and <a href="javascript:void(0);" rel="popover" data-content="${tile.job.workflow|n}" title="Workflow">workflow.</a></p>
                 </div>
                 <div class="well">
                     <p>3. Add a comment and mark the task as done.</p>
@@ -40,7 +42,9 @@
                 </div>
             % else:
                 <div class="well">
-                    <p>2. Review the work done as asked in the job's description and workflow.</p>
+                    <p>2. Review the work done as asked in the job's 
+                    <a href="javascript:void(0);" rel="popover" data-content="${tile.job.description|n}" title="Description">description</a>
+                    and <a href="javascript:void(0);" rel="popover" data-content="${tile.job.workflow|n}" title="Workflow">workflow.</a></p>
                 </div>
                 <div class="well">
                     <p>3. Give a thumb up if work is correct and complete, or send the task back to the queue.</p>
