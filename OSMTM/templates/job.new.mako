@@ -3,10 +3,10 @@
 <%def name="title()">New Job</%def>
 
 <div class="container">
+    <form method="post" action="">
     <div class="row">
     <div class="span8">
         <h1>New Job</h1>
-        <form method="post" action="">
             <div class="clearfix">
                 <label for="id_relation">Area of interest</label> 
                 <div class="input"> 
@@ -66,7 +66,6 @@
                 <input type="checkbox" id="id_is_private" name="is_private" value="1" />
                 </div>
             </div>
-        </form>
     </div>
     <div class="span8">
         <div id="map">
@@ -78,10 +77,9 @@
     </div>
     </div>
     <div class="actions">
-        <div class="input">
         <input type="submit" class="btn primary" value="Create the job" id="id_submit" name="form.submitted" disabled="disabled"/> 
-        </div>
     </div>
+    </form>
 </div>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>
