@@ -5,9 +5,9 @@
     <div class="row">
     <div class="span8">
         <h2>Job: ${job.title}</h2>
-        <h3>Description</h3>
+        <h3>What and Why? <small>Description</small></h3>
         <p>${job.description|n}</p>
-        <h3>Workflow</h3>
+        <h3>How? <small>Workflow</small></h3>
         <p>${job.workflow|n}</p>
         % if job.imagery:
         <h3>Imagery URL</h3>
@@ -25,8 +25,6 @@
         <p>${job.imagery}</p>
         % endif
         % endif
-        <hr />
-        % if not admin:
         % if current_task:
             <p>You are currently working on
             <a href="${request.route_url('task', job=current_task.job_id, x=current_task.x, y=current_task.y)}">
@@ -35,12 +33,15 @@
             </p>
         % else:
         <div>
-            <form action="${request.route_url('task_take', job=job.id)}">
-                <input type="submit" class="btn primary" value="Take a task randomly"/>
-            </form>
+        <h3>Ready? <small>Stop wasting time!</small></h3>
+            <div class="row">
+                <div class="span2">&nbsp;</div>
+                <a class="btn primary input" href="${request.route_url('task_take', job=job.id, checkin=0)}">Take a task</a>
+            </div>
+            <p class="small">If you're an experienced mapper, you can also <a class="label success" href="${request.route_url('task_take', job=job.id, checkin=1)}">validate</a> tasks done by the other mappers.</a></p>
         </div>
         % endif
-        % else:
+        % if not admin:
         <h3>Statistics</h3>
         <p>
         % if stats['current_users']:

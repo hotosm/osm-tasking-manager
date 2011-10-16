@@ -61,9 +61,7 @@ def done(request):
         # task goes back to the queue
         tile.checkin = 0
     else:
-        username = authenticated_userid(request)
-        user = session.query(User).get(username)
-        tile.checkin = int(user.role)
+        tile.checkin = tile.checkin + 1
     session.add(tile)
     return HTTPFound(location=request.route_url('job', job=job_id))
 
@@ -82,6 +80,7 @@ def unlock(request):
 @view_config(route_name='task_take', permission='job')
 def take(request):
     job_id = request.matchdict['job']
+    checkin = request.matchdict['checkin']
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
@@ -92,7 +91,7 @@ def take(request):
         request.session.flash('You already have a task to work on. Finish it before you can accept a new one.')
         return HTTPFound(location=request.route_url('job', job=job_id))
 
-    filter = and_(Tile.checkin==int(user.role) - 1, Tile.job_id==job_id)
+    filter = and_(Tile.checkin==checkin, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
     filter = and_(TileHistory.username==username, TileHistory.job_id==job_id)
     # get the tile the user worked on previously
@@ -117,6 +116,6 @@ def take(request):
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:
         # FIXME # no available tile
-        request.session.flash('Sorry. No task available for your role currently')
+        request.session.flash('Sorry. No task available to validate.')
         return HTTPFound(location=request.referrer)
 

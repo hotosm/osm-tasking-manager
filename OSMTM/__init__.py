@@ -35,7 +35,7 @@ def main(global_config, **settings):
     config.add_route('task', '/job/{job}/task/{x}/{y}', factory='OSMTM.resources.JobFactory')
     config.add_route('task_unlock', '/job/{job}/task/{x}/{y}/unlock', factory='OSMTM.resources.JobFactory')
     config.add_route('task_done', '/job/{job}/task/{x}/{y}/done', factory='OSMTM.resources.JobFactory')
-    config.add_route('task_take', '/job/{job}/take', factory='OSMTM.resources.JobFactory')
+    config.add_route('task_take', '/job/{job}/take/{checkin}', factory='OSMTM.resources.JobFactory')
     config.add_route('profile', '/profile')
     config.add_route('profile_update', '/profile/update')
     config.add_route('nextview', '/profile/nextview')

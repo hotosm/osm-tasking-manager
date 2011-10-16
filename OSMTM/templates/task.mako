@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </div>
-            % if user.role == 1:
+            % if tile.checkin == 0:
                 <div class="well">
                     <p>2. Trace the elements as asked in the job's
                     <a href="javascript:void(0);" rel="popover" data-content="${tile.job.description|n}" title="Description">description</a>
