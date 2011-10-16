@@ -56,7 +56,6 @@
                 You are ${user.username}
               </div>
               <ul id="logged_in_drodown">
-                <li><a href="${request.route_url('profile')}">Profile</a></li> 
                 <li><a id="logout_link" href="${request.route_url('logout')}">Log Out</a></li> 
               </ul>
             </div>

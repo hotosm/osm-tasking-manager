@@ -111,24 +111,6 @@ def home(request):
 def credits(request):
     return dict()
 
-@view_config(route_name='profile', renderer='user.mako', permission='edit')
-def profile(request):
-    session = DBSession()
-    username = authenticated_userid(request)
-    user = session.query(User).get(username)
-    return dict(user=user)
-
-@view_config(route_name='profile_update', permission='edit')
-def profile_update(request):
-    if 'form.submitted' in request.params:
-        session = DBSession()
-        username = authenticated_userid(request)
-        user = session.query(User).get(username)
-        user.role = request.params['role']
-        session.flush()
-        request.session.flash('Profile correctly updated!')
-    return HTTPFound(location=request.route_url('profile'))
-
 @view_config(route_name='nextview', renderer='nextview.mako', permission='edit')
 def nextview(request):
     session = DBSession()
