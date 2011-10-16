@@ -14,10 +14,10 @@
                         <div class="span1">&nbsp;</div>
                         <div class="span6">
                             <div id="export">
-                                <a class="btn small" href="javascript:void(0);" id="josm">JOSM</a>
-                                <a class="btn small" href="javascript:void(0);" id="potlatch">Potlatch</a>
-                                <a class="btn small" href="javascript:void(0);" id="potlatch2">Potlatch 2</a>
-                                <a class="btn small" href="javascript:void(0);" id="wp">Walking Papers</a>
+                                <a class="btn small info" href="javascript:void(0);" id="josm">JOSM</a>
+                                <a class="btn small info" href="javascript:void(0);" id="potlatch">Potlatch</a>
+                                <a class="btn small info" href="javascript:void(0);" id="potlatch2">Potlatch 2</a>
+                                <a class="btn small info" href="javascript:void(0);" id="wp">Walking Papers</a>
                             </div>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="input">
-                        <input type="submit" class="btn" value="Mark task as done"/>
+                        <input type="submit" class="btn primary" value="Mark task as done"/>
                     </div>
                 </div>
             % else:
@@ -54,13 +54,13 @@
                             <textarea id="task_comment" name="comment"></textarea>
                         </div>
                     </div>
-                    <button type="submit" value="Validate" class="btn thumbup input">
-                        <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
-                        Validate
-                    </button>
-                    <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown">
+                    <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input danger">
                         <img src="${request.static_url('OSMTM:static/thumb.png')}" />
                         Invalidate
+                    </button>
+                    <button type="submit" value="Validate" class="btn thumbup success">
+                        <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
+                        Validate
                     </button>
                 </div>
             % endif
