@@ -101,7 +101,6 @@ def job_users(request):
 class StatUser():
     done = 0
     validated = 0
-    invalidated = 0
 
 def get_stats(job):
     session = DBSession()
@@ -120,24 +119,50 @@ def get_stats(job):
             .all()
 
     users = {}
+    # checkin is 0 when the tile was created
     checkin = 0
+    user = None
     for ndx, i in enumerate(tiles_history):
+        # a user checked out a tile, let's add him to the list
         if i.username:
             if not users.has_key(i.username):
                 users[i.username] = StatUser()
             user = users[i.username]
-        if checkin != i.checkin:
-            user.done += 1
-            if (i.checkin - checkin) < 0:
-                user.invalidated += 1
+        # something has changed
+        if user is not None:
+            compare_checkin(checkin, i.checkin, user)
         checkin = i.checkin
-        if i.version == 0:
+        if i.version == 1:
+            # compare to the current checkin value
+            tile = session.query(Tile) \
+                .get((i.x, i.y, job.id))
+            if user is not None:
+                compare_checkin(checkin, tile.checkin, user)
+
+            # let's move to a new tile
+            # checkin is reinitialized
             checkin = 0
+            user = None
 
-    users_tuples = []
+    contributors_tuples = []
+    validators_tuples = []
     for i in users:
+        # only keep users who have actually done something
         if users[i].done != 0:
-            users_tuples.append((i, users[i].done, users[i].invalidated))
-    contributors = sorted(users_tuples, key=lambda user: user[1], reverse=True)
+            contributors_tuples.append((i, users[i].done))
+        if users[i].validated != 0:
+            validators_tuples.append((i, users[i].validated))
+    contributors = sorted(contributors_tuples, key=lambda user: user[1], reverse=True)
+    validators = sorted(validators_tuples, key=lambda user: user[1], reverse=True)
 
-    return dict(current_users=current_users, contributors=contributors)
+    return dict(current_users=current_users, contributors=contributors, 
+            validators=validators)
+
+def compare_checkin(old, new, user):
+    # task done
+    if old == 0 and new == 1:
+        user.done += 1
+    # task validated or invalidated
+    if old == 1 and new == 2 or \
+       old == 1 and new == 0:
+        user.validated += 1

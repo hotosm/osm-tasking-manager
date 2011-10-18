@@ -41,7 +41,7 @@
             <p class="small">If you're an experienced mapper, you can also <a class="label success" href="${request.route_url('task_take', job=job.id, checkin=1)}">validate</a> tasks done by the other mappers.</a></p>
         </div>
         % endif
-        % if not admin:
+        % if admin:
         <h3>Statistics</h3>
         <p>
         % if stats['current_users']:
@@ -54,16 +54,32 @@
           % endfor
         </ul>
         % endif
-        % if stats['contributors']:
-        <ul>
-          Contributors on this job:
-          % for user in stats['contributors']:
-          <li>
-            <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
-          </li>
-          % endfor
-        </ul>
-        % endif
+        <div class="row">
+            <div class="span4">
+            % if stats['contributors']:
+            <ul>
+              Contributors on this job:
+              % for user in stats['contributors']:
+              <li>
+                <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
+              </li>
+              % endfor
+            </ul>
+            % endif
+            </div>
+            <div class="span4">
+            % if stats['validators']:
+            <ul>
+              Validators on this job:
+              % for user in stats['validators']:
+              <li>
+                <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
+              </li>
+              % endfor
+            </ul>
+            % endif
+            </div>
+        </div>
         % endif
         </p>
     </div>
