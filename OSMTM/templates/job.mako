@@ -57,8 +57,8 @@
         <div class="row">
             <div class="span4">
             % if stats['contributors']:
+            <strong>Contributors</strong>
             <ul>
-              Contributors on this job:
               % for user in stats['contributors']:
               <li>
                 <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
@@ -69,8 +69,8 @@
             </div>
             <div class="span4">
             % if stats['validators']:
+            <strong>Validators</strong>
             <ul>
-              Validators on this job:
               % for user in stats['validators']:
               <li>
                 <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
