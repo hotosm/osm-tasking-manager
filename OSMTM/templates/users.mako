@@ -8,7 +8,7 @@
         % if admin:
         <a href="${request.route_url('user',id=user.username)}">${user.username}</a>
         % else:
-        ${user}
+        ${user.username}
         % endif
     </div>
     % endfor
