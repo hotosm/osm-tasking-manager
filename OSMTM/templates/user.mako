@@ -13,37 +13,11 @@
             <label>User role</label>
             <div class="input">
                 <ul class="inputs-list">
+                    % if admin or user.is_admin():
                     <li>
                         <label>
-                            <input type="radio" id="role_1" name="role" value="1"
-                                % if user.role == 1:
-                                checked="checked"
-                                % endif
-                            />
-                            <span>Newbie mapper</span>
-                            <span class="help-block">
-                                Newbie mappers work on the tile as proposed in the job description and workflow. 
-                            </span>
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="radio" id="role_2" name="role" value="2"
-                                % if user.role == 2:
-                                checked="checked"
-                                % endif
-                            />
-                            <span>Advanced mapper</span>
-                            <span class="help-block">
-                                Advanced mappers will be asked to validate or unvalidate newbie mappers' work on tiles
-                            </span>
-                        </label>
-                    </li>
-                    % if admin or user.role == 3:
-                    <li>
-                        <label>
-                        <input type="radio" id="role_3" name="role" value="3"
-                            % if user.role == 3:
+                        <input type="checkbox" id="admin" name="admin" 
+                            % if user.is_admin():
                             checked="checked"
                             % endif
                         />
