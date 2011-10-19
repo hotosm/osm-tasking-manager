@@ -5,12 +5,12 @@
     <div class="row">
     <div class="span8">
         <h2>Job: ${job.title}</h2>
-        <h3><small>What and Why?</small></h3>
+        <h3>What and Why?</h3>
         <p>${job.description|n}</p>
-        <h3><small>How?</small></h3>
+        <h3>How?</h3>
         <p>${job.workflow|n}</p>
         % if job.imagery:
-        <h3><small>Imagery URL</small></h3>
+        <h3>Imagery URL</h3>
         % if job.requires_nextview:
         <p>Access to this imagery is limited by the
         <a href="${request.route_url('nextview')}?redirect=${request.route_url('job',job=job.id)}">NextView license agreement</a>.
@@ -33,7 +33,7 @@
             </p>
         % else:
         <div>
-        <h3><small>Ready?</small></h3>
+        <h3>Ready?</h3>
             <div class="row">
                 <div class="span2">&nbsp;</div>
                 <a class="btn primary input" href="${request.route_url('task_take', job=job.id, checkin=0)}">Take a task</a>
