@@ -38,7 +38,7 @@
                 <div class="span2">&nbsp;</div>
                 <a class="btn primary input" href="${request.route_url('task_take', job=job.id, checkin=0)}">Take a task</a>
             </div>
-            <p class="small">If you're an experienced mapper, you can also <a class="label success" href="${request.route_url('task_take', job=job.id, checkin=1)}">validate</a> tasks done by the other mappers.</a></p>
+            <p class="small">If you're an experienced mapper, you can also <a href="${request.route_url('task_take', job=job.id, checkin=1)}">validate</a> tasks done by the other mappers.</a></p>
         </div>
         % endif
         % if admin:
