@@ -11,19 +11,7 @@
         <p>${job.workflow|n}</p>
         % if job.imagery:
         <h3>Imagery URL</h3>
-        % if job.requires_nextview:
-        <p>Access to this imagery is limited by the
-        <a href="${request.route_url('nextview')}?redirect=${request.route_url('job',job=job.id)}">NextView license agreement</a>.
-        % if not accepted_nextview:
-        You may
-        <a href="${request.route_url('nextview')}?redirect=${request.route_url('job',job=job.id)}">review and acknowledge</a>
-        the agreement, if you like.
-        % endif
-        </p>
-        % endif
-        % if accepted_nextview or not job.requires_nextview:
-        <p>${job.imagery}</p>
-        % endif
+        <%include file="imagery.mako" />
         % endif
         % if current_task:
             <p>You are currently working on
