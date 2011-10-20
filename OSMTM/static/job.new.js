@@ -1,5 +1,18 @@
 var map = null,
+    boxLayer = null,
+    imageryLayer = null,
     tiles = null;
+
+function showImageryLayer () {
+    if (imageryLayer == null) {
+        imageryLayer = new OpenLayers.Layer.XYZ(
+            "Imagery", $("#id_imagery").val(), {sphericalMercator: true});
+        map.addLayer(imageryLayer);
+        // map.setLayerIndex(imageryLayer, 1);
+    }
+    imageryLayer.setVisibility(true);
+    return imageryLayer;
+}
 
 function resetMap () {
     $('#id_submit')[0].disabled = true;
@@ -10,14 +23,19 @@ function resetMap () {
     });
     var osm = new OpenLayers.Layer.OSM();
     map.addLayer(osm);
+    if ($('#id_imagery_toggle').val() == 'Hide') {
+        // that means show the layer, then
+        imageryLayer = null;
+        showImageryLayer();
+    }
 }
 
 function plotBox (bounds) {
     var mercBounds = new OpenLayers.Bounds();
     mercBounds.extend(bounds);
     mercBounds.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
-    map.layers[1].clearMarkers()
-    map.layers[1].addMarker(new OpenLayers.Marker.Box(mercBounds));
+    boxLayer.clearMarkers()
+    boxLayer.addMarker(new OpenLayers.Marker.Box(mercBounds));
     $('#geometry')[0].value = bounds.toGeometry();
     $('#id_relation').val(bounds);
     $('#id_submit')[0].disabled = false;
@@ -26,8 +44,8 @@ function plotBox (bounds) {
 function showBoundingBoxMap () {
     $('#relation_loading_msg').hide();
     resetMap();
-    var boxes = new OpenLayers.Layer.Boxes("BBox");
-    map.addLayer(boxes);
+    boxLayer = new OpenLayers.Layer.Boxes("BBox");
+    map.addLayer(boxLayer);
     var control = new OpenLayers.Control();
     OpenLayers.Util.extend(control, {
         draw: function () {
@@ -113,6 +131,29 @@ $('#id_relation')
         } else if ($('#id_relation').val() != '') {
             plotBoxFromInput();
         }
+    });
+
+$('#id_imagery')
+    .change(function() {
+        if (imageryLayer) {
+            map.removeLayer(imageryLayer);
+            imageryLayer = null;
+            $('#id_imagery_toggle').val('Show');
+        }
+    });
+
+$('#id_imagery_toggle')
+    .click(function() {
+        var value = $('#id_imagery_toggle').val();
+        if ($('#id_imagery') == '') return;
+        if (value == 'Show') {
+            showImageryLayer();
+            value = 'Hide';
+        } else {
+            if (imageryLayer) imageryLayer.setVisibility(false);
+            value = 'Show';
+        }
+        $('#id_imagery_toggle').val(value);
     });
 
 $('#id_zoom')

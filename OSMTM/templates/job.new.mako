@@ -40,6 +40,7 @@
                 <label for="id_imagery">Imagery URL</label>
                 <div class="input"> 
                 <input type="text" class="text" id="id_imagery" name="imagery" value="" />
+                <input type="button" id="id_imagery_toggle" value="Show" />
                 </div>
             </div>
             <div class="clearfix">
