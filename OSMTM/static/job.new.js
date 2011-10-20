@@ -36,7 +36,7 @@ function plotBox (bounds) {
     mercBounds.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
     boxLayer.clearMarkers()
     boxLayer.addMarker(new OpenLayers.Marker.Box(mercBounds));
-    $('#geometry')[0].value = bounds.toGeometry();
+    $('#geometry')[0].value = mercBounds.toGeometry();
     $('#id_relation').val(bounds);
     $('#id_submit')[0].disabled = false;
 }
@@ -51,13 +51,13 @@ function showBoundingBoxMap () {
         draw: function () {
             this.box = new OpenLayers.Handler.Box(control,
                 {"done": function(pxBounds) { 
-                    var llBounds = new OpenLayers.Bounds();
+                    var bounds = new OpenLayers.Bounds();
                     var pt1 = map.getLonLatFromPixel(new OpenLayers.Pixel(pxBounds.left, pxBounds.bottom))
                         pt2 = map.getLonLatFromPixel(new OpenLayers.Pixel(pxBounds.right, pxBounds.top));
-                    llBounds.extend(pt1);
-                    llBounds.extend(pt2);
-                    llBounds.transform(map.getProjectionObject(), new OpenLayers.Projection("EPSG:4326"));
-                    plotBox(llBounds);
+                    bounds.extend(pt1);
+                    bounds.extend(pt2);
+                    bounds.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+                    plotBox(bounds);
                 }},
                 {keyMask: OpenLayers.Handler.MOD_SHIFT});
             this.box.activate();
