@@ -134,7 +134,7 @@ def user_update(request):
     session = DBSession()
     user = session.query(User).get(request.matchdict["id"])
     if 'form.submitted' in request.params:
-        user.admin = request.params['admin']
+        user.admin = True if 'admin' in request.params else False
         user.accepted_nextview = request.params.get('accepted_nextview', 0)
         session.flush()
         request.session.flash('Profile correctly updated!')
