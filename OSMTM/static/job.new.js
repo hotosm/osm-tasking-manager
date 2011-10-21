@@ -164,7 +164,7 @@ $('#id_zoom')
 
 
 $(document).ready(function() {
-    $.cleditor.defaultOptions.width = 230;
+    $.cleditor.defaultOptions.width = 430;
     $.cleditor.defaultOptions.height = 150;
     $.cleditor.defaultOptions.controls = "bold italic underline | color highlight | bullets numbering | link unlink";
     $("textarea").cleditor();
