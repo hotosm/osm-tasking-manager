@@ -10,6 +10,10 @@
             <div class="clearfix">
                 <label for="id_relation">Area of interest</label> 
                 <div class="input"> 
+                    <select id="id_relation_type" name="relation_type">
+                        <option value="relation">OSM relation</option>
+                        <option value="bbox">Bounding box</option>
+                    </select>
                     <input type="text" class="text" id="id_relation" name="relation" value="" /> 
                     <input type="hidden" id="geometry" name="geometry" value="" />
                 </div>
@@ -36,6 +40,7 @@
                 <label for="id_imagery">Imagery URL</label>
                 <div class="input"> 
                 <input type="text" class="text" id="id_imagery" name="imagery" value="" />
+                <input type="button" id="id_imagery_toggle" value="Show" />
                 </div>
             </div>
             <div class="clearfix">

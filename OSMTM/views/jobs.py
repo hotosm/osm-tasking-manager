@@ -46,13 +46,11 @@ def job(request):
         current_task = None
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    accepted_nextview = user.accepted_nextview
     admin = user.is_admin() if user else False
     stats = get_stats(job) if admin else None
-    return dict(job=job, tiles=dumps(FeatureCollection(tiles)),
+    return dict(job=job, user=user, tiles=dumps(FeatureCollection(tiles)),
             current_task=current_task,
             admin=admin,
-            accepted_nextview=accepted_nextview,
             stats=stats)
 
 @view_config(route_name='job_new', renderer='job.new.mako',

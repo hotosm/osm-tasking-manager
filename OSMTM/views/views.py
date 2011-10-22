@@ -116,7 +116,7 @@ def nextview(request):
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    redirect = request.params.get("redirect", request.route_url("profile"))
+    redirect = request.params.get("redirect", request.route_url("home"))
     if "accepted_terms" in request.params:
         user.accepted_nextview = request.params["accepted_terms"] == "I AGREE"
         return HTTPFound(location=redirect)
