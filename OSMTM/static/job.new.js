@@ -37,7 +37,7 @@ function plotBox (bounds) {
     boxLayer.clearMarkers()
     boxLayer.addMarker(new OpenLayers.Marker.Box(mercBounds));
     $('#geometry')[0].value = mercBounds.toGeometry();
-    $('#id_relation').val(bounds);
+    $('#bbox').val(bounds);
     $('#id_submit')[0].disabled = false;
 }
 
@@ -69,13 +69,13 @@ function showBoundingBoxMap () {
         control
     ]);
     map.zoomToMaxExtent();
-    if ($('#id_relation').val() != '') {
+    if ($('#bbox').val() != '') {
         plotBoxFromInput();
     }
 }
 
 function plotBoxFromInput() {
-    var coords = $('#id_relation').val().split(","),
+    var coords = $('#bbox').val().split(","),
         bbox = [];
     for (var i = 0; i < 4; i++) {
         bbox[i] = parseFloat(coords[i]);
@@ -88,11 +88,15 @@ function plotBoxFromInput() {
     plotBox(bounds);
 }
 
-$('#id_relation_type')
+$('input[name=relation_type]')
     .change(function() {
-        if ($("#id_relation_type").val() == "relation") {
+        if ($(this).val() == "relation") {
             $('#map').hide();
+            $('#id_relation').attr('disabled', false);
+            $('#bbox').attr('disabled', true);
         } else {
+            $('#bbox').attr('disabled', false);
+            $('#id_relation').attr('disabled', true);
             showBoundingBoxMap();
         }
     });
@@ -100,7 +104,7 @@ $('#id_relation_type')
 $('#id_relation')
     .focus()
     .change(function() {
-        if ($("#id_relation_type").val() == "relation") {
+        if ($("input[name=relation_type]").val() == "relation") {
             resetMap();
             $('#relation_loading_msg').show();
             var url = "http://www.openstreetmap.org/api/0.6/relation/" + this.value + '/full';
@@ -128,7 +132,7 @@ $('#id_relation')
 
             map.addLayer(layer);
             layer.loadGML();
-        } else if ($('#id_relation').val() != '') {
+        } else if ($('#bbox').val() != '') {
             plotBoxFromInput();
         }
     });
@@ -168,5 +172,5 @@ $(document).ready(function() {
     $.cleditor.defaultOptions.height = 150;
     $.cleditor.defaultOptions.controls = "bold italic underline | color highlight | bullets numbering | link unlink";
     $("textarea").cleditor();
-    if ($('#id_relation_type').val() == 'bbox') showBoundingBoxMap();
+    if ($('input[name=relation_type]').val() == 'bbox') showBoundingBoxMap();
 });

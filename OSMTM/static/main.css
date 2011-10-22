@@ -182,6 +182,9 @@ a {
         width: 100%;
         height: 400px;
     }
+    #relation_loading_msg {
+        display: none;
+    }
     #stats > ul.legend {
         margin-top: 5px;
         list-style: none;
