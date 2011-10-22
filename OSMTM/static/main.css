@@ -172,6 +172,9 @@ a {
     #map {
         /*display: none;*/
     }
+    #zoom_level_info {
+        display: none;
+    }
 }
 
 // Specific Pages
