@@ -34,6 +34,7 @@ html {
 html, body {
     background-color: #FFF;
     color: #111;
+    padding-top: 30px;
 }
 // Basic Layout
 .wrap {
@@ -41,112 +42,38 @@ html, body {
     margin: 0 auto;
     position: relative;
 }
-body > header {
-    text-align: left;
-    height: 80px;
-    background: transparent url('red-header.png') top left repeat-x;
-    a.logo {
-        display: block;
-        float: left;
-        font-size: @size1;
-        font-weight: bold;
-        color: #FFF;
-        text-shadow: 0px 1px 1px rgba(50, 0, 0, 0.7);
-        margin-top: @rhythm;
-
-        &:hover {
-            text-decoration: none;
-        }
+// Gradients
+#gradient {
+  .vertical (@startColor: #555, @endColor: #333) {
+    background-color: @endColor;
+    background-repeat: repeat-x;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(@startColor), to(@endColor)); // Konqueror
+    background-image: -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
+    background-image: -ms-linear-gradient(top, @startColor, @endColor); // IE10
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @startColor), color-stop(100%, @endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background-image: -o-linear-gradient(top, @startColor, @endColor); // Opera 11.10
+    background-image: linear-gradient(top, @startColor, @endColor); // The standard
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@startColor,@endColor)); // IE9 and down
+  }
+}
+.topbar-inner,
+.topbar .fill {
+  background-color: #650B05;
+  #gradient > .vertical(#9B0D0B, #B4242E);
+  @shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+  .box-shadow(@shadow);
+}
+.topbar div > ul {
+  .dropdown-menu {
+    background-color: #B4242E;
+    li a {
+      &:hover {
+        #gradient > .vertical(#800000, #9B0D0B);
+        color: white;
+      }
     }
-    nav {
-        position: relative;
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-
-            li {
-                float: left;
-                margin-top: 20px;
-                margin-right: 10px;
-                line-height: 34px;
-                display: block;
-                position: relative;
-                a {
-                    padding: 0px 10px;
-                    display: block;
-                    color: #ccc;
-                    text-shadow: 0px -1px 0 rgba(50, 0, 0, 0.7);
-
-                    &:hover {
-                        text-decoration: none;
-                        background: #B2222C;
-                        color: white;
-                    }
-                }
-                &:last-child {
-                    margin-right: 0;
-                }
-            }
-            li.first {
-                margin-left: 20px;
-            }
-        }
-    }
-    div#logged_in_topnav {
-        z-index: 2000;
-        display: block;
-        position: absolute;
-        right: 0;
-        color: #ccc;
-        cursor: pointer;
-        height: 80px;
-
-        div#topnav_element {
-            padding: 10px 20px;
-            line-height: 34px;
-        }
-
-        ul#logged_in_drodown, #logout_link {
-            .border-radius(0 0 5px 5px);
-        }
-        ul#logged_in_drodown {
-            display: none;
-            background: white;
-            border: solid grey;
-            border-width: 0 1px 1px 1px;
-            text-align: center;
-            list-style: none;
-            margin: 0;
-
-            li:hover {
-                a {
-                    background: #B2222C;
-                    color: white;
-                }
-            }
-
-            a {
-                padding: 5px 0;
-                text-decoration: none;
-                display: block;
-                color: #222;
-            }
-        }
-        &:hover {
-            text-decoration: none;
-            background: white;
-            div#topnav_element {
-                color: #222;
-                text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.7);
-                border: solid grey;
-                border-width: 0 1px;
-            }
-            ul#logged_in_drodown {
-                display: block;
-            }
-        }
-    }
+  }
 }
 #flash {
     position: absolute;

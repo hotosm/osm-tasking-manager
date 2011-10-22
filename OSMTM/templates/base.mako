@@ -28,40 +28,44 @@
                 src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-twipsy.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-popover.js')}"></script>
+        <script type="text/javascript"
+                src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-dropdown.js')}"></script>
     </head>
     <body id="${self.id()}">
-        <header class="group"> 
-        <div class="wrap"> 
-            <a class="logo" href="/">OSM Tasking Manager</a> 
-            <%
-                from pyramid.security import authenticated_userid
-                from OSMTM.models import DBSession, User
-                username = authenticated_userid(request)
-                if username is not None:
-                    user = DBSession().query(User).get(username)
-                else:
-                    user = None
-            %>
-            % if user:
-            <nav> 
-            <ul> 
-                <li class="first"><a href="${request.route_url('home')}">Jobs</a></li> 
-                % if user.is_admin():
-                <li class="first"><a href="${request.route_url('users')}">Users</a></li> 
-                % endif
-            </ul> 
-            </nav> 
-            <div id="logged_in_topnav">
-              <div id="topnav_element">
-                You are ${user.username}
-              </div>
-              <ul id="logged_in_drodown">
-                <li><a id="logout_link" href="${request.route_url('logout')}">Log Out</a></li> 
-              </ul>
+        <%
+            from pyramid.security import authenticated_userid
+            from OSMTM.models import DBSession, User
+            username = authenticated_userid(request)
+            if username is not None:
+                user = DBSession().query(User).get(username)
+            else:
+                user = None
+        %>
+        <!-- Topbar
+        ================================================== -->
+        <div class="topbar" >
+            <div class="topbar-inner">
+                <div class="container">
+                    <span class="brand" href="#">OSM Tasking Manager</span>
+                    <ul class="nav">
+                        % if user:
+                        <li class="first"><a href="${request.route_url('home')}">Jobs</a></li> 
+                        % if user.is_admin():
+                        <li class="first"><a href="${request.route_url('users')}">Users</a></li> 
+                        % endif
+                    </ul>
+                    <ul class="nav secondary-nav">
+                        <li class="dropdown"  data-dropdown="dropdown">
+                            <a href="#" class="dropdown-toggle">You are ${user.username}</a>
+                            <ul class="dropdown-menu">
+                                <li><a id="logout_link" href="${request.route_url('logout')}">Log Out</a></li> 
+                            </ul>
+                        </li>
+                        % endif
+                    </ul>
+                </div>
             </div>
-            % endif
-        </div> 
-        </header> 
+        </div>
         % if request.session.peek_flash():
             <div id="flash">
                  <% flash = request.session.pop_flash() %>
