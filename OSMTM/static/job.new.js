@@ -28,6 +28,7 @@ function resetMap () {
         imageryLayer = null;
         showImageryLayer();
     }
+    map.zoomToMaxExtent();
 }
 
 function plotBox (bounds) {
@@ -43,7 +44,6 @@ function plotBox (bounds) {
 
 function showBoundingBoxMap () {
     $('#relation_loading_msg').hide();
-    resetMap();
     boxLayer = new OpenLayers.Layer.Boxes("BBox");
     map.addLayer(boxLayer);
     var control = new OpenLayers.Control();
@@ -68,7 +68,6 @@ function showBoundingBoxMap () {
         new OpenLayers.Control.Navigation(),
         control
     ]);
-    map.zoomToMaxExtent();
     if ($('#bbox').val() != '') {
         plotBoxFromInput();
     }
@@ -90,8 +89,8 @@ function plotBoxFromInput() {
 
 $('input[name=relation_type]')
     .change(function() {
+        resetMap();
         if ($(this).val() == "relation") {
-            $('#map').hide();
             $('#id_relation').attr('disabled', false);
             $('#bbox').attr('disabled', true);
         } else {
@@ -105,7 +104,6 @@ $('#id_relation')
     .focus()
     .change(function() {
         if ($("input[name=relation_type]").val() == "relation") {
-            resetMap();
             $('#relation_loading_msg').show();
             var url = "http://www.openstreetmap.org/api/0.6/relation/" + this.value + '/full';
             var layer = new OpenLayers.Layer.GML("Objects", url, {
@@ -172,5 +170,5 @@ $(document).ready(function() {
     $.cleditor.defaultOptions.height = 150;
     $.cleditor.defaultOptions.controls = "bold italic underline | color highlight | bullets numbering | link unlink";
     $("textarea").cleditor();
-    if ($('input[name=relation_type]').val() == 'bbox') showBoundingBoxMap();
+    resetMap();
 });
