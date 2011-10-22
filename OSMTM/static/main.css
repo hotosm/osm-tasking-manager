@@ -182,12 +182,6 @@ a {
         width: 100%;
         height: 400px;
     }
-    #relation_loading_msg {
-        position: absolute;
-        text-align: center;
-        margin: 100px 20px;
-        color: grey;
-    }
     #stats > ul.legend {
         margin-top: 5px;
         list-style: none;

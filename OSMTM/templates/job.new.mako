@@ -16,6 +16,9 @@
                                 <input type="radio" name="relation_type" checked value="relation"/>
                                 <span>OSM relation</span>
                                 <input type="text" class="text small" id="id_relation" name="relation" value="" /> 
+                                <span id="relation_loading_msg" class="help-inline">
+                                    <img src="${request.static_url('OSMTM:static/ajax-loader.gif')}" />
+                                </span>
                                 <span class="help-block">
                                     <strong>Note:</strong> You already know an OSM which delimits the area. 
                                 </span>
@@ -60,10 +63,6 @@
                 </div>
                 <div class="span8">
                     <div id="map">
-                        <div id="relation_loading_msg">
-                        <img src="${request.static_url('OSMTM:static/ajax-loader.gif')}" /><br />
-                        We're currently loading and analysing the relation you asked for. Please be patient.
-                        </div>
                     </div>
                 </div>
             </div>
