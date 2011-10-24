@@ -44,6 +44,7 @@ def task(request):
             time_left=time_left,
             feature=dumps(polygon),
             user=user,
+            job=tile.job,
             job_url=request.route_url('job', job=job_id),
             done_url=request.route_url('task_done', job=job_id, x=x, y=y))
 

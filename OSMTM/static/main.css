@@ -97,6 +97,9 @@ a {
 }
 #job_new {
     #map {
+        /*display: none;*/
+    }
+    #zoom_level_info {
         display: none;
     }
 }
@@ -110,10 +113,7 @@ a {
         height: 400px;
     }
     #relation_loading_msg {
-        position: absolute;
-        text-align: center;
-        margin: 100px 20px;
-        color: grey;
+        display: none;
     }
     #stats > ul.legend {
         margin-top: 5px;
