@@ -5,6 +5,12 @@
 <div class="container">
     <h1>New Job</h1>
     <form method="post" action="">
+        <div class="clearfix">
+            <label for="id_title">Title</label> 
+            <div class="input"> 
+            <input type="text" class="text xxlarge" id="id_title" name="title" value="" /> 
+            </div> 
+        </div>
         <fieldset>
             <legend>Area of interest</legend>
             <div class="row">
@@ -74,12 +80,6 @@
         </fieldset>
         <fieldset>
             <legend>Job's description</legend>
-            <div class="clearfix">
-                <label for="id_title">Title</label> 
-                <div class="input"> 
-                <input type="text" class="text xxlarge" id="id_title" name="title" value="" /> 
-                </div> 
-            </div>
             <div class="clearfix">
                 <label for="id_description">Description</label> 
                 <div class="input"> 

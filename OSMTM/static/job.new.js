@@ -115,8 +115,9 @@ $('input[name=relation_type]')
         }
     });
 
+$('#id_title').focus();
+
 $('#id_relation')
-    .focus()
     .change(function() {
         if ($("input[name=relation_type]").val() == "relation") {
             $('#relation_loading_msg').show();
