@@ -53,6 +53,16 @@ def job(request):
             admin=admin,
             stats=stats)
 
+@view_config(route_name='job_delete', permission='admin')
+def job_delete(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    title = job.title
+    session.delete(job)
+    request.session.flash('Job "%s" removed!' % title)
+    return HTTPFound(location = route_url('home', request))
+
 @view_config(route_name='job_new', renderer='job.new.mako',
         permission='admin')
 def job_new(request):

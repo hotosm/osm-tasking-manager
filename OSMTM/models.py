@@ -96,7 +96,7 @@ class Job(Base):
     zoom = Column(Integer)
     is_private = Column(Boolean)
     requires_nextview = Column(Boolean)
-    tiles = relationship(Tile, backref='job')
+    tiles = relationship(Tile, backref='job', cascade="all, delete, delete-orphan")
     users = relationship(User,
                 secondary=job_whitelist_table,
                 backref='private_jobs')

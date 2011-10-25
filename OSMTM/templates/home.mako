@@ -8,6 +8,11 @@
         % for job in jobs:
             <h4><a href="${request.route_url('job', job=job.id)}">${job.title}</a></h4>
             <p>${job.description|n}</p>
+            % if user.is_admin():
+            <p align="right">
+                <a href="${request.route_url('job_delete', job=job.id)}" class="delete">delete</a>
+            </p>
+            % endif
         % endfor
     % endif
     </div>
@@ -18,3 +23,4 @@
     </div>
     % endif
 </div>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/home.js')}"></script>
