@@ -14,8 +14,15 @@ function showImageryLayer () {
     return imageryLayer;
 }
 
+function updateSubmitBtnStatus() {
+    var disabled = $('#id_title').val() === '' ||
+        $('#geometry').val() === '';
+    $('#id_submit')[0].disabled = disabled;
+}
+
 function resetMap () {
-    $('#id_submit')[0].disabled = true;
+    $('#geometry').val('');
+    updateSubmitBtnStatus();
     $('#map').show();
     map && map.destroy();
     map = new OpenLayers.Map('map', {
@@ -41,7 +48,7 @@ function plotBox (bounds) {
     $('#geometry').val(geometry);
     adaptZoomLevel(mercBounds);
     $('#bbox').val(bounds);
-    $('#id_submit')[0].disabled = false;
+    updateSubmitBtnStatus();
 }
 
 function showBoundingBoxMap () {
@@ -108,6 +115,7 @@ $('input[name=relation_type]')
         if ($(this).val() == "relation") {
             $('#id_relation').attr('disabled', false);
             $('#bbox').attr('disabled', true);
+            $('#id_relation').val('');
         } else {
             $('#bbox').attr('disabled', false);
             $('#id_relation').attr('disabled', true);
@@ -119,6 +127,7 @@ $('#id_title').focus();
 
 $('#id_relation')
     .change(function() {
+        $('#geometry').val('');
         if ($("input[name=relation_type]").val() == "relation") {
             $('#relation_loading_msg').show();
             var url = "http://www.openstreetmap.org/api/0.6/relation/" + this.value + '/full';
@@ -142,7 +151,7 @@ $('#id_relation')
                 var format = new OpenLayers.Format.WKT();
                 $('#geometry').val(format.write(vectorLayer.features[0]));
                 adaptZoomLevel(vectorLayer.getDataExtent());
-                $('#id_submit')[0].disabled = false;
+                updateSubmitBtnStatus();
             });
 
             map.addLayer(vectorLayer);
@@ -181,6 +190,10 @@ $('#id_zoom')
         adaptZoomLevel(vectorLayer.getDataExtent());
     });
 
+$('#id_title')
+    .change(function() {
+        updateSubmitBtnStatus();
+    });
 
 $(document).ready(function() {
     $.cleditor.defaultOptions.width = 430;
