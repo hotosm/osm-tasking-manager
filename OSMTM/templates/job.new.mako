@@ -84,6 +84,9 @@
                 <label for="id_description">Description</label> 
                 <div class="input"> 
                 <textarea class="text xxlarge" id="id_description"></textarea> 
+                <span class="help-block">
+                    <strong>Note:</strong> You can use markdown markup.
+                </span>
                 <input type="hidden" id="formatted_description" name="description" />
                 </div> 
             </div>
@@ -91,6 +94,9 @@
                 <label for="id_workflow">Workflow</label> 
                 <div class="input"> 
                 <textarea class="text xxlarge" id="id_workflow"></textarea> 
+                <span class="help-block">
+                    <strong>Note:</strong> You can use markdown markup.
+                </span>
                 <input type="hidden" id="formatted_workflow" name="workflow" />
                 </div> 
             </div>
