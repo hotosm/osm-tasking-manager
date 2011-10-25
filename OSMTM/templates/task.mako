@@ -25,8 +25,8 @@
             % if tile.checkin == 0:
                 <div class="well">
                     <p>2. Trace the elements as asked in the job&apos;s
-                    <a href="javascript:void(0);" rel="popover" data-content="${tile.job.description|n}" title="Description">description</a>
-                    and <a href="javascript:void(0);" rel="popover" data-content="${tile.job.workflow|n}" title="Workflow">workflow.</a></p>
+                    <a href="javascript:void(0);" rel="popover" data-content="${tile.job.description|h}" title="Description">description</a>
+                    and <a href="javascript:void(0);" rel="popover" data-content="${tile.job.workflow|h}" title="Workflow">workflow.</a></p>
                     <%include file="imagery.mako" />
                 </div>
                 <div class="well">
