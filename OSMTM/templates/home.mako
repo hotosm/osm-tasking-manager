@@ -6,7 +6,12 @@
     <div class="span6">
     % if jobs:
         % for job in jobs:
-            <h4><a href="${request.route_url('job', job=job.id)}">${job.title}</a></h4>
+            <h4>
+                <a href="${request.route_url('job', job=job.id)}">${job.title}</a>
+                % if job.is_private:
+                <img src="${request.static_url('OSMTM:static/img/lock.gif')}" />
+                % endif
+            </h4>
             <p>${job.description|n}</p>
             % if user.is_admin():
             <p align="right">
