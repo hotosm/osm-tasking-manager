@@ -161,6 +161,9 @@ $('#id_relation')
         }
     });
 
+$('#bbox')
+    .change(plotBoxFromInput);
+
 
 $('#id_imagery')
     .change(function() {
