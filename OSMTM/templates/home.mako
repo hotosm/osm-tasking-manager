@@ -9,13 +9,13 @@
             <h4>
                 <a href="${request.route_url('job', job=job.id)}">${job.title}</a>
                 % if job.is_private:
-                <img src="${request.static_url('OSMTM:static/img/lock.gif')}" />
+                <img src="${request.static_url('OSMTM:static/img/lock.gif')}" alt="private" title="private job" />
                 % endif
             </h4>
             <p>${job.description|n}</p>
             % if user.is_admin():
             <p align="right">
-                <a href="${request.route_url('job_delete', job=job.id)}" class="delete">delete</a>
+                <a href="${request.route_url('job_delete', job=job.id)}" class="delete" alt="delete" title="Delete the job">delete</a>
             </p>
             % endif
         % endfor
