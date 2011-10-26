@@ -31,7 +31,11 @@
         % if admin:
             <label for="id_accepted_nextview">Acknowledged NextView license terms?</label>
             <div class="input">
-                <input type="checkbox" id="id_accepted_nextview" name="accepted_nextview" value="1" />
+                <input type="checkbox" id="id_accepted_nextview" name="accepted_nextview"
+                % if user.accepted_nextview:
+                    checked="${user.accepted_nextview}"
+                % endif
+                />
                 <span class="help-block">
                     <strong>Note:</strong> This acknowledgment will allow the user to work on jobs which require it. 
                 </span>
