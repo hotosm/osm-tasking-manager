@@ -144,7 +144,7 @@ def get_stats(job):
             # compare to the current checkin value
             tile = session.query(Tile) \
                 .get((i.x, i.y, job.id))
-            if user is not None:
+            if user is not None and tile is not None:
                 compare_checkin(checkin, tile.checkin, user)
 
             # let's move to a new tile
