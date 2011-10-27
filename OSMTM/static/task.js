@@ -60,7 +60,7 @@ var exportOpen = function() {
         url = getLink({
             base: 'http://www.openstreetmap.org/edit?editor=potlatch&',
             bounds: bounds,
-            zoom: 16,
+            zoom: jobZoom,
             protocol: 'llz'
         });
         window.open(url);
@@ -69,7 +69,7 @@ var exportOpen = function() {
         url = getLink({
             base: 'http://www.openstreetmap.org/edit?editor=potlatch2&',
             bounds: bounds,
-            zoom: 16,
+            zoom: jobZoom,
             protocol: 'llz'
         });
         window.open(url);

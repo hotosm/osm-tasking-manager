@@ -83,6 +83,7 @@
 </div>
 <script type="text/javascript">
     var tiles = ${feature|n};
+    var jobZoom = ${tile.job.zoom};
     var time_left = ${time_left};
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
