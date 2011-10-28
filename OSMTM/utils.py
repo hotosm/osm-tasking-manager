@@ -1,7 +1,7 @@
 import sys, os, time
 from shapely.geometry import Polygon
 from shapely.geometry import MultiPolygon
-from math import floor, ceil
+from math import floor, ceil, pi, atan, exp
 
 
 # Maximum resolution
@@ -14,7 +14,7 @@ class TileBuilder(object):
     def __init__(self, parameter):
         self.a = parameter
     
-    def create_square(self, i, j):
+    def create_square(self, i, j, srs=900913):
         """
         creates a Shapely Polygon geometry representing tile indexed by (i,j) in OSMQA v2 with dimension a
         """
@@ -22,6 +22,9 @@ class TileBuilder(object):
         ymin = j*self.a-max
         xmax = (i+1)*self.a-max
         ymax = (j+1)*self.a-max
+        if srs == 4326:
+            xmin, ymin = transform_900913_to_4326(xmin, ymin)
+            xmax, ymax = transform_900913_to_4326(xmax, ymax)
         return Polygon([(xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax)])
 
 # This method finds the tiles that intersect the given geometry for the given zoom
@@ -50,3 +53,12 @@ def get_tiles_in_geom(geom, z):
                 polygons.append(polygon)
                 tiles.append((i, j))
     return tiles
+
+def transform_900913_to_4326(x, y):
+    """Transforms pair of mercator coordinates to lonlat"""
+    lon = (x / 20037508.34) * 180;
+    lat = (y / 20037508.34) * 180;
+
+    lat = 180/pi * (2 * atan(exp(lat * pi / 180)) -
+                         pi / 2);
+    return lon, lat

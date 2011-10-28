@@ -120,3 +120,11 @@ def take(request):
         request.session.flash('Sorry. No task available to validate.')
         return HTTPFound(location=request.referrer)
 
+@view_config(route_name="task_export", renderer="task.osm.mako")
+def task_export(request):
+    job_id = request.matchdict['job']
+    x = request.matchdict['x']
+    y = request.matchdict['y']
+    session = DBSession()
+    tile = session.query(Tile).get((x, y, job_id))
+    return dict(polygon=tile.to_polygon(4326))

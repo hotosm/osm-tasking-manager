@@ -55,12 +55,12 @@ class Tile(Base):
         self.y = y
         self.checkin = 0
 
-    def to_polygon(self):
+    def to_polygon(self, srs=900913):
         z = self.job.zoom
         # tile size (in meters) at the required zoom level
         step = max/(2**(z - 1))
         tb = TileBuilder(step)
-        return tb.create_square(self.x, self.y)
+        return tb.create_square(self.x, self.y, srs)
 
 TileHistory = Tile.__history_mapper__.class_
 
