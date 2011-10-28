@@ -37,6 +37,9 @@ def task(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     time_left = 'null'
+    if tile.user != user:
+        request.session.flash('You cannot see this task.')
+        return HTTPFound(location=request.route_url('job', job=job_id))
     if tile.checkout:
         time_left = (tile.checkout - (datetime.now() - EXPIRATION_DURATION)) \
             .seconds
