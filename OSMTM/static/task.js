@@ -53,8 +53,12 @@ var exportOpen = function() {
             bounds: bounds,
             protocol: 'lbrt'
         });
-        var w = window.open(url);
-        window.setTimeout(function(){w.close();}, 500);
+        $('#josm_export_info')
+            .modal('show')
+            .bind('hide', function() {
+                var w = window.open(url);
+                window.setTimeout(function(){w.close();}, 500);
+            });
         break;
     case "potlatch2":
         url = getLink({
@@ -82,6 +86,10 @@ var exportOpen = function() {
     }
 };
 $('#export a').click(exportOpen);
+$('#josm_export_info').modal({
+    backdrop: true,
+    keyboard: true
+});
 $('#potlatch2_export_info').modal({
     backdrop: true,
     keyboard: true
