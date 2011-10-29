@@ -135,7 +135,7 @@ def user_update(request):
     user = session.query(User).get(request.matchdict["id"])
     if 'form.submitted' in request.params:
         user.admin = True if 'admin' in request.params else False
-        user.accepted_nextview = request.params.get('accepted_nextview', 0)
+        user.accepted_nextview = request.params.get('accepted_nextview') == 'on'
         session.flush()
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('user',id=user.username))

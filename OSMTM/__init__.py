@@ -45,7 +45,7 @@ def main(global_config, **settings):
     config.add_route('osmproxy', '/osmproxy')
     config.add_route('oauth_callback', '/oauth_callback')
     config.add_view('OSMTM.views.security.login',
-            renderer='login.mako',
+            renderer='forbidden.mako',
             context='pyramid.exceptions.Forbidden')
     config.scan()
     return config.make_wsgi_app()
