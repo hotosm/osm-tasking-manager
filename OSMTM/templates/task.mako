@@ -77,7 +77,7 @@
                     <h3>Using JOSM?</h3>
                 </div>
                 <div class="modal-body">
-                    <p>If you have JOSM already running, closing this dialog box, should load data for the area of the current task,</dd>
+                    <p>If you have JOSM already running, closing this dialog box should load data for the area of the current task,</dd>
                     <p>Or you can manually open JOSM using the following <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}" target="_blank">.osm file.</a>
                     <span class="help-block">Right-click on the link to download the file.</span>
                     </p>
