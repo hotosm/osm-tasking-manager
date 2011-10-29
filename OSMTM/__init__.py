@@ -25,6 +25,9 @@ def main(global_config, **settings):
     config.set_session_factory(session_factory)
 
     config.add_static_view('static', 'OSMTM:static')
+    config.add_view('OSMTM.views.crossdomain.crossdomain_view', name='crossdomain.xml')
+    config.add_route('crossdomain', '/crossdomain.xml',
+                     view='OSMTM.views.crossdomain.crossdomain_view')
     config.add_route('home', '/')
     config.add_route('credits', '/credits')
     config.add_route('login', '/login')
