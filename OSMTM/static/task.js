@@ -56,15 +56,6 @@ var exportOpen = function() {
         var w = window.open(url);
         window.setTimeout(function(){w.close();}, 500);
         break;
-    case "potlatch":
-        url = getLink({
-            base: 'http://www.openstreetmap.org/edit?editor=potlatch&',
-            bounds: bounds,
-            zoom: jobZoom,
-            protocol: 'llz'
-        });
-        window.open(url);
-        break;
     case "potlatch2":
         url = getLink({
             base: 'http://www.openstreetmap.org/edit?editor=potlatch2&',

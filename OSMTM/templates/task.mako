@@ -15,7 +15,6 @@
                         <div class="span6">
                             <div id="export">
                                 <a class="btn small info" href="javascript:void(0);" id="josm">JOSM</a>
-                                <a class="btn small info" href="javascript:void(0);" id="potlatch">Potlatch</a>
                                 <a class="btn small info" href="javascript:void(0);" id="potlatch2">Potlatch 2</a>
                                 <a class="btn small info" href="javascript:void(0);" id="wp">Walking Papers</a>
                             </div>
