@@ -72,6 +72,16 @@
             </p>
             <div>You have <strong><span id="countdown"></span> minutes left</strong> to work on this tile.</div>
             </form>
+            <div id="potlatch2_export_info" class="modal hide fade">
+                <div class="modal-header">
+                    <a href="#" class="close">&times;</a>
+                    <h3>Using Potlatch2?</h3>
+                </div>
+                <div class="modal-body">
+                    Please consider adding the tasks extent as a new vector file using the following url: <br />
+                    <code>${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}</code>
+                </div>
+            </div>
             % endif
         </div>
     </div>

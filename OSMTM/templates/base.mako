@@ -27,6 +27,8 @@
                 src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-popover.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-dropdown.js')}"></script>
+        <script type="text/javascript"
+                src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-modal.js')}"></script>
     </head>
     <body id="${self.id()}">
         <%

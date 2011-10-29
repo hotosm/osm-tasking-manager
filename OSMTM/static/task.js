@@ -72,7 +72,11 @@ var exportOpen = function() {
             zoom: jobZoom,
             protocol: 'llz'
         });
-        window.open(url);
+        $('#potlatch2_export_info')
+            .modal('show')
+            .bind('hide', function() {
+                window.open(url);
+            });
         break;
     case "wp":
         url = getLink({
@@ -87,6 +91,10 @@ var exportOpen = function() {
     }
 };
 $('#export a').click(exportOpen);
+$('#potlatch2_export_info').modal({
+    backdrop: true,
+    keyboard: true
+});
 
 $(function(){
     var count = time_left;
