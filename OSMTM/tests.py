@@ -70,13 +70,13 @@ class UserModelTests(unittest.TestCase):
         from OSMTM.models import User
         return User
 
-    def _makeOne(self, username='foo', role=2):
-        return self._getTargetClass()(username, role)
+    def _makeOne(self, username=u'bar'):
+        user = self._getTargetClass()(username)
+        return user
 
     def test_constructor(self):
         instance = self._makeOne()
-        self.assertEqual(instance.username, 'foo')
-        self.assertEqual(instance.role, 2)
+        self.assertEqual(instance.username, u'bar')
 
 class TestHome(unittest.TestCase):
     def setUp(self):
@@ -89,7 +89,7 @@ class TestHome(unittest.TestCase):
     def test_it(self):
         from OSMTM.views.views import home 
         request = testing.DummyRequest()
-        self.config.testing_securitypolicy(userid='foo')
+        self.config.testing_securitypolicy(userid=u'foo')
         info = home(request)
         self.assertEqual(len(info['jobs']), 1)
         self.assertEqual(info['admin'], False)
@@ -109,11 +109,11 @@ class TestJobNew(unittest.TestCase):
         request = testing.DummyRequest()
         request.params = {
             'form.submitted': True,
-            'title':'NewJob',
-            'description':'SomeDescription',
-            'geometry':'POLYGON((0 0, 100 0, 100 100, 0 100, 0 0))',
-            'workflow':'SomeWorflow',
-            'imagery':'',
+            'title':u'NewJob',
+            'description':u'SomeDescription',
+            'geometry':u'POLYGON((0 0, 100 0, 100 100, 0 100, 0 0))',
+            'workflow':u'SomeWorflow',
+            'imagery':u'',
             'zoom':20
         }
         response = job_new(request)
@@ -135,7 +135,7 @@ class TestJob(unittest.TestCase):
         _registerRoutes(self.config)
         from OSMTM.views.jobs import job
         request = testing.DummyRequest()
-        self.config.testing_securitypolicy(userid='foo')
+        self.config.testing_securitypolicy(userid=u'foo')
         request.matchdict = {'job': 1}
         info = job(request)
         from OSMTM.models import Job

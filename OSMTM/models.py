@@ -127,13 +127,12 @@ def group_membership(username, request):
 def populate():
     transaction.begin()
     session = DBSession()
-    user = User('foo', 1)
+    user = User(u'foo')
     session.add(user)
-    job = Job('SomeTitle', 'Some description', 'Some workflow', 'Some geometry', 10, False, 'Some URL', False)
+    job = Job(u'SomeTitle', u'Some description', u'Some workflow', u'Some geometry', 10, False, u'Some URL', False)
     session.add(job)
     
 def initialize_sql(engine):
-    DBSession.configure(bind=engine)
     Base.metadata.bind = engine
     Base.metadata.create_all(engine)
     try:
