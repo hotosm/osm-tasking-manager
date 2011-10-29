@@ -78,8 +78,11 @@
                     <h3>Using Potlatch2?</h3>
                 </div>
                 <div class="modal-body">
+                    <p>
                     Please consider adding the tasks extent as a new vector file using the following url: <br />
-                    <code>${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}</code>
+                    <code>${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}</code><br />
+                    </p>
+                    <p class="help-block">Copy the above link and close this dialog box. You'll then be redirected to Potlatch.</p>
                 </div>
             </div>
             % endif
