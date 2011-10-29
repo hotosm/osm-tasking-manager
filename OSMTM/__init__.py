@@ -40,7 +40,7 @@ def main(global_config, **settings):
     config.add_route('task_unlock', '/job/{job}/task/{x}/{y}/unlock', factory='OSMTM.resources.JobFactory')
     config.add_route('task_done', '/job/{job}/task/{x}/{y}/done', factory='OSMTM.resources.JobFactory')
     config.add_route('task_take', '/job/{job}/take/{checkin}', factory='OSMTM.resources.JobFactory')
-    config.add_route('task_export', '/job/{job}/task/{x}/{y}/export', factory='OSMTM.resources.JobFactory')
+    config.add_route('task_export', '/job/{job}/task/{x}/{y}/export.osm', factory='OSMTM.resources.JobFactory')
     config.add_route('nextview', '/profile/nextview')
     config.add_route('user', '/user/{id}')
     config.add_route('user_update', '/user/{id}/update')
