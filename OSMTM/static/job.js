@@ -33,7 +33,15 @@ var context = {
     },
     getStrokeWidth: function(feature) {
         return (feature.attributes.checkout !== null) ?
-            1.5 : 0.3;
+            2 : 0.3;
+    },
+    getStrokeOpacity: function(feature) {
+        return (feature.attributes.checkout !== null) ?
+            1 : 0.5;
+    },
+    getZIndex: function(feature) {
+        return (feature.attributes.checkout !== null) ?
+            2 : 1;
     }
 };
 var template = {
@@ -41,12 +49,15 @@ var template = {
     fillOpacity: 0.5,
     strokeColor: "${getStrokeColor}",
     strokeWidth: "${getStrokeWidth}",
-    strokeOpacity: 0.5
+    strokeOpacity: "${getStrokeOpacity}",
+    graphicZIndex: "${getZIndex}" 
 };
 var style = new OpenLayers.Style(template, {context: context});
 var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
     styleMap: new OpenLayers.StyleMap(style),
-    renderers: ['Canvas']
+    rendererOptions: {
+        zIndexing: true
+    }
 });
 format = new OpenLayers.Format.GeoJSON();
 var features = format.read(tiles);
