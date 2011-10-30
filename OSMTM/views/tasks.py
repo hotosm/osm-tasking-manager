@@ -119,8 +119,10 @@ def take(request):
         session.add(tile)
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:
-        # FIXME # no available tile
-        request.session.flash('Sorry. No task available to validate.')
+        if checkin == 1:
+            request.session.flash('Sorry. No task available to validate.')
+        else:
+            request.session.flash('Sorry. No task available to take.')
         return HTTPFound(location=request.referrer)
 
 @view_config(route_name="task_export", renderer="task.osm.mako")
