@@ -140,6 +140,16 @@ def user_update(request):
         request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('user',id=user.username))
 
+@view_config(route_name='user_add', permission='admin')
+def user_add(request):
+    session = DBSession()
+    username = request.params.get("username")
+    if session.query(User).get(username) is None:
+        print(username)
+        session.add(User(username))
+        session.flush()
+    return HTTPFound(location=request.route_url('user', id=username)) 
+
 @view_config(route_name='users', renderer='users.mako', permission="edit")
 def users(request):
     session = DBSession()
