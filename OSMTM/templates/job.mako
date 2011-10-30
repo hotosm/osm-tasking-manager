@@ -29,8 +29,8 @@
             <p class="small">If you're an experienced mapper, you can also <a href="${request.route_url('task_take', job=job.id, checkin=1)}">validate</a> tasks done by the other mappers.</a></p>
         </div>
         % endif
-        % if admin:
-        <h3>Statistics</h3>
+        <hr />
+        <h4>Who else is working?</h4>
         <p>
         % if stats['current_users']:
         <ul>
@@ -68,7 +68,6 @@
             % endif
             </div>
         </div>
-        % endif
         </p>
     </div>
     <div class="span8">

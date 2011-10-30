@@ -47,7 +47,7 @@ def job(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     admin = user.is_admin() if user else False
-    stats = get_stats(job) if admin else None
+    stats = get_stats(job)
     return dict(job=job, user=user, tiles=dumps(FeatureCollection(tiles)),
             current_task=current_task,
             admin=admin,
