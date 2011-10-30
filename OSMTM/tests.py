@@ -140,3 +140,19 @@ class TestJob(unittest.TestCase):
         info = job(request)
         from OSMTM.models import Job
         self.assertEqual(info['job'], self.session.query(Job).get(1))
+
+class FunctionalTests(unittest.TestCase):
+
+    def setUp(self):
+        from OSMTM import main
+        settings = {
+            'sqlalchemy.url': 'sqlite:///:memory:'
+        }
+        app = main({}, **settings)
+        from webtest import TestApp
+        self.testapp = TestApp(app)
+
+    def test_root(self):
+        res = self.testapp.get('/', status=200)
+        self.failUnless('About Task Server' in res.body)
+        self.failUnless('Login' in res.body)
