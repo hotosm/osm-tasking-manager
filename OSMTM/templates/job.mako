@@ -37,7 +37,11 @@
           Users currently working on tasks:
           % for user in stats['current_users']:
           <li>
+            % if admin:
             <a href="${request.route_url('user',id=user)}">${user}</a>
+            % else:
+            <a href="http://www.openstreetmap.org/user/${user}" target="_blank">${user}</a>
+            % endif
           </li>
           % endfor
         </ul>
@@ -49,7 +53,11 @@
             <ul>
               % for user in stats['contributors']:
               <li>
+                % if admin:
                 <a href="${request.route_url('user',id=user[0])}">${user[0]}</a><sup><em> ${user[1]}</em></sup>
+                % else:
+                <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup><em> ${user[1]}</em></sup>
+                % endif
               </li>
               % endfor
             </ul>
@@ -61,7 +69,11 @@
             <ul>
               % for user in stats['validators']:
               <li>
+                % if admin:
                 <a href="${request.route_url('user',id=user[0])}">${user[0]}</a><sup><em> ${user[1]}</em></sup>
+                % else:
+                <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup><em> ${user[1]}</em></sup>
+                % endif
               </li>
               % endfor
             </ul>
