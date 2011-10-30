@@ -49,7 +49,7 @@
             <ul>
               % for user in stats['contributors']:
               <li>
-                <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
+                <a href="${request.route_url('user',id=user[0])}">${user[0]}</a><sup><em> ${user[1]}</em></sup>
               </li>
               % endfor
             </ul>
@@ -61,7 +61,7 @@
             <ul>
               % for user in stats['validators']:
               <li>
-                <a href="${request.route_url('user',id=user[0])}">${user[0]}</a> [${user[1]}]
+                <a href="${request.route_url('user',id=user[0])}">${user[0]}</a><sup><em> ${user[1]}</em></sup>
               </li>
               % endfor
             </ul>
