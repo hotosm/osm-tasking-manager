@@ -40,6 +40,11 @@
             else:
                 user = None
         %>
+        <div id="feedback-button">
+            <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dEJnSGJ2VkRaeWZDTkI1aHdGWTgzX1E6MQ#gid=0" target="_blank">
+                <img src="${request.static_url('OSMTM:static/feedback.png')}" title="Feedback" alt="feedback" />
+            </a>
+        </div>
         <!-- Topbar
         ================================================== -->
         <div class="topbar" >

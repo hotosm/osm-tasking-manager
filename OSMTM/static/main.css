@@ -57,6 +57,15 @@ html, body {
     filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@startColor,@endColor)); // IE9 and down
   }
 }
+
+#feedback-button {
+    position: absolute;
+    left: 0;
+    top: 200px;
+    padding-top: 4px;
+    background: #999;
+    .border-radius(0 5px 5px 0);
+}
 .topbar-inner,
 .topbar .fill {
   background-color: #650B05;
