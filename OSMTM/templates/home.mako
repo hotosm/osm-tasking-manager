@@ -3,7 +3,7 @@
 <%def name="title()">HOT Task Server - Home Page</%def>
 <div class="container">
     <div class="row"> 
-    <div class="span6">
+    <div class="span9">
     % if jobs:
         % for job in jobs:
             <h4>
