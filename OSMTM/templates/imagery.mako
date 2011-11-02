@@ -12,6 +12,6 @@ the agreement, if you like.
 </p>
 % endif
 % if user.accepted_nextview or not job.requires_nextview:
-<p><pre>${job.imagery}</pre></p>
+<p><textarea readonly="readonly" rows="1" cols="40">${job.imagery}</textarea></p>
 % endif
 % endif
