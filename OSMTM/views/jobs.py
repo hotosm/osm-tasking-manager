@@ -57,9 +57,21 @@ def job(request):
 def job_delete(request):
     id = request.matchdict['job']
     session = DBSession()
+
+    # prevent integrity errors
+    tiles_history = session.query(TileHistory).filter(TileHistory.job_id==id)
+    for tile in tiles_history:
+        session.delete(tile)
+
     job = session.query(Job).get(id)
     title = job.title
     session.delete(job)
+
+    # remove the tiles history twice because removing records from main table
+    # adds records in the history table
+    tiles_history = session.query(TileHistory).filter(TileHistory.job_id==id)
+    for tile in tiles_history:
+        session.delete(tile)
     request.session.flash('Job "%s" removed!' % title)
     return HTTPFound(location = route_url('home', request))
 
