@@ -2,7 +2,9 @@
 % if job.requires_nextview:
 <p>Access to this imagery is limited by the
 <a href="${request.route_url('nextview')}?redirect=${request.current_route_url()}">NextView license agreement</a>.
-% if not user.accepted_nextview:
+% if user.accepted_nextview:
+You have already acknowledged these terms.
+% else:
 You may
 <a href="${request.route_url('nextview')}?redirect=${request.current_route_url()}">review and acknowledge</a>
 the agreement, if you like.
