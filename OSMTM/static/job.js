@@ -106,10 +106,27 @@ $(document).ready(function() {
         },
         series: [{
             name: 'Done',
-            data: data_done
+            data: data_done,
+            marker: {
+                enabled: false,
+                states: {
+                    hover: {
+                        enabled: true
+                    }
+                }
+            }
         }, {
             name: 'Validated',
-            data: data_validated
-        }]
+            data: data_validated,
+            marker: {
+                enabled: false,
+                states: {
+                    hover: {
+                        enabled: true
+                    }
+                }
+            }
+        }],
+        colors: ['#FF4D4D', '#4DA64D']
     });
 });
