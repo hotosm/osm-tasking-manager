@@ -94,13 +94,23 @@
         </div>
     </div>
     </div>
+    % if admin:
+    <div class="row">
+        <div class="span16">
+            <div id="chart_div"></div>
+        </div>
+    </div>
+    % endif
 </div>
 <script type="text/javascript">
     var geometry = "${job.geometry}";
     var zoom = ${job.zoom};
     var tiles = ${tiles|n};
+    var chart_done = ${stats['chart_done']|n};
+    var chart_validated = ${stats['chart_validated']|n};
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Static.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/highcharts.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/job.js')}"></script>

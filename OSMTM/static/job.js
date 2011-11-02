@@ -64,3 +64,52 @@ var features = format.read(tiles);
 tilesLayer.addFeatures(features);
 map.zoomToExtent(tilesLayer.getDataExtent());
 map.addLayer(tilesLayer);
+
+$(document).ready(function() {
+    if ($('#chart_div').length < 1) {
+        return;
+    }
+    var done_values = window.chart_done,
+        validated_values = window.chart_validated,
+        date, done, validated,
+        data_done = [],
+        data_validated = [],
+        i, len;
+    for (i=0, len=done_values.length; i < len; i++) {
+        date = new Date(done_values[i][0]);
+        done = done_values[i][1];
+        data_done.push([date.getTime(), done]);
+    }
+    for (i=0, len=validated_values.length; i < len; i++) {
+        date = new Date(validated_values[i][0]);
+        validated = validated_values[i][1];
+        data_validated.push([date.getTime(), validated]);
+    }
+    var chart = new Highcharts.Chart({
+        title: null,
+        chart: {
+            renderTo: 'chart_div',
+            type: 'spline'
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                month: '%e. %b',
+                year: '%b'
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Number of tasks'
+            },
+            min: 0
+        },
+        series: [{
+            name: 'Done',
+            data: data_done
+        }, {
+            name: 'Validated',
+            data: data_validated
+        }]
+    });
+});

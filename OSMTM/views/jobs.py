@@ -17,6 +17,8 @@ from shapely.wkt import loads
 from geojson import Feature, FeatureCollection
 from geojson import dumps
 
+import simplejson
+
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import and_
 
@@ -142,22 +144,35 @@ def get_stats(job):
     # checkin is 0 when the tile was created
     checkin = 0
     user = None
+
+    # the changes (date, status) to create a chart with
+    changes = []
+
     for ndx, i in enumerate(tiles_history):
         # a user checked out a tile, let's add him to the list
         if i.username:
             if not users.has_key(i.username):
                 users[i.username] = StatUser()
             user = users[i.username]
+            date = i.checkout
         # something has changed
         if user is not None:
-            compare_checkin(checkin, i.checkin, user)
+            status = compare_checkin(checkin, i.checkin)
+            update_user(user, status)
+            if status is not None:
+                changes.append((date, status))
         checkin = i.checkin
-        if i.version == 1:
+
+        # new tile
+        if ndx < len(tiles_history) - 1 and tiles_history[ndx + 1].version == 1:
             # compare to the current checkin value
             tile = session.query(Tile) \
                 .get((i.x, i.y, job.id))
             if user is not None and tile is not None:
-                compare_checkin(checkin, tile.checkin, user)
+                status = compare_checkin(checkin, tile.checkin)
+                update_user(user, status)
+                if status is not None:
+                    changes.append((date, status))
 
             # let's move to a new tile
             # checkin is reinitialized
@@ -175,14 +190,40 @@ def get_stats(job):
     contributors = sorted(contributors_tuples, key=lambda user: user[1], reverse=True)
     validators = sorted(validators_tuples, key=lambda user: user[1], reverse=True)
 
-    return dict(current_users=current_users, contributors=contributors, 
-            validators=validators)
+    changes = sorted(changes, key=lambda value: value[0])
+    chart_done = []
+    chart_validated = []
+    done = 0
+    validated = 0
+    for date, status in changes:
+        if status == 1:
+            done += 1
+            chart_done.append([date.isoformat(), done])
+        if status == 2:
+            validated += 1
+            chart_validated.append([date.isoformat(), validated])
+        if status == 3:
+            done -= 1
+            chart_done.append([date.isoformat(), done])
 
-def compare_checkin(old, new, user):
+    return dict(current_users=current_users, contributors=contributors, 
+            validators=validators,
+            chart_done=simplejson.dumps(chart_done),
+            chart_validated=simplejson.dumps(chart_validated))
+
+def compare_checkin(old, new):
     # task done
     if old == 0 and new == 1:
+        return 1
+    # task validated
+    if old == 1 and new == 2:
+        return 2
+    # task invalidated
+    if old == 1 and new == 0:
+        return 3
+
+def update_user(user, status):
+    if status == 1:
         user.done += 1
-    # task validated or invalidated
-    if old == 1 and new == 2 or \
-       old == 1 and new == 0:
+    if status == 2 or status == 3:
         user.validated += 1
