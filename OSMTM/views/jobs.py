@@ -55,6 +55,22 @@ def job(request):
             admin=admin,
             stats=stats)
 
+@view_config(route_name='job_edit', renderer='job.edit.mako', permission='admin')
+def job_edit(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+
+    if 'form.submitted' in request.params:
+        job.title = request.params['title']
+        job.description = request.params['description']
+        job.workflow = request.params['workflow']
+
+        session.add(job)
+        return HTTPFound(location = route_url('job', request, job=job.id))
+
+    return dict(job=job)
+
 @view_config(route_name='job_delete', permission='admin')
 def job_delete(request):
     id = request.matchdict['job']

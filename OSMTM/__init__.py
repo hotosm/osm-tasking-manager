@@ -34,6 +34,7 @@ def main(global_config, **settings):
     config.add_route('logout', '/logout')
     config.add_route('job_new', '/job/new')
     config.add_route('job', '/job/{job}', factory='OSMTM.resources.JobFactory')
+    config.add_route('job_edit', '/job/{job}/edit', factory='OSMTM.resources.JobFactory')
     config.add_route('job_delete', '/job/{job}/delete', factory='OSMTM.resources.JobFactory')
     config.add_route('job_users', '/job/{job}/users', factory='OSMTM.resources.JobFactory')
     config.add_route('task', '/job/{job}/task/{x}/{y}', factory='OSMTM.resources.JobFactory')
