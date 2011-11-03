@@ -1,3 +1,6 @@
+<%!
+    import markdown
+%>
 <%inherit file="/base.mako"/>
 <%def name="id()">home</%def>
 <%def name="title()">HOT Task Server - Home Page</%def>
@@ -12,9 +15,11 @@
                 <img src="${request.static_url('OSMTM:static/img/lock.gif')}" alt="private" title="private job" />
                 % endif
             </h4>
-            <p>${job.description|n}</p>
+            <p>${markdown.markdown(job.description)|n}</p>
             % if user.is_admin():
             <p align="right">
+                <a href="${request.route_url('job_edit', job=job.id)}" class="edit" alt="edit" title="Edit the job">edit</a>
+                |
                 <a href="${request.route_url('job_delete', job=job.id)}" class="delete" alt="delete" title="Delete the job">delete</a>
             </p>
             % endif
