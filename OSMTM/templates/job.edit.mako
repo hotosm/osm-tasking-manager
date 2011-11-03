@@ -14,25 +14,24 @@
         <div class="clearfix">
             <label for="id_description">Description</label> 
             <div class="input"> 
-            <textarea class="text xxlarge" id="id_description" name="description">${job.description}
-            </textarea> 
-            <span class="help-block">
-                <strong>Note:</strong> You can use markdown markup.
-            </span>
+                <textarea class="text xxlarge" id="id_description" name="description">${job.description}</textarea>
+                <span class="help-block">
+                    <strong>Note:</strong> You can use markdown markup.
+                </span>
             </div> 
         </div>
         <div class="clearfix">
             <label for="id_workflow">Workflow</label> 
             <div class="input"> 
-            <textarea class="text xxlarge" id="id_workflow" name="workflow">${job.workflow}
-            </textarea> 
-            <span class="help-block">
-                <strong>Note:</strong> You can use markdown markup.
-            </span>
+                <textarea class="text xxlarge" id="id_workflow" name="workflow">${job.workflow}</textarea>
+                <span class="help-block">
+                    <strong>Note:</strong> You can use markdown markup.
+                </span>
             </div> 
         </div>
         <div class="actions">
-            <input type="submit" class="btn primary" value="Save the modifications" id="id_submit" name="form.submitted" /> 
+            <input type="submit" class="btn primary" value="Save the modifications" id="id_submit" name="form.submitted"/>
         </div>
     </form>
 </div>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/job.edit.js')}"></script>
