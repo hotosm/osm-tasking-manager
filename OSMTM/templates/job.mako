@@ -1,3 +1,6 @@
+<%!
+    import markdown
+%>
 <%inherit file="/base.mako"/>
 <%def name="id()">job</%def>
 <%def name="title()">Job - ${job.title}</%def>
@@ -6,9 +9,9 @@
     <div class="span8">
         <h2>Job: ${job.title}</h2>
         <h3>What and Why?</h3>
-        <p>${job.description|n}</p>
+        <p>${markdown.markdown(job.description)|n}</p>
         <h3>How?</h3>
-        <p>${job.workflow|n}</p>
+        <p>${markdown.markdown(job.workflow)|n}</p>
         % if job.imagery:
         <h3>Imagery URL</h3>
         <%include file="imagery.mako" />

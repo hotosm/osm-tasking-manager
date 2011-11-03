@@ -1,3 +1,6 @@
+<%!
+    import markdown
+%>
 <%inherit file="/base.mako"/>
 <%def name="id()">task</%def>
 <%def name="title()">Tile - ${tile.x} / ${tile.y}</%def>
@@ -24,8 +27,8 @@
             % if tile.checkin == 0:
                 <div class="well">
                     <p>2. Trace the elements as asked in the job&apos;s
-                    <a href="javascript:void(0);" rel="popover" data-content="${tile.job.description|h}" title="Description">description</a>
-                    and <a href="javascript:void(0);" rel="popover" data-content="${tile.job.workflow|h}" title="Workflow">workflow.</a></p>
+                    <a href="javascript:void(0);" rel="popover" data-content="${markdown.markdown(tile.job.description)|h}" title="Description">description</a>
+                    and <a href="javascript:void(0);" rel="popover" data-content="${markdown.markdown(tile.job.workflow)|h}" title="Workflow">workflow.</a></p>
                     <%include file="imagery.mako" />
                 </div>
                 <div class="well">

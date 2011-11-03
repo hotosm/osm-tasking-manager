@@ -20,7 +20,8 @@ requires = [
     'imposm.parser',
     'geojson',
     'WebTest',
-    'sqlalchemy-migrate'
+    'sqlalchemy-migrate',
+    'markdown'
     ]
 
 if sys.version_info[:3] < (2,5,0):
