@@ -25,7 +25,7 @@ Python environment execute the ``setup.py`` script::
 
 Previously, you may need to install some packages::
 
-    sudo apt-get install build-essential protobuf-compiler libprotobuf-dev libgeos-dev
+    sudo apt-get install build-essential protobuf-compiler libprotobuf-dev libgeos-dev python-dev
 
 Run OSMTM
 ---------
