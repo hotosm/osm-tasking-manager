@@ -111,6 +111,7 @@
     var tiles = ${tiles|n};
     var chart_done = ${stats['chart_done']|n};
     var chart_validated = ${stats['chart_validated']|n};
+    var job_url = "${request.route_url('job', job=job.id)}";
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>

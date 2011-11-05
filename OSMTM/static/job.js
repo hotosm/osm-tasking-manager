@@ -1,5 +1,5 @@
 var map = new OpenLayers.Map('map', {
-    controls: []
+   // controls: []
 });
 var osm = new OpenLayers.Layer.OSM();
 map.addLayer(osm);
@@ -64,6 +64,15 @@ var features = format.read(tiles);
 tilesLayer.addFeatures(features);
 map.zoomToExtent(tilesLayer.getDataExtent());
 map.addLayer(tilesLayer);
+
+var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
+    onSelect: function(feature) {
+        window.location = job_url + "/task/" + feature.attributes.x + "/" + feature.attributes.y + "/take";
+    }
+});
+map.addControls([featureControl]);
+featureControl.activate();
+
 
 $(document).ready(function() {
     if ($('#chart_div').length < 1) {
@@ -130,3 +139,4 @@ $(document).ready(function() {
         colors: ['#FF4D4D', '#4DA64D']
     });
 });
+

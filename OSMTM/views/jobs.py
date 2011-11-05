@@ -39,7 +39,8 @@ def job(request):
         if tile.checkout is not None:
             checkout = tile.checkout.isoformat()
         tiles.append(Feature(geometry=tile.to_polygon(),
-            properties={'checkin': tile.checkin, 'checkout': checkout}))
+            properties={'checkin': tile.checkin, 'checkout': checkout,
+                'x': tile.x, 'y': tile.y}))
     try:
         username = authenticated_userid(request)
         filter = and_(Tile.username==username, Tile.job_id==job.id)
