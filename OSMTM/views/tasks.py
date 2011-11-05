@@ -121,6 +121,9 @@ def take(request):
         tilex = request.matchdict['x']
         tiley = request.matchdict['y']
         tile = session.query(Tile).get((tilex, tiley, job_id))
+        if tile.checkin >= 2:
+            request.session.flash('This tile has already been validated.')
+            return HTTPFound(location=request.route_url('job', job=job_id))
     try:
         if tile is None:
             tile = tiles[random.randrange(0, len(tiles))]
