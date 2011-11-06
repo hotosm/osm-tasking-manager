@@ -82,7 +82,7 @@
         <footer class="footer">
             <div class="container">
                 <p class="span6">
-                Designed and built by <a href="http://github.com/pgiraud">@pgiraud</a> and <a href="http://github.com/schuyler">@schuyler</a> for the 
+                Designed and built for the 
                 <a href="http://hot.openstreetmap.org">Humanitarian OpenStreetMap Team</a>.
                 See the <a href="${request.route_url('about')}">about</a> page for complete information.<br />
                 </p>
