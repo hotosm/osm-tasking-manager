@@ -157,6 +157,21 @@ a {
     .well {
         padding: 10px;
     }
+    ul.contributors {
+        margin: 0;
+
+        li.online, 
+        li.offline {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        li.online {
+            background: url(status.png) no-repeat 0 0.10em;
+        }
+        li.offline {
+            background: url(status-offline.png) no-repeat 0 0.10em;
+        }
+    }
 }
 
 .footer {

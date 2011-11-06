@@ -34,28 +34,16 @@
         % endif
         <hr />
         <h4>Who else is working?</h4>
-        <p>
-        % if stats['current_users']:
-        <ul>
-          Users currently working on tasks:
-          % for user in stats['current_users']:
-          <li>
-            % if admin:
-            <a href="${request.route_url('user',id=user)}">${user}</a>
-            % else:
-            <a href="http://www.openstreetmap.org/user/${user}" target="_blank">${user}</a>
-            % endif
-          </li>
-          % endfor
-        </ul>
-        % endif
         <div class="row">
             <div class="span4">
             % if stats['contributors']:
             <strong>Contributors</strong>
-            <ul>
+            <ul class="contributors">
               % for user in stats['contributors']:
-              <li>
+              <%
+                  online = 'online' if user[2] is True else 'offline'
+              %>
+              <li class="${online}">
                 % if admin:
                 <a href="${request.route_url('user',id=user[0])}">${user[0]}</a><sup><em> ${user[1]}</em></sup>
                 % else:
@@ -83,7 +71,6 @@
             % endif
             </div>
         </div>
-        </p>
     </div>
     <div class="span8">
         <div id="map"></div>

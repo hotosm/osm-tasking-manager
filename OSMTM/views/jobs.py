@@ -200,8 +200,9 @@ def get_stats(job):
     validators_tuples = []
     for i in users:
         # only keep users who have actually done something
-        if users[i].done != 0:
-            contributors_tuples.append((i, users[i].done))
+        # or who are currently working on a task
+        if users[i].done != 0 or i in current_users:
+            contributors_tuples.append((i, users[i].done, i in current_users))
         if users[i].validated != 0:
             validators_tuples.append((i, users[i].validated))
     contributors = sorted(contributors_tuples, key=lambda user: user[1], reverse=True)
