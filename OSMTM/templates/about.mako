@@ -26,6 +26,10 @@
                 <li>Twitter Bootstrap</li>
                 <li>Less CSS</li>
             </ul>
+            <h4>Images</h4>
+            <ul class="unstyled">
+                <li>Some icons by <a href="http://p.yusukekamiyamane.com/">Yusuke Kamiyamane</a>. All rights reserved.</li>
+            </ul>
         </div>
         <div class="span4">
             <h4>Server-side</h4>
