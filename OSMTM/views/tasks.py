@@ -81,10 +81,13 @@ def unlock(request):
     session.add(tile)
     return HTTPFound(location=request.route_url('job', job=job_id))
 
-@view_config(route_name='task_take', permission='job')
+
 def take(request):
     job_id = request.matchdict['job']
-    checkin = request.matchdict['checkin']
+    if "checkin" in request.matchdict:
+        checkin = request.matchdict['checkin']
+    else:
+        checkin = None
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
@@ -98,23 +101,33 @@ def take(request):
     filter = and_(Tile.checkin==checkin, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
     filter = and_(TileHistory.username==username, TileHistory.job_id==job_id)
-    # get the tile the user worked on previously
-    p = session.query(TileHistory).filter(filter).order_by(TileHistory.checkout.desc()).limit(4).all()
-    tile = None
-    if p is not None and len(p) > 0:
-        p = p[len(p) -1]
-        neighbours = [
-            (p.x - 1, p.y - 1), (p.x - 1, p.y), (p.x - 1, p.y + 1),
-            (p.x, p.y - 1), (p.x, p.y + 1),
-            (p.x + 1, p.y - 1), (p.x + 1, p.y), (p.x + 1, p.y + 1)]
-        for t in tiles:
-            if (t.x, t.y) in neighbours:
-                tile = t
-                break
+    # take random tile
+    if checkin is not None:
+        # get the tile the user worked on previously
+        p = session.query(TileHistory).filter(filter).order_by(TileHistory.checkout.desc()).limit(4).all()
+        tile = None
+        if p is not None and len(p) > 0:
+            p = p[len(p) -1]
+            neighbours = [
+                (p.x - 1, p.y - 1), (p.x - 1, p.y), (p.x - 1, p.y + 1),
+                (p.x, p.y - 1), (p.x, p.y + 1),
+                (p.x + 1, p.y - 1), (p.x + 1, p.y), (p.x + 1, p.y + 1)]
+            for t in tiles:
+                if (t.x, t.y) in neighbours:
+                    tile = t
+                    break
+    # x / y given, selecting the tile
+    else:
+        tilex = request.matchdict['x']
+        tiley = request.matchdict['y']
+        tile = session.query(Tile).get((tilex, tiley, job_id))
+        if tile.checkin >= 2:
+            request.session.flash('This tile has already been validated.')
+            return HTTPFound(location=request.route_url('job', job=job_id))
     try:
         if tile is None:
             tile = tiles[random.randrange(0, len(tiles))]
-        tile.username = username 
+        tile.username = username
         tile.checkout = datetime.now()
         session.add(tile)
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
@@ -124,6 +137,15 @@ def take(request):
         else:
             request.session.flash('Sorry. No task available to take.')
         return HTTPFound(location=request.referrer)
+
+
+@view_config(route_name='task_take_random', permission='job')
+def take_random(request):
+    return take(request)
+
+@view_config(route_name='task_take', permission='job')
+def take_tile(request):
+    return take(request)
 
 @view_config(route_name="task_export", renderer="task.osm.mako")
 def task_export(request):

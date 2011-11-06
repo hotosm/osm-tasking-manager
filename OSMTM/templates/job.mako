@@ -25,11 +25,11 @@
         % else:
         <div>
         <h3>Ready?</h3>
-            <div class="row">
-                <div class="span2">&nbsp;</div>
-                <a class="btn primary input" href="${request.route_url('task_take', job=job.id, checkin=0)}">Take a task</a>
-            </div>
-            <p class="small">If you're an experienced mapper, you can also <a href="${request.route_url('task_take', job=job.id, checkin=1)}">validate</a> tasks done by the other mappers.</a></p>
+            <p>
+                <a class="btn primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system">Take a task</a>
+                Or choose one by clicking on the map.
+            </p>
+            <p class="small">If you're an experienced mapper, you can also be given a task to <a href="${request.route_url('task_take_random', job=job.id, checkin=1)}">validate</a>.</p>
         </div>
         % endif
         <hr />
@@ -111,6 +111,7 @@
     var tiles = ${tiles|n};
     var chart_done = ${stats['chart_done']|n};
     var chart_validated = ${stats['chart_validated']|n};
+    var job_url = "${request.route_url('job', job=job.id)}";
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>

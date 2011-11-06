@@ -1,5 +1,8 @@
 $().ready(function() {
     $('#flash').fadeIn().delay(2000).fadeOut(400);
+    $("a[rel=twipsy]").twipsy({
+        live: true
+    });
     $("a[rel=popover]")
         .popover({
             offset: 10,

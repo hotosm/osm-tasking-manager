@@ -70,9 +70,8 @@
             % endif
             <p>
                 Can't work on this task right now? No problem.
-                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}">Unlock it!</a>
+                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
             </p>
-            <div>You have <strong><span id="countdown"></span> minutes left</strong> to work on this tile.</div>
             </form>
             <div id="josm_export_info" class="modal hide fade">
                 <div class="modal-header">

@@ -1,5 +1,5 @@
 var map = new OpenLayers.Map('map', {
-    controls: []
+   // controls: []
 });
 var osm = new OpenLayers.Layer.OSM();
 map.addLayer(osm);
@@ -42,6 +42,9 @@ var context = {
     getZIndex: function(feature) {
         return (feature.attributes.checkout !== null) ?
             2 : 1;
+    },
+    getCursor: function(feature) {
+        return (feature.attributes.checkin < 2) ? "pointer" : "auto";
     }
 };
 var template = {
@@ -50,7 +53,8 @@ var template = {
     strokeColor: "${getStrokeColor}",
     strokeWidth: "${getStrokeWidth}",
     strokeOpacity: "${getStrokeOpacity}",
-    graphicZIndex: "${getZIndex}" 
+    graphicZIndex: "${getZIndex}",
+    cursor: "${getCursor}"
 };
 var style = new OpenLayers.Style(template, {context: context});
 var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
@@ -64,6 +68,18 @@ var features = format.read(tiles);
 tilesLayer.addFeatures(features);
 map.zoomToExtent(tilesLayer.getDataExtent());
 map.addLayer(tilesLayer);
+
+var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
+    onSelect: function(feature) {
+        if (feature.attributes.checkin >=  2) {
+            return false;
+        }
+        window.location = job_url + "/task/" + feature.attributes.x + "/" + feature.attributes.y + "/take";
+    }
+});
+map.addControls([featureControl]);
+featureControl.activate();
+featureControl.handlers.feature.stopDown = false;
 
 $(document).ready(function() {
     if ($('#chart_div').length < 1) {
@@ -130,3 +146,4 @@ $(document).ready(function() {
         colors: ['#FF4D4D', '#4DA64D']
     });
 });
+
