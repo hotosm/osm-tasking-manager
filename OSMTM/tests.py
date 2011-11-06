@@ -148,11 +148,33 @@ class FunctionalTests(unittest.TestCase):
         settings = {
             'sqlalchemy.url': 'sqlite:///:memory:'
         }
-        app = main({}, **settings)
+        self.app = main({}, **settings)
         from webtest import TestApp
-        self.testapp = TestApp(app)
+        self.testapp = TestApp(self.app)
+
+    def __remember(self):
+        from pyramid.security import remember
+        request = testing.DummyRequest(environ={'SERVER_NAME': 'servername'})
+        request.registry = self.app.registry
+        headers = remember(request, 'foo')
+        return {'Cookie': headers[0][1].split(';')[0]}
+
+    def __forget(self):
+        from pyramid.security import forget
+        request = testing.DummyRequest(environ={'SERVER_NAME': 'servername'})
+        request.registry = self.app.registry
+        forget(request)
 
     def test_root(self):
         res = self.testapp.get('/', status=200)
         self.failUnless('About Task Server' in res.body)
         self.failUnless('Login' in res.body)
+
+    def test_authenticated(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember()
+        try:
+            res = self.testapp.get('/', headers=headers, status=200)
+        finally:
+            self.__forget()
+        self.failUnless('You are foo' in res.body)
