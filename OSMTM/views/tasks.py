@@ -121,6 +121,12 @@ def take(request):
         tilex = request.matchdict['x']
         tiley = request.matchdict['y']
         tile = session.query(Tile).get((tilex, tiley, job_id))
+
+        # task is already checked out by someone else
+        if tile.checkout is not None and tile.user != user:
+            request.session.flash('You cannot see this task. Someone else is already working on it.')
+            return HTTPFound(location=request.route_url('job', job=job_id))
+
         if tile.checkin >= 2:
             request.session.flash('This tile has already been validated.')
             return HTTPFound(location=request.route_url('job', job=job_id))

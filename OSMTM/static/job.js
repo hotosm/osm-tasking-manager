@@ -44,7 +44,8 @@ var context = {
             2 : 1;
     },
     getCursor: function(feature) {
-        return (feature.attributes.checkin < 2) ? "pointer" : "auto";
+        return (feature.attributes.checkin < 2 &&
+            feature.attributes.checkout === null) ? "pointer" : "auto";
     }
 };
 var template = {
@@ -71,10 +72,11 @@ map.addLayer(tilesLayer);
 
 var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
     onSelect: function(feature) {
-        if (feature.attributes.checkin >=  2) {
+        var attr = feature.attributes;
+        if (attr.checkin >=  2 || attr.checkout !== null) {
             return false;
         }
-        window.location = job_url + "/task/" + feature.attributes.x + "/" + feature.attributes.y + "/take";
+        window.location = job_url + "/task/" + attr.x + "/" + attr.y + "/take";
     }
 });
 map.addControls([featureControl]);
