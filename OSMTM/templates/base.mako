@@ -84,7 +84,7 @@
                 <p class="span6">
                 Designed and built by <a href="http://github.com/pgiraud">@pgiraud</a> and <a href="http://github.com/schuyler">@schuyler</a> for the 
                 <a href="http://hot.openstreetmap.org">Humanitarian OpenStreetMap Team</a>.
-                See the <a href="${request.route_url('credits')}">about</a> page for complete information.<br />
+                See the <a href="${request.route_url('about')}">about</a> page for complete information.<br />
                 </p>
                 <p class="pull-right">
                 Fork the code on <a href="http://github.com/pgiraud/OSMTM">github</a>.</p>

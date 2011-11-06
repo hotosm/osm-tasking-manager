@@ -108,7 +108,7 @@ def home(request):
             user=user,
             admin=user.is_admin())
 
-@view_config(route_name='credits', renderer='credits.mako')
+@view_config(route_name='about', renderer='about.mako')
 def credits(request):
     return dict()
 
