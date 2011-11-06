@@ -27,7 +27,7 @@
         <h3>Ready?</h3>
             <p>
                 <a class="btn primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system">Take a task</a>
-                Or choose one by clicking on the map.
+                Or choose one by <strong>clicking</strong> on the map.
             </p>
             <p class="small">If you're an experienced mapper, you can also be given a task to <a href="${request.route_url('task_take_random', job=job.id, checkin=1)}">validate</a>.</p>
         </div>
