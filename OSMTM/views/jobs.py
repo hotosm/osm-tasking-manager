@@ -196,6 +196,15 @@ def get_stats(job):
             checkin = 0
             user = None
 
+    # also add the current users
+    tiles = session.query(Tile) \
+            .filter(Tile.job_id== job.id) \
+            .all()
+    for i in tiles:
+        if i.username:
+            if not users.has_key(i.username):
+                users[i.username] = StatUser()
+
     contributors_tuples = []
     validators_tuples = []
     for i in users:
