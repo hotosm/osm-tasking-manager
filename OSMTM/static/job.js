@@ -79,7 +79,7 @@ var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
 });
 map.addControls([featureControl]);
 featureControl.activate();
-
+featureControl.handlers.feature.stopDown = false;
 
 $(document).ready(function() {
     if ($('#chart_div').length < 1) {
