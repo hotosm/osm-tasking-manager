@@ -14,7 +14,7 @@
         <div class="span6">
             <h3>Context</h3>
             <p>
-                The current application was imagined by the <a href="http://hot.openstreetmap.org">Humanitarian OpenStreetMap Team</a> which contracted <a href="http://www.camptocamp.com">Camptocamp</a> to initiate the work.
+                The current application is the result of an initial work funded by <a href="http://www.aifdr.org/" title="AIFDR" alt="AIFDR">AIFDR</a>. It was imagined by the <a href="http://hot.openstreetmap.org">Humanitarian OpenStreetMap Team</a> which contracted <a href="http://www.camptocamp.com">Camptocamp</a> to initiate the work.
             </p>
             <p>
                 Then, the project continued to evolve on its own with the help from several developers.
