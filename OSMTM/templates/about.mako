@@ -38,6 +38,7 @@
                     <li><a href="https://github.com/schuyler/OSMTM">Schuyler</a></li>
                     <li><a href="https://github.com/pmauduit/OSMTM">pmauduit</a></li>
                     <li><a href="https://github.com/tonio/OSMTM">tonio</a></li>
+                    <li><a href="https://github.com/elemoine/OSMTM">elemoine</a></li>
                     <li>And probably others...</li>
                 </ul>
             </p>
