@@ -12,8 +12,8 @@
         <div>
         <form method="post" action="">
             <input type="hidden" name="redirect" value="${redirect}" /><!-- to get back to from whence you came -->
-            <input type="submit" name="accepted_terms" value="I AGREE"/>
-            <input type="submit" name="accepted_terms" value="No, thank you"/>
+            <input type="submit" name="accepted_terms" class="btn primary" value="I AGREE"/>
+            <input type="submit" name="accepted_terms" class="btn" value="No, thank you"/>
         </form>
         </div>
     </section>

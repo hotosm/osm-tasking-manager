@@ -226,3 +226,34 @@ class FunctionalTests(unittest.TestCase):
         finally:
             self.__forget()
         self.assertEquals(res.html.head.title.string, 'OSM Tasking Manager - About')
+
+    def test_nextview(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember('foo')
+        from OSMTM.models import DBSession, User
+        session = DBSession()
+        try:
+            res = self.testapp.get('/profile/nextview', headers=headers, status=200)
+        finally:
+            self.__forget()
+
+        try:
+            res = self.testapp.post('/profile/nextview',
+                    params={'accepted_terms': 'I AGREE', 'redirect': 'http://localhost/'},
+                    headers=headers, status=302)
+        finally:
+            self.__forget()
+
+        user = session.query(User).get('foo')
+        self.assertTrue(user.accepted_nextview)
+        try:
+            res = self.testapp.post('/profile/nextview',
+                    params={'accepted_terms': 'blah', 'redirect': 'http://localhost/'},
+                    headers=headers, status=302)
+        finally:
+            self.__forget()
+
+        from OSMTM.models import DBSession, User
+        session = DBSession()
+        user = session.query(User).get('foo')
+        self.assertFalse(user.accepted_nextview)
