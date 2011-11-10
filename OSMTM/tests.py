@@ -156,11 +156,11 @@ class FunctionalTests(unittest.TestCase):
         from OSMTM.models import populate
         populate()
 
-    def __remember(self):
+    def __remember(self, username):
         from pyramid.security import remember
         request = testing.DummyRequest(environ={'SERVER_NAME': 'servername'})
         request.registry = self.app.registry
-        headers = remember(request, 'foo')
+        headers = remember(request, username)
         return {'Cookie': headers[0][1].split(';')[0]}
 
     def __forget(self):
@@ -176,7 +176,7 @@ class FunctionalTests(unittest.TestCase):
 
     def test_authenticated(self):
         from pyramid.security import remember, forget
-        headers = self.__remember()
+        headers = self.__remember('foo')
         try:
             res = self.testapp.get('/', headers=headers, status=200)
         finally:
