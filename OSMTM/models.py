@@ -135,10 +135,4 @@ def populate():
 def initialize_sql(engine):
     Base.metadata.bind = engine
     Base.metadata.create_all(engine)
-    try:
-        populate()
-        transaction.commit()
-    except IntegrityError:
-        # already created
-        transaction.abort()
     return DBSession

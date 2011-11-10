@@ -4,8 +4,9 @@ from pyramid import testing
 
 def _initTestingDB():
     from sqlalchemy import create_engine
-    from OSMTM.models import initialize_sql
+    from OSMTM.models import initialize_sql, populate
     session = initialize_sql(create_engine('sqlite:///:memory:'))
+    populate()
     return session
 
 def _registerRoutes(config):
@@ -151,6 +152,9 @@ class FunctionalTests(unittest.TestCase):
         self.app = main({}, **settings)
         from webtest import TestApp
         self.testapp = TestApp(self.app)
+
+        from OSMTM.models import populate
+        populate()
 
     def __remember(self):
         from pyramid.security import remember
