@@ -21,7 +21,9 @@ requires = [
     'geojson',
     'WebTest',
     'sqlalchemy-migrate',
-    'markdown'
+    'markdown',
+    'nose',
+    'coverage'
     ]
 
 if sys.version_info[:3] < (2,5,0):
