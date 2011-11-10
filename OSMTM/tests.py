@@ -182,3 +182,38 @@ class FunctionalTests(unittest.TestCase):
         finally:
             self.__forget()
         self.failUnless('You are foo' in res.body)
+
+    def test_user_authenticated(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember('foo')
+        try:
+            res = self.testapp.get('/', headers=headers, status=200)
+        finally:
+            self.__forget()
+        self.assertFalse('<a href="http://localhost:6543/users">Users</a>' in res.body)
+
+    def test_user_users(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember('foo')
+        try:
+            res = self.testapp.get('/users', headers=headers, status=200)
+        finally:
+            self.__forget()
+
+    def test_user_profile(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember('foo')
+        try:
+            res = self.testapp.get('/user/foo', headers=headers, status=200)
+        finally:
+            self.__forget()
+        self.assertTrue('Forbidden' in res.body)
+
+    def test_admin_authenticated(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember('admin')
+        try:
+            res = self.testapp.get('/', headers=headers, status=200)
+        finally:
+            self.__forget()
+        self.assertTrue('<a href="http://localhost/users">Users</a>' in res.body)

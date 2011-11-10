@@ -129,6 +129,8 @@ def populate():
     session = DBSession()
     user = User(u'foo')
     session.add(user)
+    user = User(u'admin', admin=True)
+    session.add(user)
     job = Job(u'SomeTitle', u'Some description', u'Some workflow', u'Some geometry', 10, False, u'Some URL', False)
     session.add(job)
     
