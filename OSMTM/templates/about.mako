@@ -1,6 +1,6 @@
 <%inherit file="/base.mako"/>
 <%def name="id()">home</%def>
-<%def name="title()">Login</%def>
+<%def name="title()">About</%def>
 
 <div class="container">
     <div class="page-header">

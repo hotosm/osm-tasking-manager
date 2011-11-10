@@ -109,7 +109,7 @@ def home(request):
             admin=user.is_admin())
 
 @view_config(route_name='about', renderer='about.mako')
-def credits(request):
+def about(request):
     return dict()
 
 @view_config(route_name='nextview', renderer='nextview.mako', permission='edit')

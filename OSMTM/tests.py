@@ -217,3 +217,12 @@ class FunctionalTests(unittest.TestCase):
         finally:
             self.__forget()
         self.assertTrue('<a href="http://localhost/users">Users</a>' in res.body)
+
+    def test_about(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember('foo')
+        try:
+            res = self.testapp.get('/about', headers=headers, status=200)
+        finally:
+            self.__forget()
+        self.assertEquals(res.html.head.title.string, 'OSM Tasking Manager - About')
