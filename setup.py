@@ -23,7 +23,8 @@ requires = [
     'sqlalchemy-migrate',
     'markdown',
     'nose',
-    'coverage'
+    'coverage',
+    'beautifulSoup'
     ]
 
 if sys.version_info[:3] < (2,5,0):
