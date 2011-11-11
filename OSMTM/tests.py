@@ -47,7 +47,8 @@ class JobModelTests(unittest.TestCase):
         from OSMTM.models import Job
         return Job
 
-    def _makeOne(self, title='SomeTitle', description='some description', geometry='some geometry', workflow='some workflow', zoom=1):
+    def _makeOne(self, title='SomeTitle', description='some description',
+            geometry='some geometry', workflow='some workflow', zoom=1):
         return self._getTargetClass()(title, description, geometry, workflow, zoom)
 
     def test_constructor(self):
@@ -211,7 +212,7 @@ class FunctionalTests(unittest.TestCase):
 
     def test_admin_authenticated(self):
         from pyramid.security import remember, forget
-        headers = self.__remember('admin')
+        headers = self.__remember('admin_user')
         try:
             res = self.testapp.get('/', headers=headers, status=200)
         finally:
@@ -257,3 +258,33 @@ class FunctionalTests(unittest.TestCase):
         session = DBSession()
         user = session.query(User).get('foo')
         self.assertFalse(user.accepted_nextview)
+
+    def test_admin_user(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember('admin_user')
+        try:
+            res = self.testapp.get('/user/foo', headers=headers, status=200)
+            self.assertTrue('Profile for foo' in res.body)
+            self.assertFalse(res.html.find(id='admin').checked)
+        finally:
+            self.__forget()
+
+        try:
+            res = self.testapp.get('/user/admin_user', headers=headers, status=200)
+            self.assertTrue('Profile for admin_user' in res.body)
+            self.assertTrue(res.html.find(id='admin')['checked'] == 'checked')
+        finally:
+            self.__forget()
+
+    def test_admin_user_update(self):
+        from pyramid.security import remember, forget
+        headers = self.__remember('admin_user')
+        try:
+            res = self.testapp.post('/user/foo/update',
+                    params={'form.submitted': True, 'admin': 'on'},
+                    headers=headers, status=302)
+            res2 = res.follow(status=200)
+            self.assertTrue('Profile for foo' in res2.body)
+            self.assertTrue(res2.html.find(id='admin').checked)
+        finally:
+            self.__forget()
