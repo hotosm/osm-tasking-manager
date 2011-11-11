@@ -200,6 +200,13 @@ $('#id_title')
 
 $(document).ready(function() {
     var converter = new Showdown.converter();
+    var short_description = $('#id_short_description'),
+        preview_short_description = $('<div />').insertAfter(short_description);
+    short_description.keyup(function() {
+        var html = converter.makeHtml(short_description.val());
+        preview_short_description.html(html);
+    }).trigger('keyup');
+
     var description = $('#id_description'),
         preview_description = $('<div />').insertAfter(description);
     description.keyup(function() {

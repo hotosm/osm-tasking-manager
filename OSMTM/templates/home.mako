@@ -15,7 +15,10 @@
                 <img src="${request.static_url('OSMTM:static/img/lock.gif')}" alt="private" title="private job" />
                 % endif
             </h4>
-            <p>${markdown.markdown(job.description)|n}</p>
+            <%
+                description = job.short_description if job.short_description != '' else job.description
+            %>
+            <p>${markdown.markdown(description)|n}</p>
             % if user.is_admin():
             <p align="right">
                 <a href="${request.route_url('job_edit', job=job.id)}" class="edit" alt="edit" title="Edit the job">edit</a>

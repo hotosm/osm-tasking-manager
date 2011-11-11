@@ -90,6 +90,7 @@ class Job(Base):
     id = Column(Integer, primary_key=True)
     title = Column(Unicode, unique=True)
     description = Column(Unicode)
+    short_description = Column(Unicode)
     geometry = Column(Unicode)
     workflow = Column(Unicode)
     imagery = Column(Unicode)
@@ -101,11 +102,13 @@ class Job(Base):
                 secondary=job_whitelist_table,
                 backref='private_jobs')
 
-    def __init__(self, title=None, description=None, geometry=None,
+    def __init__(self, title=None,
+                 short_description='', description=None, geometry=None,
                  workflow=None, zoom=None, is_private=False, imagery=None,
                  requires_nextview=False):
         self.title = title
         self.description = description
+        self.short_description = short_description
         self.geometry = geometry
         self.workflow = workflow
         self.imagery = imagery

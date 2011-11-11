@@ -81,6 +81,15 @@
         <fieldset>
             <legend>Job's description</legend>
             <div class="clearfix">
+                <label for="id_short_description">Short Description</label>
+                <div class="input">
+                <textarea class="text xxlarge" id="id_short_description" name="short_description"></textarea>
+                <span class="help-block">
+                    <strong>Note:</strong> You can use markdown markup.
+                </span>
+                </div>
+            </div>
+            <div class="clearfix">
                 <label for="id_description">Description</label> 
                 <div class="input"> 
                 <textarea class="text xxlarge" id="id_description" name="description"></textarea>

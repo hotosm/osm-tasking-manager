@@ -64,6 +64,7 @@ def job_edit(request):
 
     if 'form.submitted' in request.params:
         job.title = request.params['title']
+        job.short_description = request.params['short_description']
         job.description = request.params['description']
         job.workflow = request.params['workflow']
 
@@ -101,6 +102,7 @@ def job_new(request):
         session = DBSession()
         job = Job()
         job.title = request.params['title']
+        job.short_description = request.params['short_description']
         job.description = request.params['description']
         job.geometry = request.params['geometry']
         job.workflow = request.params['workflow']

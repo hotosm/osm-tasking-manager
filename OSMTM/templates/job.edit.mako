@@ -14,6 +14,23 @@
         <div class="row">
             <div class="span9">
                 <div class="clearfix">
+                    <label for="id_short_description">Short Description</label>
+                    <div class="input">
+                        <textarea class="text span6" id="id_short_description" name="short_description" rows="10">${job.short_description}</textarea>
+                        <span class="help-block">
+                            <strong>Note:</strong> You can use markdown markup.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="span7">
+                <span class="help-block">Preview</span>
+                <span id="short_description_preview"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span9">
+                <div class="clearfix">
                     <label for="id_description">Description</label>
                     <div class="input">
                         <textarea class="text span6" id="id_description" name="description" rows="10">${job.description}</textarea>
