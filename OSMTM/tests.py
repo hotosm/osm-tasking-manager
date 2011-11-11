@@ -176,7 +176,6 @@ class FunctionalTests(unittest.TestCase):
         self.failUnless('Login' in res.body)
 
     def test_authenticated(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('foo')
         try:
             res = self.testapp.get('/', headers=headers, status=200)
@@ -185,7 +184,6 @@ class FunctionalTests(unittest.TestCase):
         self.failUnless('You are foo' in res.body)
 
     def test_user_authenticated(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('foo')
         try:
             res = self.testapp.get('/', headers=headers, status=200)
@@ -194,7 +192,6 @@ class FunctionalTests(unittest.TestCase):
         self.assertFalse('<a href="http://localhost:6543/users">Users</a>' in res.body)
 
     def test_user_users(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('foo')
         try:
             res = self.testapp.get('/users', headers=headers, status=200)
@@ -202,7 +199,6 @@ class FunctionalTests(unittest.TestCase):
             self.__forget()
 
     def test_user_profile(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('foo')
         try:
             res = self.testapp.get('/user/foo', headers=headers, status=200)
@@ -211,7 +207,6 @@ class FunctionalTests(unittest.TestCase):
         self.assertTrue('Forbidden' in res.body)
 
     def test_admin_authenticated(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('admin_user')
         try:
             res = self.testapp.get('/', headers=headers, status=200)
@@ -220,7 +215,6 @@ class FunctionalTests(unittest.TestCase):
         self.assertTrue('<a href="http://localhost/users">Users</a>' in res.body)
 
     def test_about(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('foo')
         try:
             res = self.testapp.get('/about', headers=headers, status=200)
@@ -229,7 +223,6 @@ class FunctionalTests(unittest.TestCase):
         self.assertEquals(res.html.head.title.string, 'OSM Tasking Manager - About')
 
     def test_nextview(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('foo')
         from OSMTM.models import DBSession, User
         session = DBSession()
@@ -260,7 +253,6 @@ class FunctionalTests(unittest.TestCase):
         self.assertFalse(user.accepted_nextview)
 
     def test_admin_user(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('admin_user')
         try:
             res = self.testapp.get('/user/foo', headers=headers, status=200)
@@ -277,7 +269,6 @@ class FunctionalTests(unittest.TestCase):
             self.__forget()
 
     def test_admin_user_update(self):
-        from pyramid.security import remember, forget
         headers = self.__remember('admin_user')
         try:
             res = self.testapp.post('/user/foo/update',
