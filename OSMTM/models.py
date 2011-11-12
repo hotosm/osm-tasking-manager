@@ -134,7 +134,7 @@ def populate():
     session.add(user)
     user = User(u'admin_user', admin=True)
     session.add(user)
-    job = Job(u'SomeTitle', u'Some description', u'Some workflow', u'Some geometry', 10, False, u'Some URL', False)
+    job = Job(u'SomeTitle', u'A short description', u'Some description', u'Some workflow', u'Some geometry', 10, False, u'Some URL', False)
     session.add(job)
     
 def initialize_sql(engine):

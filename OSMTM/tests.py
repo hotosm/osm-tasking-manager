@@ -47,9 +47,10 @@ class JobModelTests(unittest.TestCase):
         from OSMTM.models import Job
         return Job
 
-    def _makeOne(self, title='SomeTitle', description='some description',
+    def _makeOne(self, title='SomeTitle',
+            short_description='a short description', description='some description',
             geometry='some geometry', workflow='some workflow', zoom=1):
-        return self._getTargetClass()(title, description, geometry, workflow, zoom)
+        return self._getTargetClass()(title, short_description, description, geometry, workflow, zoom)
 
     def test_constructor(self):
         instance = self._makeOne()
@@ -112,6 +113,7 @@ class TestJobNew(unittest.TestCase):
         request.params = {
             'form.submitted': True,
             'title':u'NewJob',
+            'short_description':u'SomeShortDescription',
             'description':u'SomeDescription',
             'geometry':u'POLYGON((0 0, 100 0, 100 100, 0 100, 0 0))',
             'workflow':u'SomeWorflow',
