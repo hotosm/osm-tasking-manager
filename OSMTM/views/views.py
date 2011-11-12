@@ -138,7 +138,7 @@ def user_update(request):
         user.admin = True if 'admin' in request.params else False
         user.accepted_nextview = request.params.get('accepted_nextview') == 'on'
         session.flush()
-        request.session.flash('Profile correctly updated!')
+        #request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('user',id=user.username))
 
 @view_config(route_name='user_add', permission='admin')

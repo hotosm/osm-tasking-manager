@@ -49,14 +49,14 @@ class JobModelTests(unittest.TestCase):
 
     def _makeOne(self, title='SomeTitle',
             short_description='a short description', description='some description',
-            geometry='some geometry', workflow='some workflow', zoom=1):
-        return self._getTargetClass()(title, short_description, description, geometry, workflow, zoom)
+            workflow='some workflow', geometry='POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))', zoom=1):
+        return self._getTargetClass()(title, short_description, description, workflow, geometry, zoom)
 
     def test_constructor(self):
         instance = self._makeOne()
         self.assertEqual(instance.title, 'SomeTitle')
         self.assertEqual(instance.description, 'some description')
-        self.assertEqual(instance.geometry, 'some geometry')
+        self.assertEqual(instance.geometry, 'POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))')
         self.assertEqual(instance.workflow, 'some workflow')
         self.assertEqual(instance.zoom, 1)
 
@@ -273,11 +273,57 @@ class FunctionalTests(unittest.TestCase):
     def test_admin_user_update(self):
         headers = self.__remember('admin_user')
         try:
-            res = self.testapp.post('/user/foo/update',
-                    params={'form.submitted': True, 'admin': 'on'},
-                    headers=headers, status=302)
-            res2 = res.follow(status=200)
-            self.assertTrue('Profile for foo' in res2.body)
-            self.assertTrue(res2.html.find(id='admin').checked)
+            res = self.testapp.get('/user/foo',
+                    headers=headers, status=200)
+            res.form['admin'].checked = True 
+            res2 = res.form.submit('form.submitted', headers=headers,
+                    status=302)
+            res3 = res2.follow(headers=headers, status=200)
+            self.assertTrue('Profile for foo' in res3.body)
+            self.assertTrue(res3.form['admin'].checked)
+        finally:
+            self.__forget()
+
+    #########
+    # tasks #
+    #########
+
+    def test_task_not_found(self):
+        headers = self.__remember('foo')
+        try:
+            res = self.testapp.get('/job/1/task/1/1', headers=headers,
+                    status=404)
+        finally:
+            self.__forget()
+
+    def test_task(self):
+        headers = self.__remember('foo')
+        try:
+            res = self.testapp.get('/job/1/task/32774/42026', headers=headers,
+                    status=302)
+            self.assertEquals(res.location, 'http://localhost/job/1')
+        finally:
+            self.__forget()
+
+    def test_task_take(self):
+        headers = self.__remember('foo')
+        try:
+            res = self.testapp.get('/job/1/task/32774/42026/take', headers=headers,
+                    status=302)
+            self.assertEquals(res.location,
+                    'http://localhost/job/1/task/32774/42026')
+            res2 = self.testapp.get(res.location, headers=headers,
+                    status=200)
+
+            form = res2.form
+            res3 = form.submit(headers=headers, status=302)
+            res4 = res3.follow(headers=headers, status=200)
+            from OSMTM.models import DBSession, Tile
+            session = DBSession()
+            tile = session.query(Tile).get((32774, 42026, 1))
+            self.assertEquals(tile.checkin, 1)
+
+            #res2 = form.submit()
+            #self.assertEquals(res2.status, "200 OK")
         finally:
             self.__forget()

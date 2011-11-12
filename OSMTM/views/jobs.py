@@ -11,9 +11,6 @@ from OSMTM.models import TileHistory
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
-from OSMTM.utils import get_tiles_in_geom
-from shapely.wkt import loads
-
 from geojson import Feature, FeatureCollection
 from geojson import dumps
 
@@ -100,21 +97,17 @@ def job_delete(request):
 def job_new(request):
     if 'form.submitted' in request.params:
         session = DBSession()
-        job = Job()
-        job.title = request.params['title']
-        job.short_description = request.params['short_description']
-        job.description = request.params['description']
-        job.geometry = request.params['geometry']
-        job.workflow = request.params['workflow']
-        job.imagery = request.params['imagery']
-        job.zoom = request.params['zoom']
-        job.is_private = request.params.get('is_private', 0)
-        job.requires_nextview = request.params.get('requires_nextview', 0)
-
-        tiles = []
-        for i in get_tiles_in_geom(loads(job.geometry), int(job.zoom)):
-            tiles.append(Tile(i[0], i[1]))
-        job.tiles = tiles
+        job = Job(
+            request.params['title'],
+            request.params['short_description'],
+            request.params['description'],
+            request.params['workflow'],
+            request.params['geometry'],
+            request.params['zoom'],
+            request.params.get('is_private', 0),
+            request.params['imagery'],
+            request.params.get('requires_nextview', 0)
+        )
 
         session.add(job)
         session.flush()

@@ -30,9 +30,9 @@ def task(request):
     y = request.matchdict['y']
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
-    checkTask(tile)
     if tile is None:
         return HTTPNotFound()
+    checkTask(tile)
     polygon=tile.to_polygon()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
