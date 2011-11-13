@@ -27,6 +27,9 @@ def job(request):
     id = request.matchdict['job']
     session = DBSession()
     job = session.query(Job).get(id)
+    if job is None:
+        request.session.flash("Sorry, this job doesn't  exist")
+        return HTTPFound(location = route_url('home', request))
     tiles = []
     for tile in job.tiles:
         checkTask(tile)
