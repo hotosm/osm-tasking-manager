@@ -49,6 +49,7 @@
                     <a href="javascript:void(0);" rel="popover" data-content="${tile.job.description|n}" title="Description">description</a>
                     and <a href="javascript:void(0);" rel="popover" data-content="${tile.job.workflow|n}" title="Workflow">workflow.</a></p>
                     <%include file="imagery.mako" />
+                    <%include file="task.comments.mako" />
                 </div>
                 <div class="well">
                     <p>3. Give a thumb up if work is correct and complete, or send the task back to the queue.</p>

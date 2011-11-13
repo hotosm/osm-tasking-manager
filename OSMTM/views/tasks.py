@@ -43,7 +43,10 @@ def task(request):
     if tile.update:
         time_left = (tile.update - (datetime.now() - EXPIRATION_DURATION)) \
             .seconds
+    filter = and_(TileHistory.x==x, TileHistory.y==y, TileHistory.job_id==job_id)
+    history = session.query(TileHistory).filter(filter).all()
     return dict(tile=tile,
+            history=history,
             time_left=time_left,
             feature=dumps(polygon),
             user=user,
