@@ -174,6 +174,17 @@ a {
     }
 }
 
+#job, #users {
+    .hidden-link {
+        display: none;
+    }
+    li:hover {
+        .hidden-link {
+            display: inline;
+        }
+    }
+}
+
 .footer {
   background-color: #eee;
   min-width: 940px;

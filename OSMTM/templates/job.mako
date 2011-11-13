@@ -44,10 +44,9 @@
                   online = 'online' if user[2] is True else 'offline'
               %>
               <li class="${online}">
-                % if admin:
-                <a href="${request.route_url('user',id=user[0])}">${user[0]}</a><sup><em> ${user[1]}</em></sup>
-                % else:
                 <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup><em> ${user[1]}</em></sup>
+                % if admin:
+                <a href="${request.route_url('user',id=user[0])}" class="hidden-link">edit</a>
                 % endif
               </li>
               % endfor
@@ -60,10 +59,9 @@
             <ul>
               % for user in stats['validators']:
               <li>
-                % if admin:
-                <a href="${request.route_url('user',id=user[0])}">${user[0]}</a><sup><em> ${user[1]}</em></sup>
-                % else:
                 <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup><em> ${user[1]}</em></sup>
+                % if admin:
+                <a href="${request.route_url('user',id=user[0])}" class="hidden-link">edit</a>
                 % endif
               </li>
               % endfor

@@ -1,5 +1,5 @@
 <%inherit file="/base.mako"/>
-<%def name="id()">user</%def>
+<%def name="id()">users</%def>
 <%def name="title()">Registered Users</%def>
 <div class="container">
     <h1>Registered Users</h1>
@@ -7,11 +7,11 @@
         <div class="span8">
             <ul>
             % for user in users:
+                <li>${user.username}
                 % if admin:
-                <li><a href="${request.route_url('user',id=user.username)}">${user.username}</a></li>
-                % else:
-                <li>${user.username}</li>
+                   <a href="${request.route_url('user',id=user.username)}" class="hidden-link">edit</a>
                 % endif
+                </li>
             % endfor
             </ul>
         </div>
