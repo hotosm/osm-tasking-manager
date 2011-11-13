@@ -22,4 +22,4 @@
 <%
     minx, miny, maxx, maxy = tile.to_polygon(4326).bounds
 %>
-<p><a href="http://www.openstreetmap.org/api/0.6/changesets?bbox=${minx},${miny},${maxx},${maxy}" target="_blank">Changesets</a> for this area.</p>
+<p><a href="http://www.openstreetmap.org/history?bbox=${minx},${miny},${maxx},${maxy}" target="_blank">Changesets</a> for this area.</p>
