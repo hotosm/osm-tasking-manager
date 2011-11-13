@@ -163,7 +163,7 @@ class FunctionalTests(unittest.TestCase):
         from pyramid.security import remember
         request = testing.DummyRequest(environ={'SERVER_NAME': 'servername'})
         request.registry = self.app.registry
-        headers = remember(request, username)
+        headers = remember(request, username, max_age=2*7*24*60*60)
         return {'Cookie': headers[0][1].split(';')[0]}
 
     def __forget(self):
@@ -323,7 +323,8 @@ class FunctionalTests(unittest.TestCase):
             tile = session.query(Tile).get((32774, 42026, 1))
             self.assertEquals(tile.checkin, 1)
 
-            #res2 = form.submit()
-            #self.assertEquals(res2.status, "200 OK")
+            res5 = form.submit(headers=headers)
+            tile = session.query(Tile).get((32774, 42026, 1))
+            self.assertEquals(tile.checkin, 1)
         finally:
             self.__forget()

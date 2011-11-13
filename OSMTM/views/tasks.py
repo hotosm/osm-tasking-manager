@@ -64,8 +64,12 @@ def done(request):
     if 'invalidate' in request.params:
         # task goes back to the queue
         tile.checkin = 0
+    elif 'validate' in request.params:
+        # task in validated
+        tile.checkin = 2
     else:
-        tile.checkin = tile.checkin + 1
+        #task is done
+        tile.checkin = 1
     session.add(tile)
     return HTTPFound(location=request.route_url('job', job=job_id))
 
