@@ -28,24 +28,24 @@ var context = {
         return colors[checkin];
     },
     getStrokeColor: function(feature) {
-        return (feature.attributes.checkout !== null) ?
+        return (feature.attributes.username !== null) ?
             "orange" : "black";
     },
     getStrokeWidth: function(feature) {
-        return (feature.attributes.checkout !== null) ?
+        return (feature.attributes.username !== null) ?
             2 : 0.3;
     },
     getStrokeOpacity: function(feature) {
-        return (feature.attributes.checkout !== null) ?
+        return (feature.attributes.username !== null) ?
             1 : 0.5;
     },
     getZIndex: function(feature) {
-        return (feature.attributes.checkout !== null) ?
+        return (feature.attributes.username !== null) ?
             2 : 1;
     },
     getCursor: function(feature) {
         return (feature.attributes.checkin < 2 &&
-            feature.attributes.checkout === null) ? "pointer" : "auto";
+            feature.attributes.username === null) ? "pointer" : "auto";
     }
 };
 var template = {
@@ -73,7 +73,7 @@ map.addLayer(tilesLayer);
 var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
     onSelect: function(feature) {
         var attr = feature.attributes;
-        if (attr.checkin >=  2 || attr.checkout !== null) {
+        if (attr.checkin >=  2 || attr.username !== null) {
             return false;
         }
         window.location = job_url + "/task/" + attr.x + "/" + attr.y + "/take";

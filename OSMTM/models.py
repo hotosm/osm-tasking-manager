@@ -48,7 +48,7 @@ class Tile(Base):
     y = Column(Integer, primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
     username = Column(Unicode, ForeignKey('users.username'))
-    checkout = Column(DateTime)
+    update = Column(DateTime)
     checkin = Column(Integer)
     comment = Column(Unicode)
 

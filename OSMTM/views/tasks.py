@@ -40,8 +40,8 @@ def task(request):
     if tile.user != user:
         request.session.flash('You cannot see this task.')
         return HTTPFound(location=request.route_url('job', job=job_id))
-    if tile.checkout:
-        time_left = (tile.checkout - (datetime.now() - EXPIRATION_DURATION)) \
+    if tile.update:
+        time_left = (tile.update - (datetime.now() - EXPIRATION_DURATION)) \
             .seconds
     return dict(tile=tile,
             time_left=time_left,
@@ -59,7 +59,7 @@ def done(request):
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
     tile.username = None 
-    tile.checkout = None 
+    tile.update = datetime.now()
     tile.comment = request.params['comment']
     if 'invalidate' in request.params:
         # task goes back to the queue
@@ -81,7 +81,7 @@ def unlock(request):
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
     tile.username = None 
-    tile.checkout = None 
+    tile.update = datetime.now()
     session.add(tile)
     return HTTPFound(location=request.route_url('job', job=job_id))
 
@@ -108,7 +108,7 @@ def take(request):
     # take random tile
     if checkin is not None:
         # get the tile the user worked on previously
-        p = session.query(TileHistory).filter(filter).order_by(TileHistory.checkout.desc()).limit(4).all()
+        p = session.query(TileHistory).filter(filter).order_by(TileHistory.update.desc()).limit(4).all()
         tile = None
         if p is not None and len(p) > 0:
             p = p[len(p) -1]
@@ -127,7 +127,7 @@ def take(request):
         tile = session.query(Tile).get((tilex, tiley, job_id))
 
         # task is already checked out by someone else
-        if tile.checkout is not None and tile.user != user:
+        if tile.username is not None and tile.user != user:
             request.session.flash('You cannot see this task. Someone else is already working on it.')
             return HTTPFound(location=request.route_url('job', job=job_id))
 
@@ -138,7 +138,7 @@ def take(request):
         if tile is None:
             tile = tiles[random.randrange(0, len(tiles))]
         tile.username = username
-        tile.checkout = datetime.now()
+        tile.update = datetime.now()
         session.add(tile)
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:

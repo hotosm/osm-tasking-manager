@@ -164,8 +164,8 @@ EXPIRATION_DURATION = timedelta(seconds=2 * 60 * 60)
 # unlock the tile if expired
 def checkTask(tile):
     session = DBSession()
-    if tile.checkout is not None:
-        if datetime.now() > tile.checkout + EXPIRATION_DURATION:
+    if tile.username is not None:
+        if datetime.now() > tile.update + EXPIRATION_DURATION:
             tile.username = None 
-            tile.checkout = None 
+            tile.update = datetime.now()
             session.add(tile)

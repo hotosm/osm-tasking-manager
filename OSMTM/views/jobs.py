@@ -33,10 +33,10 @@ def job(request):
 
     for tile in job.tiles:
         checkout = None
-        if tile.checkout is not None:
-            checkout = tile.checkout.isoformat()
+        if tile.username is not None:
+            checkout = tile.update.isoformat()
         tiles.append(Feature(geometry=tile.to_polygon(),
-            properties={'checkin': tile.checkin, 'checkout': checkout,
+            properties={'checkin': tile.checkin, 'username': tile.username,
                 'x': tile.x, 'y': tile.y}))
     try:
         username = authenticated_userid(request)
@@ -138,7 +138,7 @@ class StatUser():
 
 def get_stats(job):
     session = DBSession()
-    filter = and_(Tile.job_id==job.id, Tile.checkout!=None)
+    filter = and_(Tile.job_id==job.id, Tile.username!=None)
     users = session.query(Tile.username).filter(filter)
     current_users = [user.username for user in users]
 
@@ -166,17 +166,17 @@ def get_stats(job):
             if not users.has_key(i.username):
                 users[i.username] = StatUser()
             user = users[i.username]
-            date = i.checkout
         # something has changed
         if user is not None:
             status = compare_checkin(checkin, i.checkin)
             update_user(user, status)
             if status is not None:
-                changes.append((date, status))
+                changes.append((i.update, status))
         checkin = i.checkin
 
         # new tile
-        if ndx < len(tiles_history) - 1 and tiles_history[ndx + 1].version == 1:
+        if ndx < len(tiles_history) - 1 and tiles_history[ndx + 1].version == 1 or \
+                ndx == len(tiles_history) - 1:
             # compare to the current checkin value
             tile = session.query(Tile) \
                 .get((i.x, i.y, job.id))
@@ -184,7 +184,7 @@ def get_stats(job):
                 status = compare_checkin(checkin, tile.checkin)
                 update_user(user, status)
                 if status is not None:
-                    changes.append((date, status))
+                    changes.append((tile.update, status))
 
             # let's move to a new tile
             # checkin is reinitialized

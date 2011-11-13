@@ -9,7 +9,7 @@
     <div class="row">
     <div class="span8">
         <div> 
-            % if tile.checkout:
+            % if tile.username:
             <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y)}">
                 <div class="well">
                     <p>1. Open the area in your favorite editing tool.</p>
@@ -62,7 +62,7 @@
                         <img src="${request.static_url('OSMTM:static/thumb.png')}" />
                         Invalidate
                     </button>
-                    <button type="submit" value="Validate" class="btn thumbup success">
+                    <button type="submit" value="Validate" name="validate" class="btn thumbup success">
                         <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
                         Validate
                     </button>
