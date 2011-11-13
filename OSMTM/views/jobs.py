@@ -166,12 +166,15 @@ def get_stats(job):
             if not users.has_key(i.username):
                 users[i.username] = StatUser()
             user = users[i.username]
+            date = i.update
         # something has changed
         if user is not None:
             status = compare_checkin(checkin, i.checkin)
             update_user(user, status)
             if status is not None:
-                changes.append((i.update, status))
+                # maintain compatibility for jobs that were created before the 'update' column creation
+                date = i.update if i.update != None else date
+                changes.append((date, status))
         checkin = i.checkin
 
         # new tile
@@ -184,7 +187,9 @@ def get_stats(job):
                 status = compare_checkin(checkin, tile.checkin)
                 update_user(user, status)
                 if status is not None:
-                    changes.append((tile.update, status))
+                    # maintain compatibility for jobs that were created before the 'update' column creation
+                    date = tile.update if tile.update != None else date
+                    changes.append((date, status))
 
             # let's move to a new tile
             # checkin is reinitialized
