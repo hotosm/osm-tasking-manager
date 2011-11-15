@@ -199,26 +199,19 @@ $('#id_title')
     });
 
 $(document).ready(function() {
-    var converter = new Showdown.converter();
-    var short_description = $('#id_short_description'),
-        preview_short_description = $('<div />').insertAfter(short_description);
-    short_description.keyup(function() {
-        var html = converter.makeHtml(short_description.val());
-        preview_short_description.html(html);
-    }).trigger('keyup');
 
-    var description = $('#id_description'),
-        preview_description = $('<div />').insertAfter(description);
-    description.keyup(function() {
-        var html = converter.makeHtml(description.val());
-        preview_description.html(html);
-    }).trigger('keyup');
+    var converter = new Showdown.converter(),
+        to_convert = ['#id_short_description', '#id_description', '#id_workflow'];
 
-    var workflow = $('#id_workflow'),
-        preview_workflow = $('<div />').insertAfter(workflow);
-    workflow.keyup(function() {
-        var html = converter.makeHtml(workflow.val());
-        preview_workflow.html(html);
-    }).trigger('keyup');
+    $(to_convert).each(function(i, sel){
+        var textarea = $(sel),
+            preview = $('<div />').appendTo(sel+'_preview');
+
+        textarea.keyup(function() {
+            var html = converter.makeHtml(textarea.val());
+            preview.html(html);
+        }).trigger('keyup');
+    });
+
     resetMap();
 });

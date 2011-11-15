@@ -80,32 +80,41 @@
         </fieldset>
         <fieldset>
             <legend>Job's description</legend>
-            <div class="clearfix">
-                <label for="id_short_description">Short Description</label>
-                <div class="input">
-                    <textarea class="text xxlarge" id="id_short_description" name="short_description"></textarea>
+            <div class="row flat">
+                <div class="col span8">
+                    <label for="id_short_description">Short Description</label>
+                    <textarea class="text span8" id="id_short_description" name="short_description"></textarea>
                     <span class="help-block">
                         <strong>Note:</strong> You can use markdown markup.
                     </span>
                 </div>
+                <div class="col span8">
+                    <div id="id_short_description_preview"></div>
+                </div>
             </div>
-            <div class="clearfix">
-                <label for="id_description">Description</label> 
-                <div class="input"> 
-                    <textarea class="text xxlarge" id="id_description" name="description"></textarea>
+            <div class="row flat">
+                <div class="col span8">
+                    <label for="id_description">Description</label>
+                    <textarea class="text span8" id="id_description" name="description"></textarea>
                     <span class="help-block">
                         <strong>Note:</strong> You can use markdown markup.
                     </span>
-                </div> 
+                </div>
+                <div class="col span8">
+                    <div id="id_description_preview"></div>
+                </div>
             </div>
-            <div class="clearfix">
-                <label for="id_workflow">Workflow</label> 
-                <div class="input"> 
-                    <textarea class="text xxlarge" id="id_workflow" name="workflow"></textarea>
+            <div class="row flat">
+                <div class="col span8">
+                    <label for="id_workflow">Workflow</label>
+                    <textarea class="text span8" id="id_workflow" name="workflow"></textarea>
                     <span class="help-block">
                         <strong>Note:</strong> You can use markdown markup.
                     </span>
-                </div> 
+                </div>
+                <div class="col span8">
+                    <div id="id_workflow_preview"></div>
+                </div>
             </div>
         </fieldset>
         <fieldset>
