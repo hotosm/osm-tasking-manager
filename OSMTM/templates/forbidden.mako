@@ -23,6 +23,7 @@
             </div>
         % else:
             <a href="${request.route_url('login', _query=[('came_from', request.url)])}" class="btn">Log in using your OpenStreetMap account »</a>
+            <p class="help-block">The OpenStreetMap authentication is sometimes down. Forgive us if it's the case and come back later.</p>
         % endif
     </div>
     </div>
