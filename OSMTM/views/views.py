@@ -1,6 +1,6 @@
 import urlparse
 from xml.etree import ElementTree
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPFound, HTTPBadGateway, HTTPBadRequest
 from pyramid.view import view_config
 from pyramid.url import route_url
 from pyramid.renderers import render_to_response
@@ -46,7 +46,7 @@ def login(request):
     client = oauth.Client(consumer)
     resp, content = client.request(REQUEST_TOKEN_URL, "GET")
     if resp['status'] != '200':
-        abort(502)
+        return HTTPBadGateway('The OSM authentication server didn\'t respond correctly') 
     request_token = dict(urlparse.parse_qsl(content))
     # store the request token in the session, we'll need in the callback
     session = request.session
@@ -65,7 +65,7 @@ def oauth_callback(request):
     session = request.session
     request_token = session.get('request_token')
     if request.params.get('oauth_token') != request_token['oauth_token']:
-        abort(500)
+        return HTTPBadRequest('Tokens don\'t match')
     # get the access token
     token = oauth.Token(request_token['oauth_token'],
                         request_token['oauth_token_secret'])
