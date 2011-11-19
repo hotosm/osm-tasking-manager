@@ -44,7 +44,9 @@ consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
 def login(request):
     # get the request token
     client = oauth.Client(consumer)
-    resp, content = client.request(REQUEST_TOKEN_URL, "GET")
+    oauth_callback_url = request.route_url('oauth_callback')
+    url = "%s?oauth_callback=%s" % (REQUEST_TOKEN_URL, oauth_callback_url)
+    resp, content = client.request(url, "GET")
     if resp['status'] != '200':
         return HTTPBadGateway('The OSM authentication server didn\'t respond correctly') 
     request_token = dict(urlparse.parse_qsl(content))
@@ -53,9 +55,8 @@ def login(request):
     session['request_token'] = request_token
     session['came_from'] = request.params.get('came_from')
     session.save()
-    oauth_callback = request.route_url('oauth_callback')
-    redirect_url = "%s?oauth_token=%s&oauth_callback=%s" % \
-            (AUTHORIZE_URL, request_token['oauth_token'], oauth_callback)
+    redirect_url = "%s?oauth_token=%s" % \
+            (AUTHORIZE_URL, request_token['oauth_token'])
     return HTTPFound(location=redirect_url)
 
 @view_config(route_name='oauth_callback')
@@ -69,6 +70,8 @@ def oauth_callback(request):
     # get the access token
     token = oauth.Token(request_token['oauth_token'],
                         request_token['oauth_token_secret'])
+    verifier = request.params.get('oauth_verifier')
+    token.set_verifier(verifier)
     client = oauth.Client(consumer, token)
     resp, content = client.request(ACCESS_TOKEN_URL, "POST")
     access_token = dict(urlparse.parse_qsl(content))
