@@ -70,8 +70,6 @@ def oauth_callback(request):
     # get the access token
     token = oauth.Token(request_token['oauth_token'],
                         request_token['oauth_token_secret'])
-    oauth_verifier = request.params.get('oauth_verifier')
-    token.set_verifier(oauth_verifier)
     client = oauth.Client(consumer, token)
     resp, content = client.request(ACCESS_TOKEN_URL, "POST")
     access_token = dict(urlparse.parse_qsl(content))
