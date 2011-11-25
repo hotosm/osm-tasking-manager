@@ -111,6 +111,19 @@ a {
     #zoom_level_info {
         display: none;
     }
+    .flat {
+        margin-bottom: 1em;
+        label {
+            float: none;
+        }
+        textarea {
+            clear: both;
+            display: block;
+        }
+        .span8 + div {
+            margin-top: 1.5em;
+        }
+    }
 }
 
 // Specific Pages
