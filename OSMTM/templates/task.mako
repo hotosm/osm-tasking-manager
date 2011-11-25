@@ -113,7 +113,5 @@
     var jobZoom = ${tile.job.zoom};
     var time_left = ${time_left};
 </script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/Static.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/task.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js')}"></script>

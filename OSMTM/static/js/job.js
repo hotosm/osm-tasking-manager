@@ -1,4 +1,5 @@
 var map = new OpenLayers.Map('map', {
+    theme: null
    // controls: []
 });
 var osm = new OpenLayers.Layer.OSM();

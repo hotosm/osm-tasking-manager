@@ -36,4 +36,4 @@
     </div>
     % endif
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/home.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/home.js')}"></script>

@@ -67,4 +67,4 @@
         </div>
     </form>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/job.edit.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.edit.js')}"></script>

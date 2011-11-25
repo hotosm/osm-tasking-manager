@@ -6,21 +6,21 @@
         <meta name="keywords" content="HOT task server" />
         <meta name="description" content="HOT task server" />
         <link rel="stylesheet"
-              href="${request.static_url('OSMTM:static/reset.css')}"
+              href="${request.static_url('OSMTM:static/css/reset.css')}"
               text="text/css" media="screen" />
         <link rel="stylesheet"
-              href="${request.static_url('OSMTM:static/map.css')}"
+              href="${request.static_url('OSMTM:static/css/map.css')}"
               text="text/css" media="screen" />
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/lib/bootstrap.less')}"
               media="all" />
         <link rel="stylesheet/less"
-              href="${request.static_url('OSMTM:static/main.css')}"
+              href="${request.static_url('OSMTM:static/css/main.css')}"
               text="text/css" media="screen" />
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/less.js')}"></script>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/main.js')}"></script>
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/showdown.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/jquery-1.7.min.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/showdown.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-twipsy.js')}"></script>
         <script type="text/javascript"
@@ -42,7 +42,7 @@
         %>
         <div id="feedback-button">
             <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dEJnSGJ2VkRaeWZDTkI1aHdGWTgzX1E6MQ#gid=0" target="_blank">
-                <img src="${request.static_url('OSMTM:static/feedback.png')}" title="Feedback" alt="feedback" />
+                <img src="${request.static_url('OSMTM:static/img/feedback.png')}" title="Feedback" alt="feedback" />
             </a>
         </div>
         <!-- Topbar

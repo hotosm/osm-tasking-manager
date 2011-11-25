@@ -26,7 +26,8 @@ function resetMap () {
     $('#map').show();
     map && map.destroy();
     map = new OpenLayers.Map('map', {
-        controls: []
+        controls: [],
+        theme: null
     });
     var osm = new OpenLayers.Layer.OSM();
     map.addLayer(osm);

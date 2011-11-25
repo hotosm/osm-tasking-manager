@@ -23,7 +23,7 @@
                                 <span>OSM relation</span>
                                 <input type="text" class="text small" id="id_relation" name="relation" value="" /> 
                                 <span id="relation_loading_msg" class="help-inline">
-                                    <img src="${request.static_url('OSMTM:static/ajax-loader.gif')}" />
+                                    <img src="${request.static_url('OSMTM:static/img/ajax-loader.gif')}" />
                                 </span>
                                 <span class="help-block">
                                     <strong>Note:</strong> You already know an OSM which delimits the area. 
@@ -137,10 +137,8 @@
         </div>
     </form>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/Static.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
 <script type="text/javascript">
     OpenLayers.ProxyHost = '${request.route_url('osmproxy')}?url=';
 </script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/job.new.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.new.js')}"></script>

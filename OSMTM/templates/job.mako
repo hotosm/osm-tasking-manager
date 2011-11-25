@@ -98,8 +98,9 @@
     var chart_validated = ${stats['chart_validated']|n};
     var job_url = "${request.route_url('job', job=job.id)}";
 </script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/OpenLayers.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/Div.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/Static.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/highcharts.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/job.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
+<script type="text/javascript">
+    OpenLayers.ImgPath = "${request.static_url('OSMTM:static/img/')}";
+</script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/highcharts.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.js')}"></script>
