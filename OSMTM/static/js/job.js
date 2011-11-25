@@ -1,6 +1,10 @@
 var map = new OpenLayers.Map('map', {
-    theme: null
-   // controls: []
+    theme: null,
+    controls: [
+        new OpenLayers.Control.Navigation(),
+        new OpenLayers.Control.ZoomPanel(),
+        new OpenLayers.Control.Attribution()
+    ]
 });
 var osm = new OpenLayers.Layer.OSM();
 map.addLayer(osm);
