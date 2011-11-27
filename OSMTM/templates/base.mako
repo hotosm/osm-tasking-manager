@@ -14,6 +14,7 @@
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/lib/bootstrap.less')}"
               media="all" />
+        <link rel="stylesheet" href="${request.static_url('OSMTM:static/js/OpenLayers-2.11/theme/default/style.tidy.css')}" type="text/css" ></link> 
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/css/main.css')}"
               text="text/css" media="screen" />
