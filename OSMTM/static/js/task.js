@@ -6,8 +6,7 @@ var osm = new OpenLayers.Layer.OSM();
 map.addLayer(osm);
 var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
     projection: new OpenLayers.Projection("EPSG:4326"),
-    displayInLayerSwitcher: false,
-    renderers: ['Canvas']
+    displayInLayerSwitcher: false
 });
 
 format = new OpenLayers.Format.GeoJSON();
