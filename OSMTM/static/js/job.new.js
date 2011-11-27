@@ -74,7 +74,7 @@ function showBoundingBoxMap () {
         }
     });
     map.addControls([
-        new OpenLayers.Control.PanZoomBar(),
+        new OpenLayers.Control.ZoomPanel(),
         new OpenLayers.Control.Navigation(),
         control
     ]);
