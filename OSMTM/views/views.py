@@ -8,6 +8,7 @@ from pyramid.renderers import render_to_response
 from OSMTM.models import DBSession
 from OSMTM.models import Job
 from OSMTM.models import User
+from OSMTM.models import Tile
 
 import oauth2 as oauth
 
@@ -107,8 +108,13 @@ def home(request):
     jobs = session.query(Job).order_by(desc(Job.id))
     if not user.is_admin():
         jobs = [job for job in jobs if not job.is_private] + user.private_jobs
+    tiles = session.query(Tile) \
+        .filter(Tile.username!=None) \
+        .group_by(Tile.username)
+    users = [tile.username for tile in tiles]
     return dict(jobs=jobs,
             user=user,
+            users=users,
             admin=user.is_admin())
 
 @view_config(route_name='about', renderer='about.mako')

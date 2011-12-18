@@ -29,6 +29,14 @@
         % endfor
     % endif
     </div>
+    <div class="span7">
+        <h5>Those users are currently working on tasks:</h5>
+        <ul>
+            % for username in users:
+            <li>${username}</li>
+            % endfor
+        </ul>
+    </div>
     </div>
     % if admin:
     <div class="actions">
