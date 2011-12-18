@@ -105,7 +105,7 @@ def home(request):
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    jobs = session.query(Job).order_by(desc(Job.id)).filter(Job.status==1)
+    jobs = session.query(Job).order_by(desc(Job.id))
     if not user.is_admin():
         jobs = [job for job in jobs if not job.is_private] + user.private_jobs
     tiles = session.query(Tile) \

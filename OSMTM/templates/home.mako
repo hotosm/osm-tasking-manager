@@ -9,24 +9,30 @@
     <div class="span9">
     % if jobs:
         % for job in jobs:
-            <h4>
-                <a href="${request.route_url('job', job=job.id)}">${job.title}</a>
-                % if job.is_private:
-                <img src="${request.static_url('OSMTM:static/img/lock.gif')}" alt="private" title="private job" />
+            % if user.is_admin() or job.status == 1:
+                <h4>
+                    <a href="${request.route_url('job', job=job.id)}">${job.title}</a>
+                    % if job.is_private:
+                    <img src="${request.static_url('OSMTM:static/img/lock.gif')}" alt="private" title="private job" />
+                    % endif
+                </h4>
+                <%
+                    description = job.short_description if job.short_description != '' else job.description
+                %>
+                <p>${markdown.markdown(description)|n}</p>
+                % if user.is_admin():
+                <p align="right">
+                    % if job.status == 1:
+                        <a href="${request.route_url('job_archive', job=job.id)}" class="archive" alt="archive" title="Archive the job">archive</a>
+                    % elif job.status == 0:
+                        publish
+                    % endif
+                    |
+                    <a href="${request.route_url('job_edit', job=job.id)}" class="edit" alt="edit" title="Edit the job">edit</a>
+                    |
+                    <a href="${request.route_url('job_delete', job=job.id)}" class="delete" alt="delete" title="Delete the job">delete</a>
+                </p>
                 % endif
-            </h4>
-            <%
-                description = job.short_description if job.short_description != '' else job.description
-            %>
-            <p>${markdown.markdown(description)|n}</p>
-            % if user.is_admin():
-            <p align="right">
-                <a href="${request.route_url('job_archive', job=job.id)}" class="archive" alt="archive" title="Archive the job">archive</a>
-                |
-                <a href="${request.route_url('job_edit', job=job.id)}" class="edit" alt="edit" title="Edit the job">edit</a>
-                |
-                <a href="${request.route_url('job_delete', job=job.id)}" class="delete" alt="delete" title="Delete the job">delete</a>
-            </p>
             % endif
         % endfor
     % endif

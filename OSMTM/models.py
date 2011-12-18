@@ -92,9 +92,9 @@ class Job(Base):
     id = Column(Integer, primary_key=True)
     title = Column(Unicode, unique=True)
     # statuses are:
-    # 0 - draft
+    # 0 - archived 
     # 1 - published
-    # 2 - archived
+    # 2 - draft
     status = Column(Integer)
     description = Column(Unicode)
     short_description = Column(Unicode)
