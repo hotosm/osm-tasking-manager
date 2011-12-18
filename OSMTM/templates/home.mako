@@ -10,6 +10,10 @@
     % if jobs:
         % for job in jobs:
             % if user.is_admin() or job.status == 1:
+                <%
+                    archived = 'archived' if job.status == 0 else ''
+                %>
+                <div class="job ${archived}">
                 <h4>
                     <a href="${request.route_url('job', job=job.id)}">${job.title}</a>
                     % if job.is_private:
@@ -25,13 +29,14 @@
                     % if job.status == 1:
                         <a href="${request.route_url('job_archive', job=job.id)}" class="archive" alt="archive" title="Archive the job">archive</a>
                     % elif job.status == 0:
-                        publish
+                        <a href="${request.route_url('job_publish', job=job.id)}" class="publish" alt="publish" title="Publish the job">publish</a>
                     % endif
                     |
                     <a href="${request.route_url('job_edit', job=job.id)}" class="edit" alt="edit" title="Edit the job">edit</a>
                     |
                     <a href="${request.route_url('job_delete', job=job.id)}" class="delete" alt="delete" title="Delete the job">delete</a>
                 </p>
+                </div>
                 % endif
             % endif
         % endfor

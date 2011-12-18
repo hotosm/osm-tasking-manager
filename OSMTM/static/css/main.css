@@ -104,6 +104,16 @@ html, body {
 a {
     color: @c-link;
 }
+#home {
+    .job {
+        padding: 0 5px;
+        border-bottom: 1px solid #DFDFDF;
+    }
+    .archived {
+        background: url(../img/closed_back.gif) transparent;
+
+    }
+}
 #job_new {
     #map {
         /*display: none;*/
