@@ -55,6 +55,7 @@ class JobModelTests(unittest.TestCase):
     def test_constructor(self):
         instance = self._makeOne()
         self.assertEqual(instance.title, 'SomeTitle')
+        self.assertEqual(instance.status, 1)
         self.assertEqual(instance.description, 'some description')
         self.assertEqual(instance.geometry, 'POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))')
         self.assertEqual(instance.workflow, 'some workflow')

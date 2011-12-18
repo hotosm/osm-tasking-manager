@@ -91,6 +91,11 @@ class Job(Base):
     __tablename__ = 'jobs'
     id = Column(Integer, primary_key=True)
     title = Column(Unicode, unique=True)
+    # statuses are:
+    # 0 - draft
+    # 1 - published
+    # 2 - archived
+    status = Column(Integer)
     description = Column(Unicode)
     short_description = Column(Unicode)
     geometry = Column(Unicode)
@@ -107,8 +112,9 @@ class Job(Base):
     def __init__(self, title=None,
                  short_description='', description=None, workflow=None,
                  geometry=None, zoom=None, is_private=False, imagery=None,
-                 requires_nextview=False):
+                 requires_nextview=False, status=1):
         self.title = title
+        self.status = status
         self.description = description
         self.short_description = short_description
         self.geometry = geometry
