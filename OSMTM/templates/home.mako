@@ -36,8 +36,8 @@
                     |
                     <a href="${request.route_url('job_delete', job=job.id)}" class="delete" alt="delete" title="Delete the job">delete</a>
                 </p>
-                </div>
                 % endif
+                </div>
             % endif
         % endfor
     % endif
