@@ -73,6 +73,18 @@ def job_edit(request):
 
     return dict(job=job)
 
+@view_config(route_name='job_archive', permission='admin')
+def job_archive(request):
+    id = request.matchdict['job']
+    session = DBSession()
+
+    job = session.query(Job).get(id)
+    job.status = 0
+    session.add(job)
+
+    request.session.flash('Job "%s" archived!' % job.title)
+    return HTTPFound(location = route_url('home', request))
+
 @view_config(route_name='job_delete', permission='admin')
 def job_delete(request):
     id = request.matchdict['job']

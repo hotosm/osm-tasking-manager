@@ -21,6 +21,8 @@
             <p>${markdown.markdown(description)|n}</p>
             % if user.is_admin():
             <p align="right">
+                <a href="${request.route_url('job_archive', job=job.id)}" class="archive" alt="archive" title="Archive the job">archive</a>
+                |
                 <a href="${request.route_url('job_edit', job=job.id)}" class="edit" alt="edit" title="Edit the job">edit</a>
                 |
                 <a href="${request.route_url('job_delete', job=job.id)}" class="delete" alt="delete" title="Delete the job">delete</a>
