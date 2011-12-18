@@ -179,10 +179,10 @@ a {
             padding-left: 20px;
         }
         li.online {
-            background: url(status.png) no-repeat 0 0.10em;
+            background: url(../img/status.png) no-repeat 0 0.10em;
         }
         li.offline {
-            background: url(status-offline.png) no-repeat 0 0.10em;
+            background: url(../img/status-offline.png) no-repeat 0 0.10em;
         }
     }
 }
