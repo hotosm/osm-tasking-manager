@@ -12,9 +12,9 @@ Installing OSMTM in a Virtual Python environment is recommended.
 
 To create a virtual Python environment::
 
-    wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.5.1.tar.gz
-    tar xvzf virtualenv-1.5.1.tar.gz
-    python virtualenv-1.5.1/virtualenv.py --distribute --no-site-packages env
+    wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.7.tar.gz
+    tar xvzf virtualenv-1.7.tar.gz
+    python virtualenv-1.7/virtualenv.py --distribute --no-site-packages env
     source env/bin/activate
 
 To install OSMTM from source (the only option at this point) in the virtual
