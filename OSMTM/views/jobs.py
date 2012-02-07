@@ -86,7 +86,7 @@ def job_archive(request):
     return HTTPFound(location = route_url('home', request))
 
 @view_config(route_name='job_publish', permission='admin')
-def job_archive(request):
+def job_publish(request):
     id = request.matchdict['job']
     session = DBSession()
 
