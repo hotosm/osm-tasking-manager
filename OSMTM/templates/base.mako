@@ -12,24 +12,24 @@
               href="${request.static_url('OSMTM:static/css/map.css')}"
               text="text/css" media="screen" />
         <link rel="stylesheet/less"
-              href="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/lib/bootstrap.less')}"
+              href="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/less/bootstrap.less')}"
               media="all" />
         <link rel="stylesheet" href="${request.static_url('OSMTM:static/js/OpenLayers-2.11/theme/default/style.tidy.css')}" type="text/css" ></link> 
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/css/main.css')}"
               text="text/css" media="screen" />
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less-1.2.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/jquery-1.7.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/showdown.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-twipsy.js')}"></script>
+                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-tooltip.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-popover.js')}"></script>
+                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-popover.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-dropdown.js')}"></script>
+                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-dropdown.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-70b1a6b/js/bootstrap-modal.js')}"></script>
+                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-modal.js')}"></script>
     </head>
     <body id="${self.id()}">
         <%
@@ -48,8 +48,8 @@
         </div>
         <!-- Topbar
         ================================================== -->
-        <div class="topbar" >
-            <div class="topbar-inner">
+        <div class="navbar navbar-fixed-top" >
+            <div class="navbar-inner">
                 <div class="container">
                     <span class="brand" href="#">OSM Tasking Manager</span>
                     <ul class="nav">
@@ -59,9 +59,9 @@
                         <li class="first"><a href="${request.route_url('users')}">Users</a></li> 
                         % endif
                     </ul>
-                    <ul class="nav secondary-nav">
-                        <li class="dropdown"  data-dropdown="dropdown">
-                            <a href="#" class="dropdown-toggle">You are ${user.username}</a>
+                    <ul class="nav pull-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">You are ${user.username} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a id="logout_link" href="${request.route_url('logout')}">Log Out</a></li> 
                             </ul>

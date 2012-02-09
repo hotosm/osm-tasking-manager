@@ -66,20 +66,18 @@ html, body {
     background: #999;
     .border-radius(0 5px 5px 0);
 }
-.topbar-inner,
-.topbar .fill {
+.navbar-inner,
+.navbar .fill {
   background-color: #650B05;
   #gradient > .vertical(#9B0D0B, #B4242E);
   @shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
   .box-shadow(@shadow);
 }
-.topbar div > ul {
+.navbar div > ul {
   .dropdown-menu {
-    background-color: #B4242E;
     li a {
       &:hover {
-        #gradient > .vertical(#800000, #9B0D0B);
-        color: white;
+        background-color: grey;
       }
     }
   }

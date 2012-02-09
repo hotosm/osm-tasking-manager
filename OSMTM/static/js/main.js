@@ -1,6 +1,6 @@
 $().ready(function() {
     $('#flash').fadeIn().delay(2000).fadeOut(400);
-    $("a[rel=twipsy]").twipsy({
+    $("a[rel=twipsy]").tooltip({
         live: true
     });
     $("a[rel=popover]")

@@ -6,7 +6,7 @@
 <%def name="title()">HOT Task Server - Home Page</%def>
 <div class="container">
     <div class="row"> 
-    <div class="span9">
+    <div class="span7">
     % if jobs:
         % for job in jobs:
             % if user.is_admin() or job.status == 1:
@@ -42,7 +42,12 @@
         % endfor
     % endif
     </div>
-    <div class="span7">
+    <div class="span5">
+        % if admin:
+        <div class="form-actions">
+            <a href="${request.route_url('job_new')}" class="btn">+ Create a new job</a>
+        </div>
+        % endif
         <h5>Those users are currently working on tasks:</h5>
         <ul>
             % for username in users:
@@ -51,10 +56,5 @@
         </ul>
     </div>
     </div>
-    % if admin:
-    <div class="actions">
-        <a href="${request.route_url('job_new')}" class="btn">+ Create a new job</a>
-    </div>
-    % endif
 </div>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/home.js')}"></script>

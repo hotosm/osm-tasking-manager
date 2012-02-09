@@ -6,7 +6,7 @@
 <%def name="title()">Job - ${job.title}</%def>
 <div class="container">
     <div class="row">
-    <div class="span8">
+    <div class="span6">
         <h2>Job: ${job.title}</h2>
         <h3>What and Why?</h3>
         <p>${markdown.markdown(job.description)|n}</p>
@@ -26,7 +26,7 @@
         <div>
         <h3>Ready?</h3>
             <p>
-                <a class="btn primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system">Take a task</a>
+                <a class="btn btn-primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system">Take a task</a>
                 Or choose one by <strong>clicking</strong> on the map.
             </p>
             <p class="small">If you're an experienced mapper, you can also be given a task to <a href="${request.route_url('task_take_random', job=job.id, checkin=1)}">validate</a>.</p>
@@ -35,7 +35,7 @@
         <hr />
         <h4>Who else is working?</h4>
         <div class="row">
-            <div class="span4">
+            <div class="span3">
             % if stats['contributors']:
             <strong>Contributors</strong>
             <ul class="contributors">
@@ -53,7 +53,7 @@
             </ul>
             % endif
             </div>
-            <div class="span4">
+            <div class="span3">
             % if stats['validators']:
             <strong>Validators</strong>
             <ul>
@@ -70,7 +70,7 @@
             </div>
         </div>
     </div>
-    <div class="span8">
+    <div class="span6">
         <div id="map"></div>
         <div id="stats">
             <ul class="legend">
@@ -84,7 +84,7 @@
     </div>
     % if admin:
     <div class="row">
-        <div class="span16">
+        <div class="span12">
             <div id="chart_div"></div>
         </div>
     </div>
