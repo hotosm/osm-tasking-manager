@@ -53,20 +53,24 @@
                 </div>
                 <div class="well">
                     <p>3. Give a thumb up if work is correct and complete, or send the task back to the queue.</p>
-                    <div class="clearfix">
-                        <label for="task_comment">Comment</label>
-                        <div class="input">
+                    <div class="control-group">
+                        <label for="task_comment" class="control-label">Comment</label>
+                        <div class="controls">
                             <textarea id="task_comment" name="comment"></textarea>
                         </div>
                     </div>
-                    <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input danger">
-                        <img src="${request.static_url('OSMTM:static/thumb.png')}" />
-                        Invalidate
-                    </button>
-                    <button type="submit" value="Validate" name="validate" class="btn thumbup success">
-                        <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
-                        Validate
-                    </button>
+                    <div class="control-group">
+                        <div class="controls">
+                        <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input btn-danger">
+                            <img src="${request.static_url('OSMTM:static/thumb.png')}" />
+                            Invalidate
+                        </button>
+                        <button type="submit" value="Validate" name="validate" class="btn thumbup btn-success">
+                            <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
+                            Validate
+                        </button>
+                        </div>
+                    </div>
                 </div>
             % endif
             <p>
