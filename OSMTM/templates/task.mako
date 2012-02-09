@@ -7,19 +7,19 @@
 <div class="container">
     <h2>Job: <a href="${request.route_url('job', job=tile.job_id)}">${tile.job.title}</a></h2>
     <div class="row">
-    <div class="span8">
+    <div class="span6">
         <div> 
             % if tile.username:
-            <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y)}">
+            <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y)}" class="form-horizontal">
                 <div class="well">
                     <p>1. Open the area in your favorite editing tool.</p>
                     <div class="row">
                         <div class="span1">&nbsp;</div>
-                        <div class="span6">
+                        <div class="span4">
                             <div id="export">
-                                <a class="btn small info" href="javascript:void(0);" id="josm">JOSM</a>
-                                <a class="btn small info" href="javascript:void(0);" id="potlatch2">Potlatch 2</a>
-                                <a class="btn small info" href="javascript:void(0);" id="wp">Walking Papers</a>
+                                <a class="btn btn-small btn-info" data-toggle="modal" href="#josm_export_info" id="josm">JOSM</a>
+                                <a class="btn btn-small btn-info" data-toggle="modal" href="#potlatch2_export_info" id="potlatch2">Potlatch 2</a>
+                                <a class="btn btn-small btn-info" href="javascript:void(0);" id="wp">Walking Papers</a>
                             </div>
                         </div>
                     </div>
@@ -33,14 +33,14 @@
                 </div>
                 <div class="well">
                     <p>3. Add a comment and mark the task as done.</p>
-                    <div class="clearfix">
-                        <label for="task_comment">Comment</label>
-                        <div class="input">
+                    <div class="control-group">
+                        <label for="task_comment" class="control-label">Comment</label>
+                        <div class="controls">
                             <textarea id="task_comment" name="comment"></textarea>
                         </div>
                     </div>
                     <div class="input">
-                        <input type="submit" class="btn primary" value="Mark task as done"/>
+                        <input type="submit" class="btn btn-primary" value="Mark task as done"/>
                     </div>
                 </div>
             % else:
@@ -74,9 +74,9 @@
                 <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
             </p>
             </form>
-            <div id="josm_export_info" class="modal hide fade">
+            <div id="josm_export_info" class="modal hide fade" style="display:none;">
                 <div class="modal-header">
-                    <a href="#" class="close">&times;</a>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
                     <h3>Using JOSM?</h3>
                 </div>
                 <div class="modal-body">
@@ -86,9 +86,9 @@
                     </p>
                 </div>
             </div>
-            <div id="potlatch2_export_info" class="modal hide fade">
+            <div id="potlatch2_export_info" class="modal hide fade" style="display:none;">
                 <div class="modal-header">
-                    <a href="#" class="close">&times;</a>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
                     <h3>Using Potlatch2?</h3>
                 </div>
                 <div class="modal-body">
@@ -102,7 +102,7 @@
             % endif
         </div>
     </div>
-    <div class="span8">
+    <div class="span6">
         <div id="map"></div>
         <br />
     </div>

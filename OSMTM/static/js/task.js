@@ -54,8 +54,7 @@ var exportOpen = function() {
             protocol: 'lbrt'
         });
         $('#josm_export_info')
-            .modal('show')
-            .bind('hide', function() {
+            .on('hide', function() {
                 var w = window.open(url);
                 window.setTimeout(function(){w.close();}, 500);
             });
@@ -68,8 +67,7 @@ var exportOpen = function() {
             protocol: 'llz'
         });
         $('#potlatch2_export_info')
-            .modal('show')
-            .bind('hide', function() {
+            .on('hide', function() {
                 window.open(url);
             });
         break;
@@ -88,11 +86,13 @@ var exportOpen = function() {
 $('#export a').click(exportOpen);
 $('#josm_export_info').modal({
     backdrop: true,
-    keyboard: true
+    keyboard: true,
+    show: false
 });
 $('#potlatch2_export_info').modal({
     backdrop: true,
-    keyboard: true
+    keyboard: true,
+    show: false
 });
 
 $(function(){
