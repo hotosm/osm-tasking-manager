@@ -4,7 +4,7 @@
 <div class="container">
     <h1>Registered Users</h1>
     <div class="row">
-        <div class="span8">
+        <div class="span6">
             <ul>
             % for user in users:
                 <li>${user.username}
@@ -16,13 +16,13 @@
             </ul>
         </div>
         % if admin:
-        <div class="span8">
+        <div class="span6">
             <form action="${request.route_url('user_add')}">
                 <input type="text" name="username" />
-                <input type="submit" class="btn primary" value="Search for a user" />
-                <span class="help-block">
+                <input type="submit" class="btn" value="Search for a user" />
+                <p class="help-block">
                     <strong>Note:</strong> the user will be created if it doesn't already exist.
-                </span>
+                </p>
             </form>
         </div>
         % endif
