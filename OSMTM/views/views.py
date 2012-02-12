@@ -111,6 +111,9 @@ def home(request):
     tiles = session.query(Tile) \
         .filter(Tile.username!=None) \
         .group_by(Tile.username)
+    # unlock expired tiles
+    for tile in tiles:
+        checkTask(tile)
     users = [tile.username for tile in tiles]
     return dict(jobs=jobs,
             user=user,
