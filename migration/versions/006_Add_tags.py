@@ -6,13 +6,12 @@ meta = MetaData()
 jobs = Table('jobs', meta,
   Column('id', Integer(), primary_key=True))
 tags = Table('tags', meta,
-  Column('id', Integer(),  primary_key=True, nullable=False),
-  Column('tag', String()),
+  Column('tag', String(),  primary_key=True, nullable=False),
 )
 
 job_tags_table = Table('job_tags', meta,
     Column('job_id', Integer, ForeignKey('jobs.id')),
-    Column('tag_id', Integer, ForeignKey('tags.id'))
+    Column('tag', Integer, ForeignKey('tags.tag'))
 )
 
 def upgrade(migrate_engine):
