@@ -106,6 +106,9 @@ def home(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     jobs = session.query(Job).order_by(desc(Job.id))
+    tag = request.params.get('tag')
+    if tag is not None:
+        jobs = jobs.filter(Job.tags.any(tag=tag))
     if not user.is_admin():
         jobs = [job for job in jobs if not job.is_private] + user.private_jobs
     tiles = session.query(Tile) \
