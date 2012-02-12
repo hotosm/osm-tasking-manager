@@ -86,6 +86,18 @@ class User(Base):
     def is_admin(self):
         return self.admin == True
 
+job_tags_table = Table('job_tags', Base.metadata,
+    Column('job_id', Integer, ForeignKey('jobs.id')),
+    Column('tag', Integer, ForeignKey('tags.tag'))
+)
+
+class Tag(Base):
+    __tablename__ = "tags"
+    tag = Column(Unicode, primary_key=True)
+
+    def __init__(self, tag):
+        self.tag = tag
+
 class Job(Base):
     """ The SQLAlchemy declarative model class for a Page object. """
     __tablename__ = 'jobs'
@@ -108,6 +120,7 @@ class Job(Base):
     users = relationship(User,
                 secondary=job_whitelist_table,
                 backref='private_jobs')
+    tags = relationship(Tag, secondary=job_tags_table, backref='tags')
 
     def __init__(self, title=None,
                  short_description='', description=None, workflow=None,

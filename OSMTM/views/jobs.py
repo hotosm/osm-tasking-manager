@@ -8,6 +8,7 @@ from OSMTM.models import Job
 from OSMTM.models import User
 from OSMTM.models import Tile
 from OSMTM.models import TileHistory
+from OSMTM.models import Tag
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
@@ -158,6 +159,18 @@ def job_users(request):
     all_users = session.query(User).order_by('username').all()
     return dict(job=job, all_users=all_users)
 
+@view_config(route_name='job_tags', renderer='job.tags.mako', permission='admin')
+def job_tags(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    if 'form.submitted' in request.params:
+        new_tag = request.params['tag']
+        tag = session.query(Tag).get(new_tag)
+        if tag is None:
+            job.tags.append(Tag(new_tag))
+    all_tags = session.query(Tag).order_by('tag').all()
+    return dict(job=job, all_tags=all_tags)
 
 class StatUser():
     done = 0

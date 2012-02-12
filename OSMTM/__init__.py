@@ -39,6 +39,7 @@ def main(global_config, **settings):
     config.add_route('job_publish', '/job/{job}/publish', factory='OSMTM.resources.JobFactory')
     config.add_route('job_delete', '/job/{job}/delete', factory='OSMTM.resources.JobFactory')
     config.add_route('job_users', '/job/{job}/users', factory='OSMTM.resources.JobFactory')
+    config.add_route('job_tags', '/job/{job}/tags', factory='OSMTM.resources.JobFactory')
     config.add_route('task_take_random', '/job/{job}/task/take/{checkin}', factory='OSMTM.resources.JobFactory')
     config.add_route('task', '/job/{job}/task/{x}/{y}', factory='OSMTM.resources.JobFactory')
     config.add_route('task_unlock', '/job/{job}/task/{x}/{y}/unlock', factory='OSMTM.resources.JobFactory')
