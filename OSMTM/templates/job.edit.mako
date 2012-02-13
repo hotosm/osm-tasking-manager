@@ -11,6 +11,15 @@
             <input type="text" class="text input-xxlarge" id="id_title" name="title" value="${job.title}" />
             </div>
         </div>
+        <div class="control-group">
+            <label>Tags</label>
+            <div class="controls">
+                % for tag in job.tags:
+                <span class="label">${tag.tag}</span>
+                % endfor
+                <a href="${request.route_url('job_tags', job=job.id)}">Manage tags</a>
+            </div>
+        </div>
         <div class="row">
             <div class="span7">
                 <div class="control-group">

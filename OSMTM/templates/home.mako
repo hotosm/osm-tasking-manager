@@ -19,6 +19,9 @@
                     % if job.is_private:
                     <img src="${request.static_url('OSMTM:static/img/lock.gif')}" alt="private" title="private job" />
                     % endif
+                    % for tag in job.tags:
+                    <a href="?tag=${tag.tag}"><span class="tag label">${tag.tag}</span></a>
+                    % endfor
                 </h4>
                 <%
                     description = job.short_description if job.short_description != '' else job.description
