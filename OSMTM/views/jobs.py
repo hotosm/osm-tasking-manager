@@ -168,7 +168,10 @@ def job_tags(request):
         new_tag = request.params['tag']
         tag = session.query(Tag).get(new_tag)
         if tag is None:
-            job.tags.append(Tag(new_tag))
+            tag = Tag(new_tag)
+        if (tag in job.tags) is False:
+            job.tags.append(tag)
+
     all_tags = session.query(Tag).order_by('tag').all()
     return dict(job=job, all_tags=all_tags)
 
