@@ -9,6 +9,7 @@ from OSMTM.models import DBSession
 from OSMTM.models import Job
 from OSMTM.models import User
 from OSMTM.models import Tile
+from OSMTM.models import Tag
 
 import oauth2 as oauth
 
@@ -118,10 +119,13 @@ def home(request):
     for tile in tiles:
         checkTask(tile)
     users = [tile.username for tile in tiles]
+    tags = session.query(Tag).all()
     return dict(jobs=jobs,
             user=user,
             users=users,
-            admin=user.is_admin())
+            admin=user.is_admin(),
+            tags=tags,
+            current_tag=tag)
 
 @view_config(route_name='about', renderer='about.mako')
 def about(request):

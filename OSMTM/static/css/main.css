@@ -234,3 +234,6 @@ a {
 .olControlAttribution {
     bottom: 3px;
 }
+.inline {
+    display: inline-block;
+}

@@ -7,6 +7,23 @@
 <div class="container">
     <div class="row"> 
     <div class="span7">
+        <div class="pull-right">
+            % if current_tag is not None:
+            <div class="inline">${current_tag}&nbsp;<a class="close" title="Show all jobs" href="?">&times;</a></div>
+            % endif
+            <div class="dropdown inline">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    % for tag in tags:
+                    <li><a href="?tag=${tag.tag}">${tag.tag}</a></li>
+                    % endfor
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="span7">
     % if jobs:
         % for job in jobs:
             % if user.is_admin() or job.status == 1:
