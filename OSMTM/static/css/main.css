@@ -109,7 +109,6 @@ a {
     }
     .archived {
         background: url(../img/closed_back.gif) transparent;
-
     }
 }
 #job_new {
@@ -235,4 +234,3 @@ a {
 .olControlAttribution {
     bottom: 3px;
 }
-
