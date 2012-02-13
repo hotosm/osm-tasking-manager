@@ -18,7 +18,7 @@
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/css/main.css')}"
               text="text/css" media="screen" />
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less-1.2.1.min.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less-1.2.2.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/jquery-1.7.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/showdown.js')}"></script>
