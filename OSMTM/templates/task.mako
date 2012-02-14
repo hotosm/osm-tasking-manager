@@ -118,4 +118,4 @@
     var time_left = ${time_left};
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js?_cdsalt=1329224459439')}"></script>
