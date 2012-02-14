@@ -24,7 +24,8 @@ requires = [
     'markdown',
     'nose',
     'coverage',
-    'beautifulSoup'
+    'beautifulSoup',
+    'pyshp=1.1.4'
     ]
 
 if sys.version_info[:3] < (2,5,0):
