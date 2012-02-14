@@ -191,9 +191,6 @@ def job_export(request):
     for tile in job.tiles:
         polygon = tile.to_polygon(4326)
         coords = polygon.exterior.coords
-        for (x,y) in coords:
-            print x
-            print y
         parts = [[[x, y] for (x, y) in coords]]
         w.poly(parts=parts)
         w.record(tile.checkin)
