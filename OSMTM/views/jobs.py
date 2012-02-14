@@ -197,13 +197,13 @@ def job_export(request):
     # FIXME we should a temp directory
     w.save('/tmp/tiles')
     import zipfile
-    with zipfile.ZipFile('/tmp/tiles.zip', 'w', zipfile.ZIP_DEFLATED) as myzip:
-        myzip.write('/tmp/tiles.shp', job.title + '/tiles.shp')
-        myzip.write('/tmp/tiles.dbf', job.title + '/tiles.dbf')
-        myzip.write('/tmp/tiles.shx', job.title + '/tiles.shx')
+    myzip = zipfile.ZipFile('/tmp/tiles.zip', 'w', zipfile.ZIP_DEFLATED)
+    myzip.write('/tmp/tiles.shp', job.title + '/tiles.shp')
+    myzip.write('/tmp/tiles.dbf', job.title + '/tiles.dbf')
+    myzip.write('/tmp/tiles.shx', job.title + '/tiles.shx')
     myzip.close()
-    content_disposition = 'attachment; filename=' + job.title + '.zip'
-    return request.get_response(FileApp('/tmp/tiles.zip', headers=[('Content-Disposition', content_disposition)]))
+    content_disposition = 'attachment; filename=export.zip'
+    return request.get_response(FileApp('/tmp/tiles.zip', **{"Content-Disposition":content_disposition}))
 
 class StatUser():
     done = 0
