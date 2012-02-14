@@ -1,7 +1,10 @@
+import tempfile
+
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
 from pyramid.url import route_url
 from pyramid.renderers import render_to_response
+from pyramid.response import Response
 
 from OSMTM.models import DBSession
 from OSMTM.models import Job
@@ -21,6 +24,8 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import and_
 
 from pyramid.security import authenticated_userid
+
+from paste.fileapp import FileApp
 
 @view_config(route_name='job', renderer='job.mako', permission='job',
         http_cache=0)
@@ -174,6 +179,34 @@ def job_tags(request):
 
     all_tags = session.query(Tag).order_by('tag').all()
     return dict(job=job, all_tags=all_tags)
+
+@view_config(route_name='job_export', permission='admin')
+def job_export(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    import shapefile
+    w = shapefile.Writer(shapefile.POLYGON)
+    w.field('checkin', 'N', 1, 0)
+    for tile in job.tiles:
+        polygon = tile.to_polygon(4326)
+        coords = polygon.exterior.coords
+        for (x,y) in coords:
+            print x
+            print y
+        parts = [[[x, y] for (x, y) in coords]]
+        w.poly(parts=parts)
+        w.record(tile.checkin)
+    # FIXME we should a temp directory
+    w.save('/tmp/tiles')
+    import zipfile
+    with zipfile.ZipFile('/tmp/tiles.zip', 'w', zipfile.ZIP_DEFLATED) as myzip:
+        myzip.write('/tmp/tiles.shp', job.title + '/tiles.shp')
+        myzip.write('/tmp/tiles.dbf', job.title + '/tiles.dbf')
+        myzip.write('/tmp/tiles.shx', job.title + '/tiles.shx')
+    myzip.close()
+    content_disposition = 'attachment; filename=' + job.title + '.zip'
+    return request.get_response(FileApp('/tmp/tiles.zip', headers=[('Content-Disposition', content_disposition)]))
 
 class StatUser():
     done = 0
