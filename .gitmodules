@@ -1,3 +1,3 @@
-[submodule "OSMTM/public/static/js"]
-	path = OSMTM/public/static/js
+[submodule "OSMTM/static/js/openlayers"]
+	path = OSMTM/static/js/openlayers
 	url = git@github.com:openlayers/openlayers.git
