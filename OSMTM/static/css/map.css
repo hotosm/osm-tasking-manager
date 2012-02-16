@@ -17,4 +17,7 @@
     background-color: grey;
     opacity: 0.6;
 }
-
+.olTileImage {
+    /* override bootstrap */
+    max-width: none;
+}

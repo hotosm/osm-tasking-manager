@@ -25,7 +25,8 @@ requires = [
     'nose',
     'coverage',
     'beautifulSoup',
-    'pyshp==1.1.4'
+    'pyshp==1.1.4',
+    'papyrus==0.7'
     ]
 
 if sys.version_info[:3] < (2,5,0):

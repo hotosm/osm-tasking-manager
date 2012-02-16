@@ -14,7 +14,7 @@
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/less/bootstrap.less')}"
               media="all" />
-        <link rel="stylesheet" href="${request.static_url('OSMTM:static/js/OpenLayers-2.11/theme/default/style.tidy.css')}" type="text/css" ></link> 
+        <link rel="stylesheet" href="${request.static_url('OSMTM:static/js/openlayers/theme/default/style.css')}" type="text/css" ></link> 
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/css/main.css?_cdsalt=1329416606709')}"
               text="text/css" media="screen" />

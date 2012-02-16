@@ -3,6 +3,7 @@ from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
+from papyrus.renderers import GeoJSON
 
 from OSMTM.models import initialize_sql, group_membership
 
@@ -33,6 +34,8 @@ def main(global_config, **settings):
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
     config.add_route('job_new', '/job/new')
+    config.add_route('job_geom', '/job/{job}.json')
+    config.add_route('job_tiles', '/job/{job}/tiles')
     config.add_route('job', '/job/{job}', factory='OSMTM.resources.JobFactory')
     config.add_route('job_edit', '/job/{job}/edit', factory='OSMTM.resources.JobFactory')
     config.add_route('job_archive', '/job/{job}/archive', factory='OSMTM.resources.JobFactory')
@@ -57,6 +60,9 @@ def main(global_config, **settings):
     config.add_view('OSMTM.views.security.login',
             renderer='forbidden.mako',
             context='pyramid.exceptions.Forbidden')
+
+    config.add_renderer('geojson', GeoJSON())
+
     config.scan()
     return config.make_wsgi_app()
 

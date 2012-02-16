@@ -89,7 +89,7 @@
         </div>
     </div>
     <div class="span6">
-        <div id="map"></div>
+        <div id="map" style="width:400px;height:400px;"></div>
         <div id="stats">
             <ul class="legend">
                 <li><div class=""></div>Total (${len(job.tiles)})</li>
@@ -101,15 +101,14 @@
     </div>
     </div>
 </div>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/openlayers/lib/OpenLayers.js')}"></script>
 <script type="text/javascript">
-    var geometry = "${job.geometry}";
-    var zoom = ${job.zoom};
-    var tiles = ${tiles|n};
+    var id = ${job.id};
+    var job_url = "${request.route_url('job_geom', job=job.id)}";
+    var tiles_url = "${request.route_url('job_tiles', job=job.id)}";
     var chart_done = ${stats['chart_done']|n};
     var chart_validated = ${stats['chart_validated']|n};
-    var job_url = "${request.route_url('job', job=job.id)}";
 </script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
 <script type="text/javascript">
     OpenLayers.ImgPath = "${request.static_url('OSMTM:static/img/')}";
 </script>

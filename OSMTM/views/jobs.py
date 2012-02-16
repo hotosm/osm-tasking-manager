@@ -15,6 +15,8 @@ from OSMTM.models import Tag
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
+from shapely.wkt import loads
+
 from geojson import Feature, FeatureCollection
 from geojson import dumps
 
@@ -36,17 +38,10 @@ def job(request):
     if job is None:
         request.session.flash("Sorry, this job doesn't  exist")
         return HTTPFound(location = route_url('home', request))
-    tiles = []
+
     for tile in job.tiles:
         checkTask(tile)
 
-    for tile in job.tiles:
-        checkout = None
-        if tile.username is not None:
-            checkout = tile.update.isoformat()
-        tiles.append(Feature(geometry=tile.to_polygon(),
-            properties={'checkin': tile.checkin, 'username': tile.username,
-                'x': tile.x, 'y': tile.y}))
     try:
         username = authenticated_userid(request)
         filter = and_(Tile.username==username, Tile.job_id==job.id)
@@ -57,10 +52,33 @@ def job(request):
     user = session.query(User).get(username)
     admin = user.is_admin() if user else False
     stats = get_stats(job)
-    return dict(job=job, user=user, tiles=dumps(FeatureCollection(tiles)),
+    return dict(job=job, user=user, 
+            bbox=loads(job.geometry).bounds,
             current_task=current_task,
             admin=admin,
             stats=stats)
+
+@view_config(route_name='job_geom', renderer='geojson', permission='edit')
+def job_geom(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    return FeatureCollection([Feature(id=id, geometry=loads(job.geometry))])
+
+@view_config(route_name='job_tiles', renderer='geojson', permission='edit')
+def job_tiles(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    tiles = []
+    for tile in job.tiles:
+        checkout = None
+        if tile.username is not None:
+            checkout = tile.update.isoformat()
+        tiles.append(Feature(geometry=tile.to_polygon(),
+            properties={'checkin': tile.checkin, 'username': tile.username,
+                'x': tile.x, 'y': tile.y}))
+    return FeatureCollection(tiles)
 
 @view_config(route_name='job_edit', renderer='job.edit.mako', permission='admin')
 def job_edit(request):
