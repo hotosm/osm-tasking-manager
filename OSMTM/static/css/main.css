@@ -208,6 +208,11 @@ a {
     }
 }
 
+.page-header {
+    padding-bottom: 0;
+    margin-top: 6px;
+}
+
 .footer {
   background-color: #eee;
   min-width: 940px;

@@ -88,7 +88,12 @@ map.addControls([featureControl]);
 featureControl.activate();
 featureControl.handlers.feature.stopDown = false;
 
-$(document).ready(function() {
+var chart_drawn = false;
+$('a[href="#chart"]').on('shown', function (e) {
+    if (chart_drawn) {
+        return false;
+    }
+
     if ($('#chart_div').length < 1) {
         return;
     }
@@ -152,5 +157,7 @@ $(document).ready(function() {
         }],
         colors: ['#FF4D4D', '#4DA64D']
     });
+    // prevent multiple renderings
+    chart_drawn = true;
 });
 

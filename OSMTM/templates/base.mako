@@ -32,6 +32,8 @@
                 src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-modal.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-typeahead.js')}"></script>
+        <script type="text/javascript"
+                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-tab.js')}"></script>
     </head>
     <body id="${self.id()}">
         <%
