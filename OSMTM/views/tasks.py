@@ -99,10 +99,10 @@ def take(request):
 
     filter = and_(Tile.checkin==checkin, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
-    filter = and_(TileHistory.username==username, TileHistory.job_id==job_id)
     # take random tile
     if checkin is not None:
         # get the tile the user worked on previously
+        filter = and_(TileHistory.username==username, TileHistory.job_id==job_id)
         p = session.query(TileHistory).filter(filter).order_by(TileHistory.update.desc()).limit(4).all()
         tile = None
         if p is not None and len(p) > 0:
@@ -132,8 +132,8 @@ def take(request):
 
     # check if user has no task he's currently working on
     filter = and_(Tile.username==username, Tile.job_id==job_id)
-    tiles = session.query(Tile).filter(filter).all()
-    if len(tiles) > 0 and tile.user != user:
+    tiles_current = session.query(Tile).filter(filter).all()
+    if len(tiles_current) > 0 and tile.user != user:
         request.session.flash('You already have a task to work on. Finish it before you can accept a new one.')
         return HTTPFound(location=request.route_url('job', job=job_id))
 
