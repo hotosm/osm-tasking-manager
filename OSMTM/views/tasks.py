@@ -74,7 +74,7 @@ def done(request):
     session.add(tile)
     return dict(job=tile.job)
 
-@view_config(route_name='task_unlock', permission='job')
+@view_config(route_name='task_unlock', permission='job', renderer='task.mako')
 def unlock(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
@@ -84,8 +84,7 @@ def unlock(request):
     tile.username = None 
     tile.update = datetime.now()
     session.add(tile)
-    return HTTPFound(location=request.route_url('job', job=job_id))
-
+    return dict(job=tile.job)
 
 def take(request):
     job_id = request.matchdict['job']

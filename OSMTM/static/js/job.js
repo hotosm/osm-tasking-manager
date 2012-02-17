@@ -241,3 +241,19 @@ $.fn.serializeObject = function()
     });
     return o;
 };
+
+function takeOrUnlock(e) {
+    $.ajax({
+        url: this.href,
+        success: function(responseText){
+            $('#task').html(responseText);
+            showTilesStatus();
+        },
+        failure: function() {
+            alert("error");
+        }
+    });
+    return false;
+}
+$('#unlock').live('click', takeOrUnlock);
+$('#validate').live('click', takeOrUnlock);

@@ -6,7 +6,7 @@
         <input type="submit" class="btn btn-primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system" value="Take a task" />
         Or choose one by <strong>clicking</strong> on the map.
     </form>
-    <p class="small">If you're an experienced mapper, you can also be given a task to <a href="${request.route_url('task_take_random', job=job.id, checkin=1)}">validate</a>.</p>
+    <p class="small">If you're an experienced mapper, you can also be given a task to <a href="${request.route_url('task_take_random', job=job.id, checkin=1)}" id="validate">validate</a>.</p>
 % else:
         <div> 
             % if tile.username:
@@ -75,7 +75,7 @@
             % endif
             <p>
                 Can't work on this task right now? No problem.
-                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
+                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}" id="unlock">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
             </p>
             </form>
             <div id="josm_export_info" class="modal hide fade" style="display:none;">
