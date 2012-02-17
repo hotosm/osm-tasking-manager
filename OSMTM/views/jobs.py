@@ -42,19 +42,19 @@ def job(request):
     for tile in job.tiles:
         checkTask(tile)
 
+    username = authenticated_userid(request)
+    user = session.query(User).get(username)
     try:
-        username = authenticated_userid(request)
         filter = and_(Tile.username==username, Tile.job_id==job.id)
         current_task = session.query(Tile).filter(filter).one()
     except NoResultFound, e:
         current_task = None
-    username = authenticated_userid(request)
-    user = session.query(User).get(username)
     admin = user.is_admin() if user else False
     stats = get_stats(job)
     return dict(job=job, user=user, 
             bbox=loads(job.geometry).bounds,
             current_task=current_task,
+            tile=current_task,
             admin=admin,
             stats=stats)
 
@@ -76,9 +76,21 @@ def job_tiles(request):
         if tile.username is not None:
             checkout = tile.update.isoformat()
         tiles.append(Feature(geometry=tile.to_polygon(),
-            properties={'checkin': tile.checkin, 'username': tile.username,
-                'x': tile.x, 'y': tile.y}))
+            id=str(tile.x) + '-' + str(tile.y)))
     return FeatureCollection(tiles)
+
+@view_config(route_name='job_tiles_status', renderer='json', permission='edit')
+def job_tiles_status(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    tiles = {}
+    for tile in job.tiles:
+        if tile.username is not None or tile.checkin != 0:
+            tiles[str(tile.x) + '-' + str(tile.y)] = dict(
+                checkin=tile.checkin,
+                username=tile.username)
+    return tiles
 
 @view_config(route_name='job_edit', renderer='job.edit.mako', permission='admin')
 def job_edit(request):

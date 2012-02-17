@@ -1,13 +1,13 @@
 <%!
     import markdown
 %>
-<%inherit file="/base.mako"/>
-<%def name="id()">task</%def>
-<%def name="title()">Tile - ${tile.x} / ${tile.y}</%def>
-<div class="container">
-    <h2>Job: <a href="${request.route_url('job', job=tile.job_id)}">${tile.job.title}</a></h2>
-    <div class="row">
-    <div class="span6">
+% if not tile:
+    <form action="${request.route_url('task_take_random', job=job.id, checkin=0)}">
+        <input type="submit" class="btn btn-primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system" value="Take a task" />
+        Or choose one by <strong>clicking</strong> on the map.
+    </form>
+    <p class="small">If you're an experienced mapper, you can also be given a task to <a href="${request.route_url('task_take_random', job=job.id, checkin=1)}">validate</a>.</p>
+% else:
         <div> 
             % if tile.username:
             <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y)}" class="form-horizontal">
@@ -105,17 +105,12 @@
             </div>
             % endif
         </div>
-    </div>
-    <div class="span6">
-        <div id="map"></div>
-        <br />
-    </div>
-    </div>
-</div>
-<script type="text/javascript">
-    var tiles = ${feature|n};
-    var jobZoom = ${tile.job.zoom};
-    var time_left = ${time_left};
-</script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js?_cdsalt=1329224459439')}"></script>
+
+    <script type="text/javascript">
+        <%
+            from geojson import dumps
+            feature = dumps(tile.to_polygon())
+        %>
+        var tiles = ${feature|n};
+    </script>
+% endif

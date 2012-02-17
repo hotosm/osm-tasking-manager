@@ -1,6 +1,7 @@
 <%
     comments = []
     comment = None
+    '''
     for ndx, i in enumerate(history):
         if i.username is not None:
             user = i.username
@@ -9,6 +10,7 @@
             comment = i.comment
     if tile.comment is not None and comment != tile.comment:
         comments.append((user, tile.comment))
+    '''
         
 %>
 % if len(comments) > 0:

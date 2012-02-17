@@ -36,6 +36,7 @@ def main(global_config, **settings):
     config.add_route('job_new', '/job/new')
     config.add_route('job_geom', '/job/{job}.json')
     config.add_route('job_tiles', '/job/{job}/tiles')
+    config.add_route('job_tiles_status', '/job/{job}/tiles_status')
     config.add_route('job', '/job/{job}', factory='OSMTM.resources.JobFactory')
     config.add_route('job_edit', '/job/{job}/edit', factory='OSMTM.resources.JobFactory')
     config.add_route('job_archive', '/job/{job}/archive', factory='OSMTM.resources.JobFactory')

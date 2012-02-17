@@ -31,19 +31,7 @@
             </div>
             <div class="tab-pane" id="task">
                 <h3><small>Ready?</small></h3>
-                % if current_task:
-                <p>You are currently working on
-                <a href="${request.route_url('task', job=current_task.job_id, x=current_task.x, y=current_task.y)}">
-                    ${current_task.x} - ${current_task.y}
-                </a>
-                </p>
-                % else:
-                <p>
-                    <a class="btn btn-primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system">Take a task</a>
-                    Or choose one by <strong>clicking</strong> on the map.
-                </p>
-                <p class="small">If you're an experienced mapper, you can also be given a task to <a href="${request.route_url('task_take_random', job=job.id, checkin=1)}">validate</a>.</p>
-                % endif
+                <%include file="/task.mako" />
             </div>
             <div class="tab-pane" id="users">
                 <h3><small>Who else is working?</small></h3>
@@ -101,13 +89,20 @@
     </div>
     </div>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/openlayers/lib/OpenLayers.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
 <script type="text/javascript">
+    <%
+        from pyramid.security import authenticated_userid
+        from OSMTM.models import DBSession, User
+        username = authenticated_userid(request)
+    %>
+    var user = "${username|n}";
     var id = ${job.id};
     var job_url = "${request.route_url('job_geom', job=job.id)}";
     var tiles_url = "${request.route_url('job_tiles', job=job.id)}";
     var chart_done = ${stats['chart_done']|n};
     var chart_validated = ${stats['chart_validated']|n};
+    var tiles_status_url = "${request.route_url('job_tiles_status', job=job.id)}";
 </script>
 <script type="text/javascript">
     OpenLayers.ImgPath = "${request.static_url('OSMTM:static/img/')}";

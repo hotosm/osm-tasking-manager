@@ -30,24 +30,24 @@ var context = {
         return colors[checkin];
     },
     getStrokeColor: function(feature) {
-        return (feature.attributes.username !== null) ?
+        return (feature.attributes.username) ?
             "orange" : "black";
     },
     getStrokeWidth: function(feature) {
-        return (feature.attributes.username !== null) ?
+        return (feature.attributes.username) ?
             2 : 0.3;
     },
     getStrokeOpacity: function(feature) {
-        return (feature.attributes.username !== null) ?
+        return (feature.attributes.username) ?
             1 : 0.5;
     },
     getZIndex: function(feature) {
-        return (feature.attributes.username !== null) ?
+        return (feature.attributes.username) ?
             2 : 1;
     },
     getCursor: function(feature) {
         return (feature.attributes.checkin < 2 &&
-            feature.attributes.username === null) ? "pointer" : "auto";
+            !feature.attributes.username) ? "pointer" : "auto";
     }
 };
 var template = {
@@ -68,6 +68,31 @@ var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
 });
 map.addLayer(tilesLayer);
 
+function showTilesStatus() {
+    var protocol = new OpenLayers.Protocol.HTTP({
+        url: tiles_status_url,
+        format: new OpenLayers.Format.JSON(),
+        callback: function(response) {
+            if (response.success()) {
+                $.each(tilesLayer.features, function(index, feature) {
+                    feature.attributes = {};
+                });
+                $.each(response.features, function(id, val) {
+                    var feature = tilesLayer.getFeatureByFid(id);
+                    feature.attributes = val;
+                    if (val.username == user) {
+                        map.zoomToExtent(feature.geometry.getBounds());
+                    }
+                });
+                // FIXME, hack
+                tilesLayer.drawn = false;
+                tilesLayer.redraw();
+            }
+        }
+    });
+    protocol.read();
+}
+
 var protocol = new OpenLayers.Protocol.HTTP({
     url: job_url,
     format: new OpenLayers.Format.GeoJSON(),
@@ -86,7 +111,7 @@ protocol = new OpenLayers.Protocol.HTTP({
     callback: function(response) {
         if (response.success()) {
             tilesLayer.addFeatures(response.features);
-            map.zoomToExtent(tilesLayer.getDataExtent());
+            showTilesStatus();
         }
     }
 });
@@ -178,3 +203,41 @@ $('a[href="#chart"]').on('shown', function (e) {
     chart_drawn = true;
 });
 
+$('form').live('submit', function(e) {
+    var formData = $(this).serializeObject();
+    var submitName = $("button[type=submit][clicked=true]").attr("name");
+    formData[submitName] = true;
+    $.ajax({
+        url: this.action,
+        type: 'POST',
+        data: formData,
+        success: function(responseText){
+            $('#task').html(responseText);
+            showTilesStatus();
+        },
+        failure: function() {
+            alert("error");
+        }
+    });
+    return false;
+});
+$("form button[type=submit]").live('click', function() {
+    $("button[type=submit]", $(this).parents("form")).removeAttr("clicked");
+    $(this).attr("clicked", "true");
+});
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
