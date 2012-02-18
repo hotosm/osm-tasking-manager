@@ -241,3 +241,14 @@ function takeOrUnlock(e) {
 }
 $('#unlock').live('click', takeOrUnlock);
 $('#validate').live('click', takeOrUnlock);
+
+var task_time_left;
+$(function(){
+    var countdown = setInterval(function(){
+        $("span#countdown").html(Math.floor(task_time_left/60));
+        if (task_time_left === 0) {
+            window.location = window.location;
+        }
+        task_time_left--;
+    }, 1000);
+});
