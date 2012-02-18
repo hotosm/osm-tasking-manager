@@ -13,7 +13,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#description" data-toggle="tab">Description</a></li>
             <li><a href="#resources" data-toggle="tab">Resources</a></li>
-            <li><a href="#task" data-toggle="tab">Task</a></li>
+            <li><a href="#task" id="task_tab" data-toggle="tab">Task</a></li>
             <li><a href="#users" data-toggle="tab">Users</a></li>
             <li><a href="#chart" data-toggle="tab">Stats</a></li>
         </ul>

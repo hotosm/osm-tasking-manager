@@ -110,6 +110,9 @@
             from geojson import dumps
             feature = dumps(tile.to_polygon())
         %>
-        var tiles = ${feature|n};
+        var current_tile = ${feature|n};
+        $(function() {
+            $('#task_tab').tab('show');
+        });
     </script>
 % endif
