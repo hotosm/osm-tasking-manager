@@ -105,6 +105,7 @@
 
     <script type="text/javascript">
         var task_time_left = ${time_left};
+        var jobZoom = ${tile.job.zoom};
         <%
             from geojson import dumps
             feature = dumps(tile.to_polygon())
