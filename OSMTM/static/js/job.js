@@ -207,17 +207,8 @@ $('form').live('submit', function(e) {
     var formData = $(this).serializeObject();
     var submitName = $("button[type=submit][clicked=true]").attr("name");
     formData[submitName] = true;
-    $.ajax({
-        url: this.action,
-        type: 'POST',
-        data: formData,
-        success: function(responseText){
-            $('#task').html(responseText);
-            showTilesStatus();
-        },
-        failure: function() {
-            alert("error");
-        }
+    $('#task').load(this.action, formData, function(responseText) {
+        showTilesStatus();
     });
     return false;
 });
