@@ -95,7 +95,7 @@ function showTilesStatus() {
 }
 
 var protocol = new OpenLayers.Protocol.HTTP({
-    url: job_url,
+    url: job_geom,
     format: new OpenLayers.Format.GeoJSON(),
     callback: function(response) {
         if (response.success()) {
@@ -124,7 +124,15 @@ var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
         if (attr.checkin >=  2 || attr.username) {
             return false;
         }
-        window.location = job_url + "/task/" + attr.x + "/" + attr.y + "/take";
+        if (current_tile) {
+            alert("You already have a task to work on");
+            return false;
+        }
+        var id = feature.fid.split('-');
+        $('#task').load(
+            job_url + "/task/" + id[0] + "/" + id[1] + "/take",
+            showTilesStatus
+        );
     }
 });
 map.addControls([featureControl]);

@@ -105,7 +105,8 @@
     %>
     var user = "${username|n}";
     var id = ${job.id};
-    var job_url = "${request.route_url('job_geom', job=job.id)}";
+    var job_url = "${request.route_url('job', job=job.id)}";
+    var job_geom = "${request.route_url('job_geom', job=job.id)}";
     var tiles_url = "${request.route_url('job_tiles', job=job.id)}";
     var chart_done = ${stats['chart_done']|n};
     var chart_validated = ${stats['chart_validated']|n};

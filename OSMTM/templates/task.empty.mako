@@ -3,3 +3,6 @@
 Or choose one by <strong>clicking</strong> on the map.
 </form>
 <p class="small">If you're an experienced mapper, you can also be given a task to <a href="${request.route_url('task_take_random', job=job.id, checkin=1)}" id="validate">validate</a>.</p>
+<script type="text/javascript">
+    var current_tile = null;
+</script>
