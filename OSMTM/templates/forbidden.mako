@@ -11,7 +11,7 @@
 <div class="container">
     <div class="row">
     <div class="span6">
-        <h2>About Task Server</h2>
+        <h2>About The Tasking Manager</h2>
         <h4>Coordinate Efforts</h4>
     OpenStreetMap has been shown to be an effective collection mechanism for infrastructure data.  One thing that is lacking is the ability to coordinate workers surveying in the field or working remotely.  The goal of the OpenStreetMap Tasking Tool is to make it easy for administrators to define collection areas of interest and collection workflows as well as allowing workers to easily determine what areas they should be working on.
     </div>
