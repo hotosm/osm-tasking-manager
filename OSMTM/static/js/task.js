@@ -1,21 +1,3 @@
-var map = new OpenLayers.Map('map', {
-    controls: [],
-    theme: null
-});
-var osm = new OpenLayers.Layer.OSM();
-map.addLayer(osm);
-var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
-    projection: new OpenLayers.Projection("EPSG:4326"),
-    displayInLayerSwitcher: false
-});
-
-format = new OpenLayers.Format.GeoJSON();
-var tiles = format.read(tiles);
-tilesLayer.addFeatures(tiles);
-map.zoomToExtent(tilesLayer.getDataExtent());
-map.zoomOut();
-map.addLayer(tilesLayer);
-
 var roundd = function(input, decimals) {
     var p = Math.pow(10, decimals);
     return Math.round(input*p)/p;
@@ -38,8 +20,11 @@ var getLink = function(options) {
         });
     }
 };
-var exportOpen = function() {  
-    var url, bounds = tilesLayer.getDataExtent();
+var exportOpen = function() {
+    var url,
+        format = new OpenLayers.Format.GeoJSON(),
+        f = format.read(current_tile)[0],
+        bounds = f.geometry.getBounds();
 
     bounds.transform(
         new OpenLayers.Projection("EPSG:900913"), 
@@ -83,25 +68,4 @@ var exportOpen = function() {
         break;
     }
 };
-$('#export a').click(exportOpen);
-$('#josm_export_info').modal({
-    backdrop: true,
-    keyboard: true,
-    show: false
-});
-$('#potlatch2_export_info').modal({
-    backdrop: true,
-    keyboard: true,
-    show: false
-});
-
-$(function(){
-    var count = time_left;
-    var countdown = setInterval(function(){
-        $("span#countdown").html(Math.floor(count/60));
-        if (count === 0) {
-            window.location = window.location;
-        }
-        count--;
-    }, 1000);
-});
+$('#export a').live('click', exportOpen);

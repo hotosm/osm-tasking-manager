@@ -30,8 +30,15 @@
                 % endif
             </div>
             <div class="tab-pane" id="task">
-                <h3><small>Ready?</small></h3>
-                <%include file="/task.mako" />
+                % if tile is not None:
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $('#task').load('${request.route_url('task', x=tile.x, y=tile.y, job=tile.job_id)}');
+                        });
+                    </script>
+                % else:
+                    <%include file="/task.empty.mako" />
+                % endif
             </div>
             <div class="tab-pane" id="users">
                 <h3><small>Who else is working?</small></h3>
@@ -109,3 +116,4 @@
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/highcharts.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js')}"></script>

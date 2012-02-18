@@ -48,9 +48,7 @@ def task(request):
             history=history,
             time_left=time_left,
             user=user,
-            job=tile.job,
-            job_url=request.route_url('job', job=job_id),
-            done_url=request.route_url('task_done', job=job_id, x=x, y=y))
+            job=tile.job)
 
 @view_config(route_name='task_done', permission='job', renderer='task.mako')
 def done(request):
