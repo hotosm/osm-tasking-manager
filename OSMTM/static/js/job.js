@@ -46,7 +46,8 @@ var context = {
             2 : 1;
     },
     getCursor: function(feature) {
-        return (feature.attributes.checkin < 2 &&
+        return ((feature.attributes.checkin < 2 ||
+            !feature.attributes.checkin) &&
             !feature.attributes.username) ? "pointer" : "auto";
     }
 };
@@ -120,7 +121,7 @@ protocol.read();
 var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
     onSelect: function(feature) {
         var attr = feature.attributes;
-        if (attr.checkin >=  2 || attr.username !== null) {
+        if (attr.checkin >=  2 || attr.username) {
             return false;
         }
         window.location = job_url + "/task/" + attr.x + "/" + attr.y + "/take";
