@@ -234,15 +234,8 @@ $.fn.serializeObject = function()
 };
 
 function takeOrUnlock(e) {
-    $.ajax({
-        url: this.href,
-        success: function(responseText){
-            $('#task').html(responseText);
-            showTilesStatus();
-        },
-        failure: function() {
-            alert("error");
-        }
+    $('#task').load(this.href, function(responseText) {
+        showTilesStatus();
     });
     return false;
 }
