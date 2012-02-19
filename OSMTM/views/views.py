@@ -91,7 +91,7 @@ def oauth_callback(request):
         if db_session.query(User).get(username) is None:
             db_session.add(User(username))
             db_session.flush()
-        headers = remember(request, username, max_age=2*7*24*60*60)
+        headers = remember(request, username, max_age=20*7*24*60*60)
 
     # and redirect to the main page
     return HTTPFound(location=session.get('came_from'), headers=headers)
