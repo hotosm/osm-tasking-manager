@@ -20,13 +20,16 @@
                         <div class="controls">
                             <div class="inline-inputs"> 
                                 <input type="radio" name="relation_type" checked value="relation"/>
-                                <span>OSM relation</span>
+                                <span>OSM relation ID</span>
                                 <input type="text" class="text input-small" id="id_relation" name="relation" value="" /> 
                                 <span id="relation_loading_msg" class="help-inline">
                                     <img src="${request.static_url('OSMTM:static/img/ajax-loader.gif')}" />
                                 </span>
+                                <span class="help-block">
+                                    ex: 1714850
+                                </span>
                                 <p class="help-block">
-                                    <strong>Note:</strong> You already know an OSM which delimits the area. 
+                                    <strong>Note:</strong> You already know an OSM relation which delimits the area.
                                 </p>
                             </div>
                         </div>
