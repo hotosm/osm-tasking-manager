@@ -58,9 +58,6 @@
                     <a class="brand" href="${request.route_url('home')}">OSM Tasking Manager</a>
                     <ul class="nav">
                         % if user:
-                        % if user.is_admin():
-                        <li class="first"><a href="${request.route_url('users')}">Users</a></li> 
-                        % endif
                     </ul>
                     <ul class="nav pull-right">
                         <li class="dropdown">
