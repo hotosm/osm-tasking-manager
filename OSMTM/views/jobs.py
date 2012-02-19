@@ -49,12 +49,32 @@ def job(request):
         current_task = session.query(Tile).filter(filter).one()
     except NoResultFound, e:
         current_task = None
+
+    # search for a previously taken task
+    prev_task = None
+    if current_task is None:
+        # first find task taken by the user
+        filter = and_(TileHistory.username==username, Tile.job_id==job.id)
+        task = session.query(TileHistory)\
+                       .filter(filter)\
+                       .order_by(TileHistory.update.desc())\
+                       .first()
+        version = task.version
+        filter = and_(TileHistory.x==task.x, TileHistory.y==task.y,
+                TileHistory.job_id==job.id)
+        task = session.query(TileHistory)\
+                       .filter(filter)\
+                       .order_by(TileHistory.version.desc())\
+                       .first()
+        if task is not None and version == task.version:
+            prev_task = session.query(Tile).get((task.x, task.y, task.job_id))
+
     admin = user.is_admin() if user else False
     stats = get_stats(job)
     return dict(job=job, user=user, 
             bbox=loads(job.geometry).bounds,
-            current_task=current_task,
             tile=current_task,
+            prev_task=prev_task,
             admin=admin,
             stats=stats)
 

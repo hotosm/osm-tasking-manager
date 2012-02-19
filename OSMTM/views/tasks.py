@@ -32,7 +32,6 @@ def task(request):
     tile = session.query(Tile).get((x, y, job_id))
     if tile is None:
         return HTTPNotFound()
-    checkTask(tile)
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     time_left = 'null'
