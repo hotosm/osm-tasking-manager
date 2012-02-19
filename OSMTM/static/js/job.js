@@ -82,7 +82,10 @@ function showTilesStatus() {
                     var feature = tilesLayer.getFeatureByFid(id);
                     feature.attributes = val;
                     if (val.username == user) {
-                        map.zoomToExtent(feature.geometry.getBounds());
+                        var zoom = map.getZoomForExtent(feature.geometry.getBounds()),
+                            centroid = feature.geometry.getCentroid(),
+                            lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
+                        map.setCenter(lonlat, zoom - 1);
                     }
                 });
                 // FIXME, hack
