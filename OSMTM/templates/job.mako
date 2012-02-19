@@ -85,12 +85,8 @@
     </div>
     <div class="span6">
         <div id="map" style="width:400px;height:400px;"></div>
-        <div id="stats">
-            <ul class="legend">
-                <li><div class=""></div>Total (${len(job.tiles)})</li>
-                <li><div class="checkin1"></div>Done (${len([x for x in job.tiles if x.checkin == 1 or x.checkin == 2])})</li>
-                <li><div class="checkin2"></div>Validated (${len([x for x in job.tiles if x.checkin == 2])})</li>
-                <li><div class="checkout"></div>Curr. worked on (${len([x for x in job.tiles if x.username != None])})</li>
+        <div id="map_legend">
+            <ul>
             </ul>
         </div>
     </div>

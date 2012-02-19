@@ -78,6 +78,10 @@ function showTilesStatus() {
                 $.each(tilesLayer.features, function(index, feature) {
                     feature.attributes = {};
                 });
+                var total = 0,
+                    done = 0,
+                    validated = 0,
+                    cur = 0;
                 $.each(response.features, function(id, val) {
                     var feature = tilesLayer.getFeatureByFid(id);
                     feature.attributes = val;
@@ -87,10 +91,26 @@ function showTilesStatus() {
                             lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
                         map.setCenter(lonlat, zoom - 1);
                     }
+                    total++;
+                    if (val.checkin == 1) {
+                        done++;
+                    }
+                    if (val.checkin == 2) {
+                        validated++;
+                    }
+                    if (val.username) {
+                        cur++;
+                    }
                 });
                 // FIXME, hack
                 tilesLayer.drawn = false;
                 tilesLayer.redraw();
+                $('#map_legend ul').html(function() {
+                    return '<li><div class=""></div>Total (' + total + ')</li>' +
+                           '<li><div class="checkin1"></div>Done (' + done + ')</li>' +
+                           '<li><div class="checkin2"></div>Validated (' + validated + ')</li>' +
+                           '<li><div class="checkout"></div>Curr. worked on (' + cur + ')</li>';
+                });
             }
         }
     });
