@@ -55,10 +55,9 @@
         <div class="navbar navbar-fixed-top" >
             <div class="navbar-inner">
                 <div class="container">
-                    <span class="brand" href="#">OSM Tasking Manager</span>
+                    <a class="brand" href="${request.route_url('home')}">OSM Tasking Manager</a>
                     <ul class="nav">
                         % if user:
-                        <li class="first"><a href="${request.route_url('home')}">Jobs</a></li> 
                         % if user.is_admin():
                         <li class="first"><a href="${request.route_url('users')}">Users</a></li> 
                         % endif
