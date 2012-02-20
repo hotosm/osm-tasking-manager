@@ -154,7 +154,13 @@ var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
         var id = feature.fid.split('-');
         $('#task').load(
             job_url + "/task/" + id[0] + "/" + id[1] + "/take",
-            showTilesStatus
+            function(responseText, textStatus, request) {
+                if (textStatus == 'error') {
+                    alert(responseText);
+                } else {
+                    showTilesStatus();
+                }
+            }
         );
     }
 });
@@ -266,9 +272,15 @@ $.fn.serializeObject = function()
 };
 
 function takeOrUnlock(e) {
-    $('#task').load(this.href, function(responseText) {
-        showTilesStatus();
-    });
+    $('#task').load(this.href, '',
+        function(responseText, textStatus, request) {
+            if (textStatus == 'error') {
+                alert(responseText);
+            } else {
+                showTilesStatus();
+            }
+        }
+    );
     return false;
 }
 $('#unlock').live('click', takeOrUnlock);

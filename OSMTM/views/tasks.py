@@ -7,6 +7,7 @@ from OSMTM.models import DBSession
 from OSMTM.models import Tile
 from OSMTM.models import TileHistory
 from OSMTM.models import User
+from OSMTM.models import Job
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
@@ -92,6 +93,7 @@ def take(request):
     session = DBSession()
     username = authenticated_userid(request)
     user = session.query(User).get(username)
+    job = session.query(Job).get(job_id)
 
     filter = and_(Tile.checkin==checkin, Tile.job_id==job_id)
     tiles = session.query(Tile).filter(filter).all()
@@ -119,12 +121,12 @@ def take(request):
 
         # task is already checked out by someone else
         if tile.username is not None and tile.user != user:
-            request.session.flash('You cannot see this task. Someone else is already working on it.')
-            return HTTPFound(location=request.route_url('job', job=job_id))
+            msg = 'You cannot take this task. Someone else is already working on it.'
+            return dict(job=job, error_msg=msg)
 
         if tile.checkin >= 2:
-            request.session.flash('This tile has already been validated.')
-            return HTTPFound(location=request.route_url('job', job=job_id))
+            msg = 'This tile has already been validated.'
+            return dict(job=job, error_msg=msg)
 
     # check if user has no task he's currently working on
     filter = and_(Tile.username==username, Tile.job_id==job_id)
@@ -141,18 +143,18 @@ def take(request):
         session.add(tile)
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:
-        if checkin == 1:
-            request.session.flash('Sorry. No task available to validate.')
+        if int(checkin) == 1:
+            msg = 'Sorry. No task available to validate.'
         else:
-            request.session.flash('Sorry. No task available to take.')
-        return HTTPFound(location=request.referrer)
+            msg = 'Sorry. No task available to take.'
+        return dict(job=job, error_msg=msg)
 
 
-@view_config(route_name='task_take_random', permission='job')
+@view_config(route_name='task_take_random', permission='job', renderer="task.mako")
 def take_random(request):
     return take(request)
 
-@view_config(route_name='task_take', permission='job')
+@view_config(route_name='task_take', permission='job', renderer="task.mako")
 def take_tile(request):
     return take(request)
 

@@ -1,3 +1,8 @@
+% if error_msg is not UNDEFINED and error_msg is not None:
+    <div class="alert alert-error">
+    ${error_msg}
+    </div>
+% endif
 <form action="${request.route_url('task_take_random', job=job.id, checkin=0)}">
 <input type="submit" class="btn btn-primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system" value="Take a task" />
 Or choose one by <strong>clicking</strong> on the map.
