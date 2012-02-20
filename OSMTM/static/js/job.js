@@ -158,6 +158,7 @@ var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
                 if (textStatus == 'error') {
                     alert(responseText);
                 } else {
+                    $('#task_tab').tab('show');
                     showTilesStatus();
                 }
             }
