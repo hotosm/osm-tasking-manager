@@ -8,6 +8,14 @@ This application is intented to be used as a way to organize collaborative work 
 Installation
 ------------
 
+First clone the git repository::
+
+    git clone git://github.com/pgiraud/OSMTM.git
+
+Update and load the submodules::
+    
+    git submodule update --init
+
 Installing OSMTM in a Virtual Python environment is recommended.
 
 To create a virtual Python environment::
