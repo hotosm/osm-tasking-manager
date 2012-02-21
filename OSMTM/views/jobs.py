@@ -59,15 +59,16 @@ def job(request):
                        .filter(filter)\
                        .order_by(TileHistory.update.desc())\
                        .first()
-        version = task.version
-        filter = and_(TileHistory.x==task.x, TileHistory.y==task.y,
-                TileHistory.job_id==job.id)
-        task = session.query(TileHistory)\
+        if task is not None:
+            version = task.version
+            filter = and_(TileHistory.x==task.x, TileHistory.y==task.y,
+                    TileHistory.job_id==job.id)
+            task = session.query(TileHistory)\
                        .filter(filter)\
                        .order_by(TileHistory.version.desc())\
                        .first()
-        if task is not None and version == task.version:
-            prev_task = session.query(Tile).get((task.x, task.y, task.job_id))
+            if version == task.version:
+                prev_task = session.query(Tile).get((task.x, task.y, task.job_id))
 
     admin = user.is_admin() if user else False
     stats = get_stats(job)
