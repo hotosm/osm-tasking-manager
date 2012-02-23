@@ -9,10 +9,12 @@ from imposm.parser import OSMParser
 from shapely.geometry import Polygon
 from shapely.geometry import MultiPolygon
 
+from geojson import Feature, FeatureCollection
+
 import logging
 log = logging.getLogger(__file__)
 
-@view_config(route_name='osmproxy')
+@view_config(route_name='osmproxy', renderer='geojson')
 def osmproxy(request):
     url = request.params.get("url")
     if url is None:
@@ -76,7 +78,7 @@ def osmproxy(request):
             polygons.append(Polygon(nodes))
 
     multipolygon = MultiPolygon(polygons)
-    return Response(multipolygon.to_wkt())
+    return FeatureCollection([Feature(geometry=multipolygon)])
 
 # simple class that handles the parsed OSM data.
 class RelationParser(object):

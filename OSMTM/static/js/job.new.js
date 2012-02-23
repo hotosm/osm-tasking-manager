@@ -132,8 +132,12 @@ $('#id_relation')
         if ($("input[name=relation_type]").val() == "relation") {
             $('#relation_loading_msg').show();
             var url = "http://www.openstreetmap.org/api/0.6/relation/" + this.value + '/full';
-            vectorLayer = new OpenLayers.Layer.GML("Objects", url, {
-                format: OpenLayers.Format.WKT,
+            vectorLayer = new OpenLayers.Layer.Vector("Objects", {
+                protocol: new OpenLayers.Protocol.HTTP({
+                    url: url, 
+                    format: new OpenLayers.Format.GeoJSON()
+                }),
+                strategies: [new OpenLayers.Strategy.Fixed()],
                 style: {
                     strokeColor: "blue",
                     strokeWidth: 3,
@@ -156,7 +160,6 @@ $('#id_relation')
             });
 
             map.addLayer(vectorLayer);
-            vectorLayer.loadGML();
         } else if ($('#bbox').val() != '') {
             plotBoxFromInput();
         }
