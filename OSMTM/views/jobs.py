@@ -67,7 +67,7 @@ def job(request):
                        .filter(filter)\
                        .order_by(TileHistory.version.desc())\
                        .first()
-            if version == task.version:
+            if task is not None and version == task.version:
                 prev_task = session.query(Tile).get((task.x, task.y, task.job_id))
 
     admin = user.is_admin() if user else False
