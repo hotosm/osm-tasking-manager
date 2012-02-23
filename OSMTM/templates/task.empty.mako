@@ -4,7 +4,7 @@
     ${error_msg}
     </div>
 % endif
-% if prev_task is not None:
+% if prev_task and prev_task is not None:
     <p>Hey! You took a task to work on a while ago. It has been unlocked.</p>
     You can <a href="${request.route_url('task_take', x=prev_task.x, y=prev_task.y, job=prev_task.job_id)}" id="take_again">take it</a> again.
     <hr />
