@@ -1,7 +1,13 @@
+<h3><small>Ready?</small></h3>
 % if error_msg is not UNDEFINED and error_msg is not None:
     <div class="alert alert-error">
     ${error_msg}
     </div>
+% endif
+% if prev_task is not None:
+    <p>Hey! You took a task to work on a while ago. It has been unlocked.</p>
+    You can <a href="${request.route_url('task_take', x=prev_task.x, y=prev_task.y, job=prev_task.job_id)}" id="take_again">take it</a> again.
+    <hr />
 % endif
 <form action="${request.route_url('task_take_random', job=job.id, checkin=0)}">
 <input type="submit" class="btn btn-primary input" href="${request.route_url('task_take_random', job=job.id, checkin=0)}" rel="twipsy" data-original-title="The task will be chosen for you by the system" value="Take a task" />

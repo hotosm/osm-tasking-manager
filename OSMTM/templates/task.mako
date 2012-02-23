@@ -1,4 +1,3 @@
-<h3><small>Ready?</small></h3>
 <%!
     import markdown
 %>

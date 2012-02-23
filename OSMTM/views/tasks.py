@@ -82,7 +82,8 @@ def unlock(request):
     tile.username = None 
     tile.update = datetime.now()
     session.add(tile)
-    return dict(job=tile.job)
+    return dict(job=tile.job,
+                prev_task=tile)
 
 def take(request):
     job_id = request.matchdict['job']
