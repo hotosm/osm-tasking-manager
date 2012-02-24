@@ -20,7 +20,7 @@
               text="text/css" media="screen" />
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less-1.2.2.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/jquery-1.7.1.min.js')}"></script>
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js?_cdsalt=1329224459439')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js?_cdsalt=1330087595137')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/showdown.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-tooltip.js')}"></script>
