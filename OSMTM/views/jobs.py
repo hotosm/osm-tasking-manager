@@ -329,17 +329,15 @@ def get_stats(job):
             if not users.has_key(i.username):
                 users[i.username] = StatUser()
 
-    contributors_tuples = []
-    validators_tuples = []
+    contributors = []
+    validators = []
     for i in users:
         # only keep users who have actually done something
         # or who are currently working on a task
         if users[i].done != 0 or i in current_users:
-            contributors_tuples.append((i, users[i].done, i in current_users))
+            contributors.append((i, users[i].done, i in current_users))
         if users[i].validated != 0:
-            validators_tuples.append((i, users[i].validated))
-    contributors = sorted(contributors_tuples, key=lambda user: user[1], reverse=True)
-    validators = sorted(validators_tuples, key=lambda user: user[1], reverse=True)
+            validators.append((i, users[i].validated))
 
     changes = sorted(changes, key=lambda value: value[0])
     chart_done = []

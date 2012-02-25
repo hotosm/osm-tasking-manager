@@ -47,12 +47,15 @@
                     % if stats['contributors']:
                     <strong>Contributors</strong>
                     <ul class="contributors">
-                      % for user in stats['contributors']:
+                      % for user in sorted(stats['contributors'], key=lambda user: user[0].lower()):
                       <%
                           online = 'online' if user[2] is True else 'offline'
                       %>
                       <li class="${online}">
-                        <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup><em> ${user[1]}</em></sup>
+                        <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup class="hidden-link"><em> ${user[1]}</em></sup>
+                        % if user[1] == 0:
+                            <sup class="new"><em>new</em></sup>
+                        % endif
                         % if admin:
                         <a href="${request.route_url('user',id=user[0])}" class="hidden-link">edit</a>
                         % endif
@@ -65,9 +68,9 @@
                     % if stats['validators']:
                     <strong>Validators</strong>
                     <ul>
-                      % for user in stats['validators']:
+                      % for user in sorted(stats['validators'], key=lambda user: user[0].lower()):
                       <li>
-                        <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup><em> ${user[1]}</em></sup>
+                        <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup class="hidden-link"><em> ${user[1]}</em></sup>
                         % if admin:
                         <a href="${request.route_url('user',id=user[0])}" class="hidden-link">edit</a>
                         % endif
