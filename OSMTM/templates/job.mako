@@ -45,7 +45,7 @@
                 <div class="row">
                     <div class="span3">
                     % if stats['contributors']:
-                    <strong>Contributors</strong>
+                    <strong>Contributors </strong><sup><em>${len(stats['contributors'])}</em></sup>
                     <ul class="contributors">
                       % for user in sorted(stats['contributors'], key=lambda user: user[0].lower()):
                       <%
@@ -66,7 +66,7 @@
                     </div>
                     <div class="span3">
                     % if stats['validators']:
-                    <strong>Validators</strong>
+                    <strong>Validators </strong><sup><em>${len(stats['validators'])}</em></sup>
                     <ul>
                       % for user in sorted(stats['validators'], key=lambda user: user[0].lower()):
                       <li>
