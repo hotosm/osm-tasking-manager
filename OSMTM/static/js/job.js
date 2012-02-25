@@ -78,7 +78,7 @@ function showTilesStatus() {
                 $.each(tilesLayer.features, function(index, feature) {
                     feature.attributes = {};
                 });
-                var total = 0,
+                var total = tilesLayer.features.length,
                     done = 0,
                     validated = 0,
                     cur = 0;
@@ -91,8 +91,7 @@ function showTilesStatus() {
                             lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
                         map.setCenter(lonlat, zoom - 1);
                     }
-                    total++;
-                    if (val.checkin == 1) {
+                    if (val.checkin == 1 || val.checkin == 2) {
                         done++;
                     }
                     if (val.checkin == 2) {
