@@ -25,7 +25,7 @@ def main(global_config, **settings):
     session_factory = session_factory_from_settings(settings)
     config.set_session_factory(session_factory)
 
-    config.add_static_view('static', 'OSMTM:static')
+    config.add_static_view('static', 'OSMTM:static', cache_max_age=3600)
     config.add_view('OSMTM.views.crossdomain.crossdomain_view', name='crossdomain.xml')
     config.add_route('crossdomain', '/crossdomain.xml',
                      view='OSMTM.views.crossdomain.crossdomain_view')
