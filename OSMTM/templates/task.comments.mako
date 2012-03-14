@@ -11,7 +11,7 @@
         comments.append((user, tile.comment))
 %>
 % if len(comments) > 0:
-    <p>Comments made by contributors:</p>
+    <p>Comments made by contributors who previously worked on this task:</p>
 % endif
 % for user, comment in comments:
     <blockquote>${comment}
@@ -21,4 +21,6 @@
 <%
     minx, miny, maxx, maxy = tile.to_polygon(4326).bounds
 %>
-<p><a href="http://www.openstreetmap.org/history?bbox=${minx},${miny},${maxx},${maxy}" target="_blank">Changesets</a> for this area.</p>
+% if comments:
+<p>See the <a href="http://www.openstreetmap.org/history?bbox=${minx},${miny},${maxx},${maxy}" target="_blank">changesets</a> for this area.</p>
+% endif
