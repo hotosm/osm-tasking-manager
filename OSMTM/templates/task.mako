@@ -24,6 +24,7 @@
                 <div class="well">
                     <p>2. Trace the elements.</p>
                     <%include file="imagery.mako" />
+                    <%include file="task.comments.mako" />
                 </div>
                 <div class="well">
                     <p>3. Add a comment and mark the task as done.</p>
