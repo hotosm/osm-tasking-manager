@@ -16,7 +16,7 @@
               media="all" />
         <link rel="stylesheet" href="${request.static_url('OSMTM:static/js/openlayers/theme/default/style.css')}" type="text/css" ></link> 
         <link rel="stylesheet/less"
-              href="${request.static_url('OSMTM:static/css/main.css?_cdsalt=1329416606709')}"
+              href="${request.static_url('OSMTM:static/css/main.css', _cdsalt=1329416606709)}"
               text="text/css" media="screen" />
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less-1.2.2.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/jquery-1.7.1.min.js')}"></script>
