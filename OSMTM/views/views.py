@@ -113,8 +113,7 @@ def home(request):
     if not user.is_admin():
         jobs = [job for job in jobs if not job.is_private] + user.private_jobs
     tiles = session.query(Tile) \
-        .filter(Tile.username!=None) \
-        .group_by(Tile.username)
+        .filter(Tile.username!=None)
     # unlock expired tiles
     for tile in tiles:
         checkTask(tile)

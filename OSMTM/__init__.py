@@ -6,6 +6,7 @@ from pyramid.authorization import ACLAuthorizationPolicy
 from papyrus.renderers import GeoJSON
 
 from OSMTM.models import initialize_sql, group_membership
+from OSMTM.resources import MapnikRendererFactory
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -36,6 +37,7 @@ def main(global_config, **settings):
     config.add_route('job_new', '/job/new')
     config.add_route('job_geom', '/job/{job}.json')
     config.add_route('job_tiles', '/job/{job}/tiles')
+    config.add_route('job_tiles_raster', '/job/{job}/tiles.png')
     config.add_route('job_tiles_status', '/job/{job}/tiles_status')
     config.add_route('job', '/job/{job}', factory='OSMTM.resources.JobFactory')
     config.add_route('job_edit', '/job/{job}/edit', factory='OSMTM.resources.JobFactory')
@@ -63,6 +65,7 @@ def main(global_config, **settings):
             context='pyramid.exceptions.Forbidden')
 
     config.add_renderer('geojson', GeoJSON())
+    config.add_renderer('.xml', MapnikRendererFactory)
 
     config.scan()
     return config.make_wsgi_app()

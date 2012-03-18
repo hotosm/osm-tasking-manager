@@ -26,7 +26,9 @@ requires = [
     'coverage',
     'beautifulSoup',
     'pyshp==1.1.4',
-    'papyrus==0.7'
+    'papyrus==0.7',
+    'geoalchemy==0.6',
+    'psycopg2==2.4.4'
     ]
 
 if sys.version_info[:3] < (2,5,0):

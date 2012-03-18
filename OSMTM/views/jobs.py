@@ -15,7 +15,7 @@ from OSMTM.models import Tag
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
-from shapely.wkt import loads
+from shapely.wkb import loads
 
 from geojson import Feature, FeatureCollection
 from geojson import dumps
@@ -73,7 +73,7 @@ def job(request):
     admin = user.is_admin() if user else False
     stats = get_stats(job)
     return dict(job=job, user=user, 
-            bbox=loads(job.geometry).bounds,
+            bbox=loads(str(job.geometry.geom_wkb)).bounds,
             tile=current_task,
             prev_task=prev_task,
             admin=admin,
@@ -84,7 +84,8 @@ def job_geom(request):
     id = request.matchdict['job']
     session = DBSession()
     job = session.query(Job).get(id)
-    return FeatureCollection([Feature(id=id, geometry=loads(job.geometry))])
+    return FeatureCollection([Feature(id=id, geometry=loads(str(job.geometry.geom_wkb)))])
+
 
 @view_config(route_name='job_tiles', renderer='geojson', permission='edit')
 def job_tiles(request):
@@ -96,9 +97,14 @@ def job_tiles(request):
         checkout = None
         if tile.username is not None:
             checkout = tile.update.isoformat()
-        tiles.append(Feature(geometry=tile.to_polygon(),
+        tiles.append(Feature(geometry=loads(str(tile.geometry.geometry.geom_wkb)),
             id=str(tile.x) + '-' + str(tile.y)))
     return FeatureCollection(tiles)
+
+@view_config(route_name='job_tiles_raster', renderer='OSMTM:views/job.xml', permission='edit')
+def job_tiles_raster(request):
+    id = request.matchdict['job']
+    return dict() 
 
 @view_config(route_name='job_tiles_status', renderer='json', permission='edit')
 def job_tiles_status(request):

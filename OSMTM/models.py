@@ -16,6 +16,8 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 
+from geoalchemy import GeometryColumn, Polygon, MultiPolygon, GeometryDDL, WKBSpatialElement
+
 from zope.sqlalchemy import ZopeTransactionExtension
 
 from pyramid.security import Allow
@@ -51,20 +53,33 @@ class Tile(Base):
     update = Column(DateTime)
     checkin = Column(Integer)
     comment = Column(Unicode)
+    geometry_id = Column(Integer, ForeignKey('tiles_geometry.id')) 
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, zoom):
         self.x = x
         self.y = y
         self.checkin = 0
+        geometry = WKBSpatialElement(buffer(self.to_polygon(zoom).wkb), srid=4326)
+        self.geometry = TileGeometry(geometry)
 
-    def to_polygon(self, srs=900913):
-        z = self.job.zoom
+    def to_polygon(self, zoom, srs=900913):
         # tile size (in meters) at the required zoom level
-        step = max/(2**(z - 1))
+        step = max/(2**(int(zoom) - 1))
         tb = TileBuilder(step)
         return tb.create_square(self.x, self.y, srs)
 
 TileHistory = Tile.__history_mapper__.class_
+
+class TileGeometry(Base):
+    __tablename__ = "tiles_geometry"
+    id = Column(Integer, primary_key=True)
+    geometry = GeometryColumn('the_geom', Polygon(srid=4326))
+    tile = relationship(Tile, backref='geometry')
+
+    def __init__(self, geometry):
+        self.geometry = geometry 
+
+GeometryDDL(TileGeometry.__table__)
 
 job_whitelist_table = Table('job_whitelists', Base.metadata,
     Column('job_id', Integer, ForeignKey('jobs.id')),
@@ -88,12 +103,13 @@ class User(Base):
 
 job_tags_table = Table('job_tags', Base.metadata,
     Column('job_id', Integer, ForeignKey('jobs.id')),
-    Column('tag', Integer, ForeignKey('tags.tag'))
+    Column('tag', Integer, ForeignKey('tags.id'))
 )
-
+id
 class Tag(Base):
     __tablename__ = "tags"
-    tag = Column(Unicode, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    tag = Column(Unicode)
 
     def __init__(self, tag):
         self.tag = tag
@@ -110,7 +126,7 @@ class Job(Base):
     status = Column(Integer)
     description = Column(Unicode)
     short_description = Column(Unicode)
-    geometry = Column(Unicode)
+    geometry = GeometryColumn('the_geom', MultiPolygon(srid=4326))
     workflow = Column(Unicode)
     imagery = Column(Unicode)
     zoom = Column(Integer)
@@ -134,13 +150,14 @@ class Job(Base):
         self.workflow = workflow
         self.imagery = imagery
         self.zoom = zoom
-        self.is_private = is_private
-        self.requires_nextview = requires_nextview
+        self.is_private = bool(is_private)
+        self.requires_nextview = bool(requires_nextview)
 
         tiles = []
         for i in get_tiles_in_geom(loads(geometry), int(zoom)):
-            tiles.append(Tile(i[0], i[1]))
+            tiles.append(Tile(i[0], i[1], zoom))
         self.tiles = tiles
+GeometryDDL(Job.__table__)
 
 def group_membership(username, request):
     session = DBSession()
