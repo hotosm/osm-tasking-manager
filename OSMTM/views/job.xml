@@ -1,9 +1,8 @@
-<Map background-color="steelblue" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
+<Map srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
 
   <Style name="My Style">
     <Rule>
-      <PolygonSymbolizer fill="#f2eff9" />
-      <LineSymbolizer stroke="rgb(50%,50%,50%)" stroke-width="0.1" />
+      <LineSymbolizer stroke-width="0.1" />
     </Rule>
   </Style>
   <Layer name="world" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">
