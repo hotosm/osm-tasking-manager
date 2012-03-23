@@ -24,9 +24,11 @@ from pyramid.asset import abspath_from_asset_spec
 from pyramid.httpexceptions import HTTPBadRequest
 
 from mapnik import (MemoryDatasource, Context, Path, Feature, Box2d, Map, Image,
-                     load_map, render)
+                     load_map, render_layer, Grid)
 import itertools
 from shapely.geometry import asShape
+
+import json
 
 
 class MapnikRendererFactory:
@@ -41,6 +43,7 @@ class MapnikRendererFactory:
         for tile in tiles:
             #properties = dict(feature.properties)
             f = Feature(context, ids.next())
+            f['username'] = tile[0].username
             #for k,v in properties.iteritems():
                 #if isinstance(v, decimal.Decimal):
                     #f[k] = float(v)
@@ -105,8 +108,13 @@ class MapnikRendererFactory:
 
         m.zoom_to_box(bbox or layer.envelope())
 
-        im = Image(width, height)
-        render(m, im, 1, 1)
+        grid = Grid(width, height)
+        render_layer(m, grid, layer=0, fields=['username'])
+        utfgrid = grid.encode('utf', resolution=4)
 
-        request.response_content_type = 'image/png'
-        return im.tostring('png')
+        #im = Image(width, height)
+        #render(m, im, 1, 1)
+
+        #request.response_content_type = 'image/png'
+        return json.dumps(utfgrid)
+        #return im.tostring('png')
