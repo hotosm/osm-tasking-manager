@@ -10,6 +10,7 @@ from OSMTM.models import DBSession
 from OSMTM.models import Job
 from OSMTM.models import User
 from OSMTM.models import Tile
+from OSMTM.models import TileGeometry
 from OSMTM.models import TileHistory
 from OSMTM.models import Tag
 
@@ -105,8 +106,8 @@ def job_tiles(request):
 def job_tiles_raster(request):
     id = request.matchdict['job']
     session = DBSession()
-    job = session.query(Job).get(id)
-    return job.tiles
+    tiles = session.query(Tile, TileGeometry.geometry).join(Tile.geometry).filter(Tile.job_id==id)
+    return tiles
 
 @view_config(route_name='job_tiles_status', renderer='json', permission='edit')
 def job_tiles_status(request):

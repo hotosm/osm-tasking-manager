@@ -46,8 +46,8 @@ class MapnikRendererFactory:
                     #f[k] = float(v)
                 #elif isinstance(v, (datetime.date, datetime.datetime)):
                     #f[k] = str(v)
-            f.add_geometries_from_wkb(str(tile.geometry.geometry.geom_wkb))
             ds.add_feature(f)
+            f.add_geometries_from_wkb(str(tile.geometry.geom_wkb))
         return ds
 
     def _set_layer_in_map(self, _map, layer_name):
