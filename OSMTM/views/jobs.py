@@ -16,6 +16,7 @@ from OSMTM.models import Tag
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
 from shapely.wkb import loads
+from shapely.geometry import asShape
 
 from geojson import Feature, FeatureCollection
 from geojson import dumps
@@ -93,18 +94,19 @@ def job_tiles(request):
     session = DBSession()
     job = session.query(Job).get(id)
     tiles = []
+    print "job_here"
     for tile in job.tiles:
-        checkout = None
-        if tile.username is not None:
-            checkout = tile.update.isoformat()
         tiles.append(Feature(geometry=loads(str(tile.geometry.geometry.geom_wkb)),
             id=str(tile.x) + '-' + str(tile.y)))
+    print "job_there"
     return FeatureCollection(tiles)
 
 @view_config(route_name='job_tiles_raster', renderer='OSMTM:views/job.xml', permission='edit')
 def job_tiles_raster(request):
     id = request.matchdict['job']
-    return dict() 
+    session = DBSession()
+    job = session.query(Job).get(id)
+    return job.tiles
 
 @view_config(route_name='job_tiles_status', renderer='json', permission='edit')
 def job_tiles_status(request):
@@ -246,7 +248,8 @@ def job_export(request):
     w = shapefile.Writer(shapefile.POLYGON)
     w.field('checkin', 'N', 1, 0)
     for tile in job.tiles:
-        polygon = tile.to_polygon(4326)
+        wkb = str(tile.geometry.geometry.geom_wkb)
+        polygon = loads(wkb)
         coords = polygon.exterior.coords
         parts = [[[x, y] for (x, y) in coords]]
         w.poly(parts=parts)

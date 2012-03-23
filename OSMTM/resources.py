@@ -23,22 +23,32 @@ import datetime
 from pyramid.asset import abspath_from_asset_spec
 from pyramid.httpexceptions import HTTPBadRequest
 
-from mapnik2 import (PostGIS, Context, Path, Feature, Box2d, Map, Image,
+from mapnik import (MemoryDatasource, Context, Path, Feature, Box2d, Map, Image,
                      load_map, render)
 import itertools
-
 from shapely.geometry import asShape
+
 
 class MapnikRendererFactory:
     def __init__(self, info):
         self.mapfile = abspath_from_asset_spec(info.name)
 
-    def _create_datasource(self, job_id):
-        """ Create a Mapnik postgis datasource 
-        """
-        buffered_table = '(select the_geom from tiles_geometry LEFT JOIN tiles ON id = geometry_id WHERE job_id = %s) as tiles_geometry' % job_id
-        ds = PostGIS(host='localhost',user='www-data',password='www-data',dbname='osmtm',table=buffered_table, geometry_field='the_geom')
-        return ds 
+    def _create_datasource(self, tiles):
+        ids = itertools.count(0)
+        context = Context()
+        context.push('foo')
+        ds = MemoryDatasource()
+        for tile in tiles:
+            #properties = dict(feature.properties)
+            f = Feature(context, ids.next())
+            #for k,v in properties.iteritems():
+                #if isinstance(v, decimal.Decimal):
+                    #f[k] = float(v)
+                #elif isinstance(v, (datetime.date, datetime.datetime)):
+                    #f[k] = str(v)
+            f.add_geometries_from_wkb(str(tile.geometry.geometry.geom_wkb))
+            ds.add_feature(f)
+        return ds
 
     def _set_layer_in_map(self, _map, layer_name):
         layer = None
@@ -55,7 +65,7 @@ class MapnikRendererFactory:
         if not isinstance(value, tuple):
             value = (None, value);
 
-        layer_name, job_id = value
+        layer_name, collection = value
 
         # get image width and height
         try:
@@ -91,7 +101,7 @@ class MapnikRendererFactory:
             layer_name = m.layers[0].name
 
         layer = self._set_layer_in_map(m, layer_name)
-        layer.datasource = self._create_datasource(7)
+        layer.datasource = self._create_datasource(collection)
 
         m.zoom_to_box(bbox or layer.envelope())
 
