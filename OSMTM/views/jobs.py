@@ -93,14 +93,14 @@ def job_geom(request):
 def job_tiles(request):
     id = request.matchdict['job']
     session = DBSession()
-    job = session.query(Job).get(id)
-    tiles = []
+    tiles = session.query(Tile, TileGeometry.geometry).join(Tile.geometry).filter(Tile.job_id==id)
     print "job_here"
-    for tile in job.tiles:
-        tiles.append(Feature(geometry=loads(str(tile.geometry.geometry.geom_wkb)),
-            id=str(tile.x) + '-' + str(tile.y)))
+    features = []
+    for tile in tiles:
+        features.append(Feature(geometry=loads(str(tile.geometry.geom_wkb)),
+            id=str(tile[0].x) + '-' + str(tile[0].y)))
     print "job_there"
-    return FeatureCollection(tiles)
+    return FeatureCollection(features)
 
 @view_config(route_name='job_tiles_raster', renderer='OSMTM:views/job.xml', permission='edit')
 def job_tiles_raster(request):
