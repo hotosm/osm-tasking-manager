@@ -19,7 +19,7 @@
     </blockquote>
 % endfor
 <%
-    minx, miny, maxx, maxy = tile.to_polygon(4326).bounds
+    minx, miny, maxx, maxy = tile.geometry.get_bounds()
 %>
 % if comments:
 <p>See the <a href="http://www.openstreetmap.org/history?bbox=${minx},${miny},${maxx},${maxy}" target="_blank">changesets</a> for this area.</p>

@@ -1,14 +1,65 @@
 var map = new OpenLayers.Map('map', {
     theme: null,
+    projection: new OpenLayers.Projection('EPSG:900913'),
+    maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
+                                         20037508.34, 20037508.34),
     controls: [
         new OpenLayers.Control.Navigation(),
         new OpenLayers.Control.ZoomPanel(),
         new OpenLayers.Control.Attribution()
     ]
 });
-var osm = new OpenLayers.Layer.OSM();
+var osm = new OpenLayers.Layer.OSM({
+    buffer: 0
+});
 map.addLayer(osm);
-var layer = new OpenLayers.Layer.Vector("Objects", {
+var tilesUrl = window.location + '/tiles/${z}/${x}/${y}';
+var tilesLayer = new OpenLayers.Layer.XYZ("Tiles", 
+    tilesUrl + '.png',
+    {
+        isBaseLayer: false,
+        buffer: 0
+    });
+map.addLayer(tilesLayer);
+var utfgrid = new OpenLayers.Layer.UTFGrid({
+    url: tilesUrl + '.json',
+    utfgridResolution: 4
+});
+map.addLayer(utfgrid);
+
+// prevent caching
+function redrawLayers() {
+    tilesLayer.url = tilesUrl + '.png?_cdsalt=' + Math.random();
+    utfgrid.url = tilesUrl + '.json?_cdsalt=' + Math.random();
+    tilesLayer.redraw(true);
+    utfgrid.redraw(true);
+}
+var control = new OpenLayers.Control.UTFGrid({
+    handlerMode: 'click',
+    callback: function(infoLookup) {
+        var info;
+        for (var idx in infoLookup) {
+            // idx can be used to retrieve layer from map.layers[idx]
+            info = infoLookup[idx];
+            if (info && info.data && !current_tile && !info.data.username) {
+                var data = info.data;
+                $('#task').load(
+                    job_url + "/task/" + data.x + "/" + data.y + "/take",
+                    function(responseText, textStatus, request) {
+                        if (textStatus == 'error') {
+                            alert(responseText);
+                        } else {
+                            $('#task_tab').tab('show');
+                            redrawLayers(); 
+                        }
+                    }
+                );
+            }
+        }
+    }
+});
+map.addControl(control);
+layer = new OpenLayers.Layer.Vector("Objects", {
     style: {
         strokeColor: "blue",
         strokeWidth: 3,
@@ -60,61 +111,6 @@ var template = {
     graphicZIndex: "${getZIndex}",
     cursor: "${getCursor}"
 };
-var style = new OpenLayers.Style(template, {context: context});
-var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
-    styleMap: new OpenLayers.StyleMap(style),
-    rendererOptions: {
-        zIndexing: true
-    }
-});
-map.addLayer(tilesLayer);
-
-function showTilesStatus() {
-    var protocol = new OpenLayers.Protocol.HTTP({
-        url: tiles_status_url,
-        format: new OpenLayers.Format.JSON(),
-        callback: function(response) {
-            if (response.success()) {
-                $.each(tilesLayer.features, function(index, feature) {
-                    feature.attributes = {};
-                });
-                var total = tilesLayer.features.length,
-                    done = 0,
-                    validated = 0,
-                    cur = 0;
-                $.each(response.features, function(id, val) {
-                    var feature = tilesLayer.getFeatureByFid(id);
-                    feature.attributes = val;
-                    if (val.username == user) {
-                        var zoom = map.getZoomForExtent(feature.geometry.getBounds()),
-                            centroid = feature.geometry.getCentroid(),
-                            lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
-                        map.setCenter(lonlat, zoom - 1);
-                    }
-                    if (val.checkin == 1 || val.checkin == 2) {
-                        done++;
-                    }
-                    if (val.checkin == 2) {
-                        validated++;
-                    }
-                    if (val.username) {
-                        cur++;
-                    }
-                });
-                // FIXME, hack
-                tilesLayer.drawn = false;
-                tilesLayer.redraw();
-                $('#map_legend ul').html(function() {
-                    return '<li><div class=""></div>Total (' + total + ')</li>' +
-                           '<li><div class="checkin1"></div>Done (' + done + ')</li>' +
-                           '<li><div class="checkin2"></div>Validated (' + validated + ')</li>' +
-                           '<li><div class="checkout"></div>Curr. worked on (' + cur + ')</li>';
-                });
-            }
-        }
-    });
-    protocol.read();
-}
 
 var protocol = new OpenLayers.Protocol.HTTP({
     url: job_geom,
@@ -127,46 +123,6 @@ var protocol = new OpenLayers.Protocol.HTTP({
     }
 });
 protocol.read();
-
-protocol = new OpenLayers.Protocol.HTTP({
-    url: tiles_url,
-    format: new OpenLayers.Format.GeoJSON(),
-    callback: function(response) {
-        if (response.success()) {
-            tilesLayer.addFeatures(response.features);
-            showTilesStatus();
-        }
-    }
-});
-protocol.read();
-
-var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
-    onSelect: function(feature) {
-        var attr = feature.attributes;
-        if (attr.checkin >=  2 || attr.username) {
-            return false;
-        }
-        if (current_tile) {
-            alert("You already have a task to work on");
-            return false;
-        }
-        var id = feature.fid.split('-');
-        $('#task').load(
-            job_url + "/task/" + id[0] + "/" + id[1] + "/take",
-            function(responseText, textStatus, request) {
-                if (textStatus == 'error') {
-                    alert(responseText);
-                } else {
-                    $('#task_tab').tab('show');
-                    showTilesStatus();
-                }
-            }
-        );
-    }
-});
-map.addControls([featureControl]);
-featureControl.activate();
-featureControl.handlers.feature.stopDown = false;
 
 var chart_drawn = false;
 $('a[href="#chart"]').on('shown', function (e) {
@@ -246,7 +202,7 @@ $('form').live('submit', function(e) {
     var submitName = $("button[type=submit][clicked=true]").attr("name");
     formData[submitName] = true;
     $('#task').load(this.action, formData, function(responseText) {
-        showTilesStatus();
+        redrawLayers();
     });
     return false;
 });
@@ -277,7 +233,7 @@ function takeOrUnlock(e) {
             if (textStatus == 'error') {
                 alert(responseText);
             } else {
-                showTilesStatus();
+                redrawLayers();
             }
         }
     );

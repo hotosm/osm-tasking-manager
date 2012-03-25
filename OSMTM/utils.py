@@ -19,13 +19,13 @@ class TileBuilder(object):
         creates a Shapely Polygon geometry representing tile indexed by (i,j) in OSMQA v2 with dimension a
         """
         xmin = i*self.a-max
-        ymin = j*self.a-max
+        ymin = max-j*self.a
         xmax = (i+1)*self.a-max
-        ymax = (j+1)*self.a-max
+        ymax = max-(j+1)*self.a
         if srs == 4326:
             xmin, ymin = transform_900913_to_4326(xmin, ymin)
             xmax, ymax = transform_900913_to_4326(xmax, ymax)
-        return Polygon([(xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax)])
+        return (xmin, ymin, xmax, ymax)
 
 # This method finds the tiles that intersect the given geometry for the given zoom
 def get_tiles_in_geom(geom, z):
@@ -39,16 +39,19 @@ def get_tiles_in_geom(geom, z):
 
     xminstep = int(floor((xmin+max)/step))
     xmaxstep = int(ceil((xmax+max)/step))
-    yminstep = int(floor((ymin+max)/step))
-    ymaxstep = int(ceil((ymax+max)/step))
-
+    ymaxstep = int(floor((max-ymin)/step))
+    yminstep = int(ceil((max-ymax)/step))
 
     tb = TileBuilder(step)
     polygons = []
     tiles = []
     for i in range(xminstep,xmaxstep+1):
-        for j in range(yminstep,ymaxstep+1):
-            polygon = tb.create_square(i, j)
+        for j in range(yminstep-1,ymaxstep+1):
+            (xmin, ymin, xmax, ymax) = tb.create_square(i, j)
+            polygon = Polygon(((xmin, ymin), (xmin, ymax),
+                (xmax, ymax), (xmax, ymin),
+                (xmin, ymin)))
+
             if geom.intersects(polygon):
                 polygons.append(polygon)
                 tiles.append((i, j))

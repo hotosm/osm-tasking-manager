@@ -2,6 +2,8 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.url import route_url
 from pyramid.security import Allow, Deny, Everyone
 from models import Job, User, RootFactory, DBSession
+from OSMTM.utils import TileBuilder
+from OSMTM.utils import max
 
 class JobFactory(RootFactory):
     def __init__(self, request):
@@ -24,9 +26,8 @@ from pyramid.asset import abspath_from_asset_spec
 from pyramid.httpexceptions import HTTPBadRequest
 
 from mapnik import (MemoryDatasource, Context, Path, Feature, Box2d, Map, Image,
-                     load_map, render_layer, Grid)
+                     load_map, render, render_layer, Grid)
 import itertools
-from shapely.geometry import asShape
 
 import json
 
@@ -44,11 +45,9 @@ class MapnikRendererFactory:
             #properties = dict(feature.properties)
             f = Feature(context, ids.next())
             f['username'] = tile[0].username
-            #for k,v in properties.iteritems():
-                #if isinstance(v, decimal.Decimal):
-                    #f[k] = float(v)
-                #elif isinstance(v, (datetime.date, datetime.datetime)):
-                    #f[k] = str(v)
+            f['checkin'] = tile[0].checkin
+            f['x'] = tile[0].x
+            f['y'] = tile[0].y
             ds.add_feature(f)
             f.add_geometries_from_wkb(str(tile.geometry.geom_wkb))
         return ds
@@ -71,26 +70,17 @@ class MapnikRendererFactory:
         layer_name, collection = value
 
         # get image width and height
-        try:
-            width = int(request.params.get('img_width', 600))
-        except:
-            request.response_status = 400
-            return 'incorrect width'
-        try:
-            height = int(request.params.get('img_height', 400))
-        except:
-            request.response_status = 400
-            return 'incorrect height'
+        width = 256 
+        height = 256
 
         # get image bbox
-        bbox = request.params.get('img_bbox')
-        if bbox:
-            try:
-                bbox = map(float, bbox.split(','))
-            except ValueError:
-                request.response_status = 400
-                return 'incorrect img_bbox'
-            bbox = Box2d(*bbox)
+        z = request.matchdict['z']
+        x = request.matchdict['x']
+        y = request.matchdict['y']
+        step = max/(2**(int(z) - 1))
+        tb = TileBuilder(step)
+        (xmin, ymax, xmax, ymin) = tb.create_square(int(x), int(y))
+        bbox = Box2d(xmin, ymax, xmax, ymin)
 
         m = Map(width, height)
         load_map(m, self.mapfile)
@@ -108,13 +98,17 @@ class MapnikRendererFactory:
 
         m.zoom_to_box(bbox or layer.envelope())
 
-        grid = Grid(width, height)
-        render_layer(m, grid, layer=0, fields=['username'])
-        utfgrid = grid.encode('utf', resolution=4)
+        format = request.matchdict['format']
+        if format == 'png':
+            im = Image(width, height)
+            render(m, im, 1, 1)
 
-        #im = Image(width, height)
-        #render(m, im, 1, 1)
+            request.response_content_type = 'image/png'
+            return im.tostring('png')
+        
+        elif format == 'json':
+            grid = Grid(width, height)
+            render_layer(m, grid, layer=0, fields=['x', 'y', 'username', 'checkin'])
+            utfgrid = grid.encode('utf', resolution=4)
+            return json.dumps(utfgrid)
 
-        #request.response_content_type = 'image/png'
-        return json.dumps(utfgrid)
-        #return im.tostring('png')

@@ -20,6 +20,12 @@ var getLink = function(options) {
         });
     }
 };
+var zoomToTile = function() {
+    var format = new OpenLayers.Format.GeoJSON(),
+        f = format.read(current_tile)[0],
+        bounds = f.geometry.getBounds();
+    map.zoomToExtent(bounds);
+};
 var exportOpen = function() {
     var url,
         format = new OpenLayers.Format.GeoJSON(),

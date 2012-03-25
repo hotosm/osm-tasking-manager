@@ -27,7 +27,11 @@ from pyramid.security import Authenticated
 from OSMTM.utils import TileBuilder
 from OSMTM.utils import max 
 from OSMTM.utils import get_tiles_in_geom
+import shapely
 from shapely.wkt import loads
+from shapely.wkb import loads as loads_wkb
+from shapely.geometry import asShape
+import geojson
 
 from OSMTM.history_meta import VersionedMeta, VersionedListener
 from OSMTM.history_meta import _history_mapper 
@@ -66,7 +70,8 @@ class Tile(Base):
         # tile size (in meters) at the required zoom level
         step = max/(2**(int(zoom) - 1))
         tb = TileBuilder(step)
-        return tb.create_square(self.x, self.y, srs)
+        (xmin, ymin, xmax, ymax) = tb.create_square(self.x, self.y, srs)
+        return shapely.geometry.Polygon(((xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax), (xmin, ymin)))
 
 TileHistory = Tile.__history_mapper__.class_
 
@@ -78,6 +83,15 @@ class TileGeometry(Base):
 
     def __init__(self, geometry):
         self.geometry = geometry 
+
+    def get_bounds(self):
+        return loads_wkb(str(self.geometry.geom_wkb)).bounds
+
+    @property
+    def __geo_interface__(self):
+        id = self.id
+        geometry = loads_wkb(str(self.geometry.geom_wkb))
+        return geojson.Feature(id=id, geometry=geometry)
 
 GeometryDDL(TileGeometry.__table__)
 

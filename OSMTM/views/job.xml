@@ -2,7 +2,21 @@
 
   <Style name="My Style">
     <Rule>
+      <LineSymbolizer stroke-width="2" stroke="#FFCC00" />
+      <Filter>[username]</Filter>
+    </Rule>
+    <Rule>
+      <PolygonSymbolizer fill-opacity="0.5" fill="#FF0000" />
+      <Filter>[checkin] = 1</Filter>
+    </Rule>
+    <Rule>
+      <PolygonSymbolizer fill-opacity="0.5" fill="#00FF00" />
+      <Filter>[checkin] = 2</Filter>
+    </Rule>
+    <Rule>
+      <PolygonSymbolizer fill-opacity="0.01" fill="#000000" />
       <LineSymbolizer stroke-width="0.1" />
+      <Filter>not [username]</Filter>
     </Rule>
   </Style>
   <Layer name="world" srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">

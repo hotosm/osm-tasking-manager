@@ -95,7 +95,7 @@
     </div>
     </div>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/openlayers/lib/OpenLayers.js')}"></script>
 <script type="text/javascript">
     <%
         from pyramid.security import authenticated_userid
@@ -106,10 +106,9 @@
     var id = ${job.id};
     var job_url = "${request.route_url('job', job=job.id)}";
     var job_geom = "${request.route_url('job_geom', job=job.id)}";
-    var tiles_url = "${request.route_url('job_tiles', job=job.id)}";
+    var tiles_url = "${request.route_url('job_tiles', job=job.id, z='z', x='x', y='y', format='foo')}";
     var chart_done = ${stats['chart_done']|n};
     var chart_validated = ${stats['chart_validated']|n};
-    var tiles_status_url = "${request.route_url('job_tiles_status', job=job.id)}";
 </script>
 <script type="text/javascript">
     OpenLayers.ImgPath = "${request.static_url('OSMTM:static/img/')}";

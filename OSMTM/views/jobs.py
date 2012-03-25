@@ -14,10 +14,13 @@ from OSMTM.models import TileGeometry
 from OSMTM.models import TileHistory
 from OSMTM.models import Tag
 
+from OSMTM.utils import TileBuilder
+from OSMTM.utils import max
+
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
 from shapely.wkb import loads
-from shapely.geometry import asShape
+from shapely.geometry.polygon import Polygon
 
 from geojson import Feature, FeatureCollection
 from geojson import dumps
@@ -26,6 +29,8 @@ import simplejson
 
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import and_
+from geoalchemy.functions import functions
+from geoalchemy import WKBSpatialElement
 
 from pyramid.security import authenticated_userid
 
@@ -89,37 +94,26 @@ def job_geom(request):
     return FeatureCollection([Feature(id=id, geometry=loads(str(job.geometry.geom_wkb)))])
 
 
-@view_config(route_name='job_tiles', renderer='geojson', permission='edit')
+@view_config(route_name='job_tiles', renderer='OSMTM:views/job.xml')
 def job_tiles(request):
     id = request.matchdict['job']
     session = DBSession()
-    tiles = session.query(Tile, TileGeometry.geometry).join(Tile.geometry).filter(Tile.job_id==id)
-    print "job_here"
-    features = []
-    for tile in tiles:
-        features.append(Feature(geometry=loads(str(tile.geometry.geom_wkb)),
-            id=str(tile[0].x) + '-' + str(tile[0].y)))
-    print "job_there"
-    return FeatureCollection(features)
 
-@view_config(route_name='job_tiles_raster', renderer='OSMTM:views/job.xml', permission='edit')
-def job_tiles_raster(request):
-    id = request.matchdict['job']
-    session = DBSession()
-    tiles = session.query(Tile, TileGeometry.geometry).join(Tile.geometry).filter(Tile.job_id==id)
-    return tiles
+    # get image bbox
+    z = request.matchdict['z']
+    x = request.matchdict['x']
+    y = request.matchdict['y']
+    step = max/(2**(int(z) - 1))
+    tb = TileBuilder(step)
+    (xmin, ymax, xmax, ymin) = tb.create_square(int(x), int(y))
 
-@view_config(route_name='job_tiles_status', renderer='json', permission='edit')
-def job_tiles_status(request):
-    id = request.matchdict['job']
-    session = DBSession()
-    job = session.query(Job).get(id)
-    tiles = {}
-    for tile in job.tiles:
-        if tile.username is not None or tile.checkin != 0:
-            tiles[str(tile.x) + '-' + str(tile.y)] = dict(
-                checkin=tile.checkin,
-                username=tile.username)
+    geometry = Polygon(((xmin, ymin), (xmin, ymax),
+        (xmax, ymax), (xmax, ymin),
+        (xmin, ymin)))
+    wkb_geometry = WKBSpatialElement(buffer(geometry.wkb))
+    tiles = session.query(Tile, TileGeometry.geometry).join(Tile.geometry)\
+        .filter(Tile.job_id==id) \
+        .filter(functions._within_distance(TileGeometry.geometry, wkb_geometry, 0.0))
     return tiles
 
 @view_config(route_name='job_edit', renderer='job.edit.mako', permission='admin')
