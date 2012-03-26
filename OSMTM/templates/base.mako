@@ -18,6 +18,9 @@
         <link rel="stylesheet/less"
               href="${request.static_url('OSMTM:static/css/main.css')}?_cdsalt=1329416606709"
               text="text/css" media="screen" />
+        <link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.css" />
+        <!--[if lte IE 8]><link rel="stylesheet" href="http://leaflet.cloudmade.com/dist/leaflet.ie.css" /><![endif]-->
+
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less-1.2.2.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/jquery-1.7.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}?_cdsalt=1330087595137"></script>

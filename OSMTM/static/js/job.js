@@ -1,172 +1,34 @@
-var map = new OpenLayers.Map('map', {
-    theme: null,
-    controls: [
-        new OpenLayers.Control.Navigation(),
-        new OpenLayers.Control.ZoomPanel(),
-        new OpenLayers.Control.Attribution()
-    ]
+var map = new L.Map('map', {
 });
-var osm = new OpenLayers.Layer.OSM();
+
+var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    osm = new L.TileLayer(osmUrl, {maxZoom: 18});
+
+map.setView(new L.LatLng(-10.25, 123.51), 10);
 map.addLayer(osm);
-var layer = new OpenLayers.Layer.Vector("Objects", {
-    style: {
-        strokeColor: "blue",
-        strokeWidth: 3,
-        strokeOpacity: 0.5,
-        fillOpacity: 0.2,
-        fillColor: "lightblue",
-        pointRadius: 6
-    },
-    projection: new OpenLayers.Projection("EPSG:4326"),
-    displayInLayerSwitcher: false
-});
 
-map.addLayer(layer);
-
-var colors = ["#aaa", "red", "green"];
-var context = {
-    getColor: function(feature) {
-        var checkin = feature.attributes.checkin || 0;
-        return colors[checkin];
-    },
-    getStrokeColor: function(feature) {
-        return (feature.attributes.username) ?
-            "orange" : "black";
-    },
-    getStrokeWidth: function(feature) {
-        return (feature.attributes.username) ?
-            2 : 0.3;
-    },
-    getStrokeOpacity: function(feature) {
-        return (feature.attributes.username) ?
-            1 : 0.5;
-    },
-    getZIndex: function(feature) {
-        return (feature.attributes.username) ?
-            2 : 1;
-    },
-    getCursor: function(feature) {
-        return ((feature.attributes.checkin < 2 ||
-            !feature.attributes.checkin) &&
-            !feature.attributes.username) ? "pointer" : "auto";
+var tilesLayer = new L.GeoJSON();
+tilesLayer.on("featureparse", function (e) {
+    var color = "#999";
+    switch (e.properties.checkin) {
+        case 1:
+            color = '#FF0000';
+            break;
+        case 2:
+            color = '#00FF00';
+            break;
     }
-};
-var template = {
-    fillColor: "${getColor}",
-    fillOpacity: 0.5,
-    strokeColor: "${getStrokeColor}",
-    strokeWidth: "${getStrokeWidth}",
-    strokeOpacity: "${getStrokeOpacity}",
-    graphicZIndex: "${getZIndex}",
-    cursor: "${getCursor}"
-};
-var style = new OpenLayers.Style(template, {context: context});
-var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
-    styleMap: new OpenLayers.StyleMap(style),
-    rendererOptions: {
-        zIndexing: true
-    }
-});
-map.addLayer(tilesLayer);
-
-function showTilesStatus() {
-    var protocol = new OpenLayers.Protocol.HTTP({
-        url: tiles_status_url,
-        format: new OpenLayers.Format.JSON(),
-        callback: function(response) {
-            if (response.success()) {
-                $.each(tilesLayer.features, function(index, feature) {
-                    feature.attributes = {};
-                });
-                var total = tilesLayer.features.length,
-                    done = 0,
-                    validated = 0,
-                    cur = 0;
-                $.each(response.features, function(id, val) {
-                    var feature = tilesLayer.getFeatureByFid(id);
-                    feature.attributes = val;
-                    if (val.username == user) {
-                        var zoom = map.getZoomForExtent(feature.geometry.getBounds()),
-                            centroid = feature.geometry.getCentroid(),
-                            lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
-                        map.setCenter(lonlat, zoom - 1);
-                    }
-                    if (val.checkin == 1 || val.checkin == 2) {
-                        done++;
-                    }
-                    if (val.checkin == 2) {
-                        validated++;
-                    }
-                    if (val.username) {
-                        cur++;
-                    }
-                });
-                // FIXME, hack
-                tilesLayer.drawn = false;
-                tilesLayer.redraw();
-                $('#map_legend ul').html(function() {
-                    return '<li><div class=""></div>Total (' + total + ')</li>' +
-                           '<li><div class="checkin1"></div>Done (' + done + ')</li>' +
-                           '<li><div class="checkin2"></div>Validated (' + validated + ')</li>' +
-                           '<li><div class="checkout"></div>Curr. worked on (' + cur + ')</li>';
-                });
-            }
-        }
+    e.layer.setStyle({
+        fillColor: color,
+        weight: 0.5,
+        color: "#999",
+        opacity: 1,
+        fillOpacity: 0.4
     });
-    protocol.read();
-}
-
-var protocol = new OpenLayers.Protocol.HTTP({
-    url: job_geom,
-    format: new OpenLayers.Format.GeoJSON(),
-    callback: function(response) {
-        if (response.success()) {
-            layer.addFeatures(response.features);
-            map.zoomToExtent(layer.getDataExtent());
-        }
-    }
 });
-protocol.read();
 
-protocol = new OpenLayers.Protocol.HTTP({
-    url: tiles_url,
-    format: new OpenLayers.Format.GeoJSON(),
-    callback: function(response) {
-        if (response.success()) {
-            tilesLayer.addFeatures(response.features);
-            showTilesStatus();
-        }
-    }
-});
-protocol.read();
-
-var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
-    onSelect: function(feature) {
-        var attr = feature.attributes;
-        if (attr.checkin >=  2 || attr.username) {
-            return false;
-        }
-        if (current_tile) {
-            alert("You already have a task to work on");
-            return false;
-        }
-        var id = feature.fid.split('-');
-        $('#task').load(
-            job_url + "/task/" + id[0] + "/" + id[1] + "/take",
-            function(responseText, textStatus, request) {
-                if (textStatus == 'error') {
-                    alert(responseText);
-                } else {
-                    $('#task_tab').tab('show');
-                    showTilesStatus();
-                }
-            }
-        );
-    }
-});
-map.addControls([featureControl]);
-featureControl.activate();
-featureControl.handlers.feature.stopDown = false;
+tilesLayer.addGeoJSON(tiles);
+map.addLayer(tilesLayer);
 
 var chart_drawn = false;
 $('a[href="#chart"]').on('shown', function (e) {

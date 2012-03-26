@@ -72,12 +72,19 @@ def job(request):
 
     admin = user.is_admin() if user else False
     stats = get_stats(job)
+    tiles = []
+    for tile in job.tiles:
+        checkout = None
+        if tile.username is not None:
+            checkout = tile.update.isoformat()
+        tiles.append(Feature(geometry=tile.to_polygon(srs=4326),
+            id=str(tile.x) + '-' + str(tile.y), properties={'checkin': tile.checkin}))
     return dict(job=job, user=user, 
             bbox=loads(job.geometry).bounds,
             tile=current_task,
             prev_task=prev_task,
             admin=admin,
-            stats=stats)
+            stats=stats, tiles=dumps(FeatureCollection(tiles)))
 
 @view_config(route_name='job_geom', renderer='geojson', permission='edit')
 def job_geom(request):

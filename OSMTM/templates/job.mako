@@ -95,7 +95,7 @@
     </div>
     </div>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
+<script type="text/javascript" src="http://leaflet.cloudmade.com/dist/leaflet.js"></script>
 <script type="text/javascript">
     <%
         from pyramid.security import authenticated_userid
@@ -107,12 +107,12 @@
     var job_url = "${request.route_url('job', job=job.id)}";
     var job_geom = "${request.route_url('job_geom', job=job.id)}";
     var tiles_url = "${request.route_url('job_tiles', job=job.id)}";
+    var tiles = ${tiles|n};
     var chart_done = ${stats['chart_done']|n};
     var chart_validated = ${stats['chart_validated']|n};
     var tiles_status_url = "${request.route_url('job_tiles_status', job=job.id)}";
 </script>
 <script type="text/javascript">
-    OpenLayers.ImgPath = "${request.static_url('OSMTM:static/img/')}";
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/highcharts.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.js')}?_cdsalt=1330087595137"></script>
