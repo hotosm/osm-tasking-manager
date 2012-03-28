@@ -4,7 +4,7 @@ var map = new L.Map('map', {
 var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     osm = new L.TileLayer(osmUrl, {maxZoom: 18});
 
-map.setView(new L.LatLng(-10.25, 123.51), 10);
+map.setView(new L.LatLng(45.51, 6.43), 8);
 map.addLayer(osm);
 
 var tilesLayer = new L.GeoJSON();
