@@ -27,8 +27,11 @@ tilesLayer.on("featureparse", function (e) {
     });
 });
 
-tilesLayer.addGeoJSON(tiles);
 map.addLayer(tilesLayer);
+
+$.getJSON(tiles_url, function(data) {
+    tilesLayer.addGeoJSON(data);
+});
 
 var chart_drawn = false;
 $('a[href="#chart"]').on('shown', function (e) {

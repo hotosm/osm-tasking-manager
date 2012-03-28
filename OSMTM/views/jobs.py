@@ -103,7 +103,7 @@ def job_tiles(request):
         checkout = None
         if tile.username is not None:
             checkout = tile.update.isoformat()
-        tiles.append(Feature(geometry=tile.to_polygon(),
+        tiles.append(Feature(geometry=tile.to_polygon(srs=4326),
             id=str(tile.x) + '-' + str(tile.y)))
     return FeatureCollection(tiles)
 
