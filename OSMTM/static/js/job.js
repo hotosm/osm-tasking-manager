@@ -6,7 +6,9 @@ var map = new OpenLayers.Map('map', {
         new OpenLayers.Control.Attribution()
     ]
 });
-var osm = new OpenLayers.Layer.OSM();
+var osm = new OpenLayers.Layer.OSM('OSM', null, {
+    transitionEffect: 'resize'
+});
 map.addLayer(osm);
 var layer = new OpenLayers.Layer.Vector("Objects", {
     style: {
