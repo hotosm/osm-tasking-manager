@@ -66,6 +66,9 @@ function activateDrawControl() {
         control
     ]);
     control.activate();
+    if (!map.getCenter()) {
+        map.zoomToMaxExtent();
+    }
 }
 
 // set the zoom level to the more appropriate value
