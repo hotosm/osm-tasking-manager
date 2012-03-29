@@ -84,7 +84,8 @@
             <div class="container">
                 <p class="span6">
                 Designed and built for the 
-                <a href="http://hot.openstreetmap.org">Humanitarian OpenStreetMap Team</a>.
+                <a href="http://hot.openstreetmap.org">Humanitarian OpenStreetMap Team</a> 
+                with initial sponsorship from the Australia-Indonesia Facility for Disaster Reduction.
                 See the <a href="${request.route_url('about')}">about</a> page for complete information.<br />
                 </p>
                 <p class="pull-right">
