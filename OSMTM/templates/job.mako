@@ -95,7 +95,7 @@
     </div>
     </div>
 </div>
-<script type="text/javascript" src="http://leaflet.cloudmade.com/dist/leaflet.js"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/leaflet/dist/leaflet.js')}"></script>
 <script type="text/javascript">
     <%
         from pyramid.security import authenticated_userid

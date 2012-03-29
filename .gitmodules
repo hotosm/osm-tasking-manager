@@ -1,3 +1,6 @@
 [submodule "OSMTM/static/js/openlayers"]
 	path = OSMTM/static/js/openlayers
 	url = git://github.com/openlayers/openlayers.git
+[submodule "OSMTM/static/js/leaflet"]
+	path = OSMTM/static/js/leaflet
+	url = https://github.com/CloudMade/Leaflet.git
