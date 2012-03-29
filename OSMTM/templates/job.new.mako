@@ -36,11 +36,9 @@
                         <div class="controls">
                             <div class="inline-inputs"> 
                                 <input type="radio" name="relation_type" value="bbox"/>
-                                <span>Bounding box</span>
-                                <input type="text" class="text span2" id="bbox" name="bbox" value="" disabled/> 
+                                <span>Draw it yourself</span>
                                 <p class="help-block">
-                                    <strong>Note:</strong> You can draw a box on the map or enter it manually to define the area. 
-                                    Hold down shift to draw a bounding box across the map. 
+                                    <strong>Note:</strong> Draw an area on the map.
                                 </p>
                             </div>
                         </div>

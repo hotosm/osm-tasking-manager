@@ -36,41 +36,28 @@ function resetMap () {
         imageryLayer = null;
         showImageryLayer();
     }
-    map.zoomToMaxExtent();
 }
 
-function plotBox (bounds) {
-    var mercBounds = new OpenLayers.Bounds();
-    mercBounds.extend(bounds);
-    mercBounds.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
-    vectorLayer.removeFeatures(vectorLayer.features);
-    var geometry = mercBounds.toGeometry();
-    vectorLayer.addFeatures([new OpenLayers.Feature.Vector(geometry)]);
-    $('#geometry').val(geometry);
-    adaptZoomLevel(mercBounds);
-    $('#bbox').val(bounds);
-    updateSubmitBtnStatus();
-}
-
-function showBoundingBoxMap () {
+function activateDrawControl() {
     $('#relation_loading_msg').hide();
-    vectorLayer = new OpenLayers.Layer.Vector("BBox");
+    vectorLayer = new OpenLayers.Layer.Vector("Job Area");
     map.addLayer(vectorLayer);
-    var control = new OpenLayers.Control();
-    OpenLayers.Util.extend(control, {
-        draw: function () {
-            this.box = new OpenLayers.Handler.Box(control,
-                {"done": function(pxBounds) { 
-                    var bounds = new OpenLayers.Bounds();
-                    var pt1 = map.getLonLatFromPixel(new OpenLayers.Pixel(pxBounds.left, pxBounds.bottom))
-                        pt2 = map.getLonLatFromPixel(new OpenLayers.Pixel(pxBounds.right, pxBounds.top));
-                    bounds.extend(pt1);
-                    bounds.extend(pt2);
-                    bounds.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
-                    plotBox(bounds);
-                }},
-                {keyMask: OpenLayers.Handler.MOD_SHIFT});
-            this.box.activate();
+    var control = new OpenLayers.Control.DrawFeature(
+        vectorLayer,
+        OpenLayers.Handler.Polygon, {
+        "callbacks": {
+            point: function(feature) { 
+                vectorLayer.destroyFeatures();
+            }
+        }
+    });
+    vectorLayer.events.on({
+        featureadded: function(obj) {
+            var feature = obj.feature;
+            var format = new OpenLayers.Format.WKT();
+            $('#geometry').val(format.write(feature));
+            adaptZoomLevel(vectorLayer.getDataExtent());
+            updateSubmitBtnStatus();
         }
     });
     map.addControls([
@@ -78,23 +65,7 @@ function showBoundingBoxMap () {
         new OpenLayers.Control.Navigation(),
         control
     ]);
-    if ($('#bbox').val() != '') {
-        plotBoxFromInput();
-    }
-}
-
-function plotBoxFromInput() {
-    var coords = $('#bbox').val().split(","),
-        bbox = [];
-    for (var i = 0; i < 4; i++) {
-        bbox[i] = parseFloat(coords[i]);
-        if (coords[i] == "" || coords[i] == " " || isNaN(bbox[i])) {
-            alert("Please enter bounding box coords as: south,west,north,east");
-            return;
-        }
-    }
-    var bounds = new OpenLayers.Bounds(bbox[0],bbox[1],bbox[2],bbox[3]);
-    plotBox(bounds);
+    control.activate();
 }
 
 // set the zoom level to the more appropriate value
@@ -115,12 +86,10 @@ $('input[name=relation_type]')
         resetMap();
         if ($(this).val() == "relation") {
             $('#id_relation').attr('disabled', false);
-            $('#bbox').attr('disabled', true);
             $('#id_relation').val('');
         } else {
-            $('#bbox').attr('disabled', false);
             $('#id_relation').attr('disabled', true);
-            showBoundingBoxMap();
+            activateDrawControl();
         }
     });
 
@@ -160,14 +129,8 @@ $('#id_relation')
             });
 
             map.addLayer(vectorLayer);
-        } else if ($('#bbox').val() != '') {
-            plotBoxFromInput();
         }
     });
-
-$('#bbox')
-    .change(plotBoxFromInput);
-
 
 $('#id_imagery')
     .change(function() {
