@@ -4,7 +4,6 @@ var map = new L.Map('map', {
 var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     osm = new L.TileLayer(osmUrl, {maxZoom: 18});
 
-map.setView(new L.LatLng(45.51, 6.43), 8);
 map.addLayer(osm);
 
 var tilesLayer = new L.GeoJSON();
@@ -31,6 +30,7 @@ map.addLayer(tilesLayer);
 
 $.getJSON(tiles_url, function(data) {
     tilesLayer.addGeoJSON(data);
+    map.fitBounds(tilesLayer.getBounds());
 });
 
 var chart_drawn = false;
