@@ -7,20 +7,15 @@ var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 map.addLayer(osm);
 
 var tilesLayer = new L.GeoJSON();
+// keep a mapping between the Leaflet _layers ids and the tiles ids
+var featuresMapping = {};
 tilesLayer.on("featureparse", function (e) {
+    featuresMapping[e.id] = e.layer;
     var color = "#999";
-    switch (e.properties.checkin) {
-        case 1:
-            color = '#FF0000';
-            break;
-        case 2:
-            color = '#00FF00';
-            break;
-    }
     e.layer.setStyle({
         fillColor: color,
         weight: 0.5,
-        color: "#999",
+        color: color,
         opacity: 1,
         fillOpacity: 0.4
     });
@@ -28,10 +23,48 @@ tilesLayer.on("featureparse", function (e) {
 
 map.addLayer(tilesLayer);
 
+function showTilesStatus() {
+    $.getJSON(tiles_status_url, function(data) {
+        tilesLayer._iterateLayers(function(layer) {
+            layer.setStyle({
+                fillColor: '#999',
+                color: '#999'
+            });
+        });
+        $.each(data, function(id, feature) {
+            var layer = featuresMapping[id];
+            var color,
+                strokeColor,
+                weight;
+            if (feature.username) {
+                strokeColor = 'orange';
+                weight = 1;
+            }
+            switch (feature.checkin) {
+                case 1:
+                    color = '#FF0000';
+                    break;
+                case 2:
+                    color = '#00FF00';
+                    break;
+                default:
+                    color = '#999';
+            }
+            layer.setStyle({
+                fillColor: color,
+                color: strokeColor || '#999',
+                weight: weight || 0.5
+            });
+        });
+    });
+}
+
 $.getJSON(tiles_url, function(data) {
     tilesLayer.addGeoJSON(data);
     map.fitBounds(tilesLayer.getBounds());
+    showTilesStatus();
 });
+
 
 var chart_drawn = false;
 $('a[href="#chart"]').on('shown', function (e) {
