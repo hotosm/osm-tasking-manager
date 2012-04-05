@@ -46,6 +46,25 @@ class RootFactory(object):
     def __init__(self, request):
         pass
 
+class TileGeometry(Base):
+    __tablename__ = "tiles_geometry"
+    id = Column(Integer, primary_key=True)
+    geometry = GeometryColumn('the_geom', Polygon(srid=4326))
+
+    def __init__(self, geometry):
+        self.geometry = geometry 
+
+    def get_bounds(self):
+        return loads_wkb(str(self.geometry.geom_wkb)).bounds
+
+    @property
+    def __geo_interface__(self):
+        id = self.id
+        geometry = loads_wkb(str(self.geometry.geom_wkb))
+        return geojson.Feature(id=id, geometry=geometry)
+
+GeometryDDL(TileGeometry.__table__)
+
 class Tile(Base):
     __metaclass__ = VersionedMeta
     __tablename__ = "tiles"
@@ -57,6 +76,7 @@ class Tile(Base):
     checkin = Column(Integer)
     comment = Column(Unicode)
     geometry_id = Column(Integer, ForeignKey('tiles_geometry.id'))
+    geometry = relationship(TileGeometry, cascade="all, delete-orphan", single_parent=True)
 
     def __init__(self, x, y, zoom):
         self.x = x
@@ -74,26 +94,6 @@ class Tile(Base):
 
 TileHistory = Tile.__history_mapper__.class_
 
-
-class TileGeometry(Base):
-    __tablename__ = "tiles_geometry"
-    id = Column(Integer, primary_key=True)
-    geometry = GeometryColumn('the_geom', Polygon(srid=4326))
-    tile = relationship(Tile, backref='geometry')
-
-    def __init__(self, geometry):
-        self.geometry = geometry 
-
-    def get_bounds(self):
-        return loads_wkb(str(self.geometry.geom_wkb)).bounds
-
-    @property
-    def __geo_interface__(self):
-        id = self.id
-        geometry = loads_wkb(str(self.geometry.geom_wkb))
-        return geojson.Feature(id=id, geometry=geometry)
-
-GeometryDDL(TileGeometry.__table__)
 
 job_whitelist_table = Table('job_whitelists', Base.metadata,
     Column('job_id', Integer, ForeignKey('jobs.id')),
