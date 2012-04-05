@@ -10,6 +10,7 @@ from OSMTM.models import DBSession
 from OSMTM.models import Job
 from OSMTM.models import User
 from OSMTM.models import Tile
+from OSMTM.models import TileGeometry
 from OSMTM.models import TileHistory
 from OSMTM.models import Tag
 
@@ -90,15 +91,12 @@ def job_geom(request):
 def job_tiles(request):
     id = request.matchdict['job']
     session = DBSession()
-    job = session.query(Job).get(id)
-    tiles = []
-    for tile in job.tiles:
-        checkout = None
-        if tile.username is not None:
-            checkout = tile.update.isoformat()
-        tiles.append(Feature(geometry=loads(str(tile.geometry.geometry.geom_wkb)),
-            id=str(tile.x) + '-' + str(tile.y)))
-    return FeatureCollection(tiles)
+    tiles = session.query(Tile, TileGeometry.geometry).join(Tile.geometry).filter(Tile.job_id==id)
+    features = []
+    for tile in tiles:
+        features.append(Feature(geometry=loads(str(tile.geometry.geom_wkb)),
+            id=str(tile[0].x) + '-' + str(tile[0].y)))
+    return FeatureCollection(features)
 
 @view_config(route_name='job_tiles_status', renderer='json', permission='edit')
 def job_tiles_status(request):
