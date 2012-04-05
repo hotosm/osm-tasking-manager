@@ -104,7 +104,7 @@
         var jobZoom = ${tile.job.zoom};
         <%
             from geojson import dumps
-            feature = dumps(tile.to_polygon())
+            feature = dumps(tile.geometry)
         %>
         var current_tile = ${feature|n};
         $(function() {

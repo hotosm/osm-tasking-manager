@@ -15,6 +15,8 @@ from geojson import Feature
 from geojson import dumps
 from sqlalchemy.sql.expression import and_
 
+from shapely.wkb import loads
+
 from datetime import datetime
 import random
 
@@ -166,4 +168,4 @@ def task_export(request):
     y = request.matchdict['y']
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
-    return dict(polygon=tile.to_polygon(4326))
+    return dict(polygon=loads(str(tile.geometry.geom_wkb)))
