@@ -132,7 +132,10 @@ protocol.read();
 
 protocol = new OpenLayers.Protocol.HTTP({
     url: tiles_url,
-    format: new OpenLayers.Format.GeoJSON(),
+    format: new OpenLayers.Format.GeoJSON({
+        internalProjection: new OpenLayers.Projection('EPSG:900913'),
+        externalProjection: new OpenLayers.Projection('EPSG:4326')
+    }),
     callback: function(response) {
         if (response.success()) {
             tilesLayer.addFeatures(response.features);

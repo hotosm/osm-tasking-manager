@@ -26,11 +26,6 @@ var exportOpen = function() {
         f = format.read(current_tile)[0],
         bounds = f.geometry.getBounds();
 
-    bounds.transform(
-        new OpenLayers.Projection("EPSG:900913"), 
-        new OpenLayers.Projection("EPSG:4326")
-    );
-    
     switch (this.id) {
     case "josm":
         url = getLink({

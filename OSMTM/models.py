@@ -85,7 +85,7 @@ class Tile(Base):
         geometry = WKBSpatialElement(buffer(self.to_polygon(zoom).wkb), srid=4326)
         self.geometry = TileGeometry(geometry)
 
-    def to_polygon(self, zoom, srs=900913):
+    def to_polygon(self, zoom, srs=4326):
         # tile size (in meters) at the required zoom level
         step = max/(2**(int(zoom) - 1))
         tb = TileBuilder(step)
