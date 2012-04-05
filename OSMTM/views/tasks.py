@@ -168,4 +168,4 @@ def task_export(request):
     y = request.matchdict['y']
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
-    return dict(polygon=loads(str(tile.geometry.geom_wkb)))
+    return dict(polygon=loads(str(tile.geometry.geometry.geom_wkb)))
