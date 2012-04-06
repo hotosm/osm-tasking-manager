@@ -188,7 +188,8 @@ def job_new(request):
             request.params['zoom'],
             request.params.get('is_private', 0),
             request.params['imagery'],
-            request.params.get('requires_nextview', 0)
+            request.params.get('requires_nextview', 0),
+            request.params.get('tiled', 0)
         )
 
         session.add(job)

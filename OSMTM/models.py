@@ -146,6 +146,7 @@ class Job(Base):
     zoom = Column(Integer)
     is_private = Column(Boolean)
     requires_nextview = Column(Boolean)
+    tiled = Column(Boolean)
     tiles = relationship(Tile, backref='job', cascade="all, delete, delete-orphan")
     users = relationship(User,
                 secondary=job_whitelist_table,
@@ -155,7 +156,7 @@ class Job(Base):
     def __init__(self, title=None,
                  short_description='', description=None, workflow=None,
                  geometry=None, zoom=None, is_private=False, imagery=None,
-                 requires_nextview=False, status=1):
+                 requires_nextview=False, tiled=True, status=1):
         self.title = title
         self.status = status
         self.description = description
@@ -166,11 +167,14 @@ class Job(Base):
         self.zoom = zoom
         self.is_private = bool(is_private)
         self.requires_nextview = bool(requires_nextview)
+        self.tiled = bool(tiled)
 
+        # tiled vs. contributor-self drawn
         tiles = []
-        for i in get_tiles_in_geom(loads(geometry), int(zoom)):
-            tiles.append(Tile(i[0], i[1], zoom))
-        self.tiles = tiles
+        if bool(tiled) is not False:
+            for i in get_tiles_in_geom(loads(geometry), int(zoom)):
+                tiles.append(Tile(i[0], i[1], zoom))
+            self.tiles = tiles
 
 GeometryDDL(Job.__table__)
 

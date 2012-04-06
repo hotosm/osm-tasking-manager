@@ -116,4 +116,7 @@
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/highcharts.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.js')}?_cdsalt=1330087595137"></script>
+% if job.tiled:
+    <script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.tiled.js')}?_cdsalt=1330087595137"></script>
+% endif
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js')}?_cdsalt=1330087595137"></script>

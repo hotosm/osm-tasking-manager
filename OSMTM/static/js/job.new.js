@@ -163,6 +163,11 @@ $('#id_zoom')
         adaptZoomLevel(vectorLayer.getDataExtent());
     });
 
+$('#id_tiled')
+    .change(function() {
+        $('#zoom_group').toggle($(this).visible);
+    });
+
 $('#id_title')
     .change(function() {
         updateSubmitBtnStatus();

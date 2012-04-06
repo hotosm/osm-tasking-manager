@@ -45,6 +45,17 @@
                         <input type="hidden" id="geometry" name="geometry" value="" />
                     </div>
                     <div class="control-group">
+                        <label for="id_tiled">Tiled ?</label>
+                        <div class="controls">
+                            <input type="checkbox" id="id_tiled" name="tiled" checked="checked" />
+                            <p class="help-block">
+                                <span>
+                                    Should the area be automatically divided into small squares? Or should each user draw the are he/she wants to work on? 
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="control-group" id="zoom_group">
                         <label for="id_zoom">Zoom level</label> 
                         <div class="controls">
                             <select id="id_zoom" name="zoom">
