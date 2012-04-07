@@ -62,14 +62,14 @@ def job(request):
                        .first()
         if task is not None:
             version = task.version
-            filter = and_(TileHistory.x==task.x, TileHistory.y==task.y,
+            filter = and_(TileHistory.id==task.id,
                     TileHistory.job_id==job.id)
             task = session.query(TileHistory)\
                        .filter(filter)\
                        .order_by(TileHistory.version.desc())\
                        .first()
             if task is not None and version == task.version:
-                prev_task = session.query(Tile).get((task.x, task.y, task.job_id))
+                prev_task = session.query(Tile).get((task.id, task.job_id))
 
     admin = user.is_admin() if user else False
     stats = get_stats(job)
@@ -91,11 +91,11 @@ def job_geom(request):
 def job_tiles(request):
     id = request.matchdict['job']
     session = DBSession()
-    tiles = session.query(Tile, TileGeometry.geometry).join(Tile.geometry).filter(Tile.job_id==id)
+    tiles = session.query(Tile.id, TileGeometry.geometry).join(Tile.geometry).filter(Tile.job_id==id)
     features = []
     for tile in tiles:
         features.append(Feature(geometry=loads(str(tile.geometry.geom_wkb)),
-            id=str(tile[0].x) + '-' + str(tile[0].y)))
+            id=tile.id))
     return FeatureCollection(features)
 
 @view_config(route_name='job_tiles_status', renderer='json', permission='edit')
@@ -106,7 +106,7 @@ def job_tiles_status(request):
     tiles = {}
     for tile in job.tiles:
         if tile.username is not None or tile.checkin != 0:
-            tiles[str(tile.x) + '-' + str(tile.y)] = dict(
+            tiles[str(tile.id)] = dict(
                 checkin=tile.checkin,
                 username=tile.username)
     return tiles
@@ -239,7 +239,7 @@ def job_export(request):
     w = shapefile.Writer(shapefile.POLYGON)
     w.field('checkin', 'N', 1, 0)
     for tile in job.tiles:
-        polygon = tile.to_polygon(job.zoom, 4326)
+        polygon = tile.to_polygon(job.zoom)
         coords = polygon.exterior.coords
         parts = [[[x, y] for (x, y) in coords]]
         w.poly(parts=parts)
@@ -272,7 +272,6 @@ def get_stats(job):
     # get the users who actually did some work
     tiles_history = session.query(TileHistory) \
             .filter(TileHistory.job_id==job.id) \
-            .order_by(TileHistory.x, TileHistory.y) \
             .all()
 
     users = {}
@@ -305,7 +304,7 @@ def get_stats(job):
                 ndx == len(tiles_history) - 1:
             # compare to the current checkin value
             tile = session.query(Tile) \
-                .get((i.x, i.y, job.id))
+                .get((i.id, job.id))
             if user is not None and tile is not None:
                 status = compare_checkin(checkin, tile.checkin)
                 update_user(user, status)

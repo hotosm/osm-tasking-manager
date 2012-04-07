@@ -6,7 +6,7 @@
 % else:
         <div> 
             % if tile.username:
-            <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y)}" class="form-horizontal">
+            <form action="${request.route_url('task_done', job=tile.job_id, task=tile.id)}" class="form-horizontal">
                 <div class="well">
                     <p>1. Open the area in your favorite editing tool.</p>
                     <div class="row">
@@ -68,7 +68,7 @@
             % endif
             <p>
                 Can't work on this task right now? No problem.
-                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}" id="unlock">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
+                <a href="${request.route_url('task_unlock', job=tile.job_id, task=tile.id)}" id="unlock">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
             </p>
             </form>
             <div id="josm_export_info" class="modal hide fade" style="display:none;">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="modal-body">
                     <p>If you have JOSM already running, closing this dialog box should load data for the area of the current task,</dd>
-                    <p>Or you can manually open JOSM using the following <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}" target="_blank">.osm file.</a>
+                    <p>Or you can manually open JOSM using the following <a href="${request.route_url('task_export', job=tile.job_id, task=tile.id)}" target="_blank">.osm file.</a>
                     <span class="help-block">Right-click on the link to download the file.</span>
                     </p>
                 </div>
@@ -91,7 +91,7 @@
                 <div class="modal-body">
                     <p>
                     Please consider adding the tasks extent as a new vector file using the following url: <br />
-                    <code>${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}</code><br />
+                    <code>${request.route_url('task_export', job=tile.job_id, task=tile.id)}</code><br />
                     </p>
                     <p class="help-block">Copy the above link and close this dialog box. You'll then be redirected to Potlatch.</p>
                 </div>

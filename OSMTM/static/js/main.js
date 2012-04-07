@@ -1,7 +1,7 @@
 $().ready(function() {
     $('#flash').fadeIn().delay(2000).fadeOut(400);
-    $("a[rel=twipsy]").tooltip({
-        live: true
+    $("[rel=tooltip]").tooltip({
+        trigger: 'hover'
     });
     $("a[rel=popover]")
         .popover({

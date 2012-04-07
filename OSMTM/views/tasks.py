@@ -1,21 +1,29 @@
 from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.view import view_config
 from pyramid.url import route_url
 
+from papyrus.protocol import Protocol
+
 from OSMTM.models import DBSession
 from OSMTM.models import Tile
+from OSMTM.models import TileGeometry
 from OSMTM.models import TileHistory
 from OSMTM.models import User
 from OSMTM.models import Job
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
-from geojson import Feature
+import geojson
 from geojson import dumps
-from sqlalchemy.sql.expression import and_
+from geojson import GeoJSON
+from sqlalchemy.sql.expression import and_, not_
 
-from shapely.wkb import loads
+from shapely.wkb import loads as loads_wkb
+from shapely.geometry import asShape
+
+from geoalchemy import WKBSpatialElement
 
 from datetime import datetime
 import random
@@ -29,10 +37,9 @@ log = logging.getLogger(__file__)
         http_cache=0)
 def task(request):
     job_id = request.matchdict['job']
-    x = request.matchdict['x']
-    y = request.matchdict['y']
+    task_id = request.matchdict['task']
     session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
+    tile = session.query(Tile).get((task_id, job_id))
     if tile is None:
         return HTTPNotFound()
     username = authenticated_userid(request)
@@ -44,7 +51,7 @@ def task(request):
     if tile.update:
         time_left = (tile.update - (datetime.now() - EXPIRATION_DURATION)) \
             .seconds
-    filter = and_(TileHistory.x==x, TileHistory.y==y, TileHistory.job_id==job_id)
+    filter = and_(TileHistory.id==task_id, TileHistory.job_id==job_id)
     history = session.query(TileHistory).filter(filter).all()
     return dict(tile=tile,
             history=history,
@@ -55,10 +62,9 @@ def task(request):
 @view_config(route_name='task_done', permission='job', renderer='task.mako')
 def done(request):
     job_id = request.matchdict['job']
-    x = request.matchdict['x']
-    y = request.matchdict['y']
+    task_id = request.matchdict['task']
     session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
+    tile = session.query(Tile).get((task_id, job_id))
     tile.username = None 
     tile.update = datetime.now()
     tile.comment = request.params['comment']
@@ -77,10 +83,9 @@ def done(request):
 @view_config(route_name='task_unlock', permission='job', renderer='task.mako')
 def unlock(request):
     job_id = request.matchdict['job']
-    x = request.matchdict['x']
-    y = request.matchdict['y']
+    task_id = request.matchdict['task']
     session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
+    tile = session.query(Tile).get((task_id, job_id))
     tile.username = None 
     tile.update = datetime.now()
     session.add(tile)
@@ -102,25 +107,24 @@ def take(request):
     tiles = session.query(Tile).filter(filter).all()
     # take random tile
     if checkin is not None:
-        # get the tile the user worked on previously
-        filter = and_(TileHistory.username==username, TileHistory.job_id==job_id)
-        p = session.query(TileHistory).filter(filter).order_by(TileHistory.update.desc()).limit(4).all()
+        ## get the tile the user worked on previously
+        #filter = and_(TileHistory.username==username, TileHistory.job_id==job_id)
+        #p = session.query(TileHistory).filter(filter).order_by(TileHistory.update.desc()).limit(4).all()
         tile = None
-        if p is not None and len(p) > 0:
-            p = p[len(p) -1]
-            neighbours = [
-                (p.x - 1, p.y - 1), (p.x - 1, p.y), (p.x - 1, p.y + 1),
-                (p.x, p.y - 1), (p.x, p.y + 1),
-                (p.x + 1, p.y - 1), (p.x + 1, p.y), (p.x + 1, p.y + 1)]
-            for t in tiles:
-                if (t.x, t.y) in neighbours:
-                    tile = t
-                    break
+        #if p is not None and len(p) > 0:
+            #p = p[len(p) -1]
+            #neighbours = [
+                #(p.x - 1, p.y - 1), (p.x - 1, p.y), (p.x - 1, p.y + 1),
+                #(p.x, p.y - 1), (p.x, p.y + 1),
+                #(p.x + 1, p.y - 1), (p.x + 1, p.y), (p.x + 1, p.y + 1)]
+            #for t in tiles:
+                #if (t.x, t.y) in neighbours:
+                    #tile = t
+                    #break
     # x / y given, selecting the tile
     else:
-        tilex = request.matchdict['x']
-        tiley = request.matchdict['y']
-        tile = session.query(Tile).get((tilex, tiley, job_id))
+        task_id = request.matchdict['task']
+        tile = session.query(Tile).get((task_id, job_id))
 
         # task is already checked out by someone else
         if tile.username is not None and tile.user != user:
@@ -144,7 +148,7 @@ def take(request):
         tile.username = username
         tile.update = datetime.now()
         session.add(tile)
-        return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
+        return HTTPFound(location=request.route_url('task', job=job_id, task=tile.id))
     except:
         if int(checkin) == 1:
             msg = 'Sorry. No task available to validate.'
@@ -161,11 +165,40 @@ def take_random(request):
 def take_tile(request):
     return take(request)
 
+protocol = Protocol(DBSession, Tile, 'geometry')
+
+@view_config(route_name='task_create', permission='job', renderer="json")
+def task_create(request):
+    session = DBSession()
+    job_id = request.matchdict['job']
+    job = session.query(Job).get(job_id)
+
+    jobShape = asShape(job.__geo_interface__.geometry)
+    collection = geojson.loads(request.body, object_hook=GeoJSON.to_instance)
+    newShape = asShape(collection.features[0].geometry)
+
+    # the shape is not fully contained in the job's shape
+    if jobShape.intersects(newShape) and not jobShape.contains(newShape):
+        newShape = jobShape.intersection(newShape)
+
+    # check if area intersects an already existing area
+    geom = WKBSpatialElement(buffer(newShape.wkb), srid=900913)
+    filter = not_(TileGeometry.geometry.touches(geom))
+    filter = and_(filter, TileGeometry.geometry.intersects(geom))
+    filter = and_(filter, TileGeometry.id==Tile.id, Tile.job_id==job_id)
+    if DBSession.query(Tile).filter(filter).count() > 0:
+        return HTTPBadRequest('The specified area overlays an already defined area')
+
+    tile = Tile(WKBSpatialElement(buffer(newShape.wkb), srid=900913))
+    tile.job_id = job.id
+    session.add(tile)
+    session.flush()
+    return dict({'id': tile.id})
+
 @view_config(route_name="task_export", renderer="task.osm.mako")
 def task_export(request):
     job_id = request.matchdict['job']
-    x = request.matchdict['x']
-    y = request.matchdict['y']
+    task_id = request.matchdict['task']
     session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
-    return dict(polygon=loads(str(tile.geometry.geometry.geom_wkb)))
+    tile = session.query(Tile).get((task_id, job_id))
+    return dict(polygon=loads_wkb(str(tile.geometry.geometry.geom_wkb)))

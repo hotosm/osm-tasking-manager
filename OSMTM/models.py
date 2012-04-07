@@ -16,7 +16,7 @@ from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 
-from geoalchemy import GeometryColumn, Polygon, MultiPolygon, GeometryDDL, WKBSpatialElement
+from geoalchemy import GeometryColumn, Polygon, MultiPolygon, GeometryDDL, WKBSpatialElement, WKTSpatialElement
 
 from zope.sqlalchemy import ZopeTransactionExtension
 
@@ -49,7 +49,7 @@ class RootFactory(object):
 class TileGeometry(Base):
     __tablename__ = "tiles_geometry"
     id = Column(Integer, primary_key=True)
-    geometry = GeometryColumn('the_geom', Polygon(srid=4326))
+    geometry = GeometryColumn('the_geom', Polygon(srid=900913))
 
     def __init__(self, geometry):
         self.geometry = geometry 
@@ -68,29 +68,24 @@ GeometryDDL(TileGeometry.__table__)
 class Tile(Base):
     __metaclass__ = VersionedMeta
     __tablename__ = "tiles"
-    x = Column(Integer, primary_key=True)
-    y = Column(Integer, primary_key=True)
+    id = Column(Integer, ForeignKey('tiles_geometry.id'), primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
     username = Column(Unicode, ForeignKey('users.username'))
     update = Column(DateTime)
     checkin = Column(Integer)
     comment = Column(Unicode)
-    geometry_id = Column(Integer, ForeignKey('tiles_geometry.id'))
     geometry = relationship(TileGeometry, cascade="all, delete-orphan", single_parent=True)
 
-    def __init__(self, x, y, zoom):
-        self.x = x
-        self.y = y
+    def __init__(self, geometry):
         self.checkin = 0
-        geometry = WKBSpatialElement(buffer(self.to_polygon(zoom).wkb), srid=4326)
         self.geometry = TileGeometry(geometry)
 
-    def to_polygon(self, zoom, srs=4326):
-        # tile size (in meters) at the required zoom level
-        step = max/(2**(int(zoom) - 1))
-        tb = TileBuilder(step)
-        (xmin, ymin, xmax, ymax) = tb.create_square(self.x, self.y, srs)
-        return shapely.geometry.Polygon(((xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax), (xmin, ymin)))
+def to_polygon(x, y, zoom):
+    # tile size (in meters) at the required zoom level
+    step = max/(2**(int(zoom) - 1))
+    tb = TileBuilder(step)
+    (xmin, ymin, xmax, ymax) = tb.create_square(x, y)
+    return shapely.geometry.Polygon(((xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax), (xmin, ymin)))
 
 TileHistory = Tile.__history_mapper__.class_
 
@@ -140,7 +135,7 @@ class Job(Base):
     status = Column(Integer)
     description = Column(Unicode)
     short_description = Column(Unicode)
-    geometry = GeometryColumn('the_geom', MultiPolygon(srid=4326))
+    geometry = GeometryColumn('the_geom', MultiPolygon(srid=900913))
     workflow = Column(Unicode)
     imagery = Column(Unicode)
     zoom = Column(Integer)
@@ -161,7 +156,7 @@ class Job(Base):
         self.status = status
         self.description = description
         self.short_description = short_description
-        self.geometry = geometry
+        self.geometry = WKTSpatialElement(geometry, srid=900913)
         self.workflow = workflow
         self.imagery = imagery
         self.zoom = zoom
@@ -173,8 +168,16 @@ class Job(Base):
         tiles = []
         if bool(tiled) is not False:
             for i in get_tiles_in_geom(loads(geometry), int(zoom)):
-                tiles.append(Tile(i[0], i[1], zoom))
+                square = WKBSpatialElement(buffer(to_polygon(i[0], i[1], zoom).wkb), srid=900913)
+                print to_polygon(i[0], i[1], zoom) 
+                tiles.append(Tile(square))
             self.tiles = tiles
+
+    @property
+    def __geo_interface__(self):
+        id = self.id
+        geometry = loads_wkb(str(self.geometry.geom_wkb))
+        return geojson.Feature(id=id, geometry=geometry)
 
 GeometryDDL(Job.__table__)
 

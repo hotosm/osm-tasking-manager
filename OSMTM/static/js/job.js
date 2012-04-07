@@ -4,7 +4,8 @@ var map = new OpenLayers.Map('map', {
         new OpenLayers.Control.Navigation(),
         new OpenLayers.Control.ZoomPanel(),
         new OpenLayers.Control.Attribution()
-    ]
+    ],
+    projection: 'EPSG:900913'
 });
 var osm = new OpenLayers.Layer.OSM('OSM', null, {
     transitionEffect: 'resize'
@@ -19,7 +20,6 @@ var layer = new OpenLayers.Layer.Vector("Objects", {
         fillColor: "lightblue",
         pointRadius: 6
     },
-    projection: new OpenLayers.Projection("EPSG:4326"),
     displayInLayerSwitcher: false
 });
 
@@ -63,10 +63,21 @@ var template = {
     cursor: "${getCursor}"
 };
 var style = new OpenLayers.Style(template, {context: context});
+var geojsonFormat = new OpenLayers.Format.GeoJSON({});
 var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
+    strategies: [new OpenLayers.Strategy.Fixed()],
+    protocol: new OpenLayers.Protocol.HTTP({
+        url: tiles_url,
+        format: geojsonFormat
+    }),
     styleMap: new OpenLayers.StyleMap(style),
     rendererOptions: {
         zIndexing: true
+    }
+});
+tilesLayer.events.on({
+    'loadend': function() {
+        showTilesStatus();
     }
 });
 map.addLayer(tilesLayer);
@@ -120,7 +131,7 @@ function showTilesStatus() {
 
 var protocol = new OpenLayers.Protocol.HTTP({
     url: job_geom,
-    format: new OpenLayers.Format.GeoJSON(),
+    format: geojsonFormat,
     callback: function(response) {
         if (response.success()) {
             layer.addFeatures(response.features);
@@ -130,20 +141,6 @@ var protocol = new OpenLayers.Protocol.HTTP({
 });
 protocol.read();
 
-protocol = new OpenLayers.Protocol.HTTP({
-    url: tiles_url,
-    format: new OpenLayers.Format.GeoJSON({
-        internalProjection: new OpenLayers.Projection('EPSG:900913'),
-        externalProjection: new OpenLayers.Projection('EPSG:4326')
-    }),
-    callback: function(response) {
-        if (response.success()) {
-            tilesLayer.addFeatures(response.features);
-            showTilesStatus();
-        }
-    }
-});
-protocol.read();
 
 var chart_drawn = false;
 $('a[href="#chart"]').on('shown', function (e) {
@@ -264,6 +261,20 @@ $('#unlock').live('click', takeOrUnlock);
 $('#validate').live('click', takeOrUnlock);
 $('#take_again').live('click', takeOrUnlock);
 
+function take(id) {
+    $('#task').load(
+        job_url + "/task/" + id + "/take",
+        function(responseText, textStatus, request) {
+            if (textStatus == 'error') {
+                alert(responseText);
+            } else {
+                $('#task_tab').tab('show');
+                showTilesStatus();
+            }
+        }
+    );
+}
+
 var task_time_left;
 $(function(){
     var countdown = setInterval(function(){
@@ -274,3 +285,20 @@ $(function(){
         task_time_left--;
     }, 1000);
 });
+
+var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
+    onSelect: function(feature) {
+        var attr = feature.attributes;
+        if (attr.checkin >=  2 || attr.username) {
+            return false;
+        }
+        if (current_tile) {
+            alert("You already have a task to work on");
+            return false;
+        }
+        take(feature.fid);
+    }
+});
+map.addControls([featureControl]);
+featureControl.activate();
+featureControl.handlers.feature.stopDown = false;
