@@ -28,4 +28,7 @@
     if (countdown) {
         clearInterval(countdown);
     }
+    $("#task [rel=tooltip]").tooltip({
+        trigger: 'hover'
+    });
 </script>
