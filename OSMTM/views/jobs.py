@@ -14,7 +14,7 @@ from OSMTM.models import TileGeometry
 from OSMTM.models import TileHistory
 from OSMTM.models import Tag
 
-from OSMTM.views.views import EXPIRATION_DURATION, checkTask
+from OSMTM.views.views import checkTask
 
 from shapely.wkb import loads
 

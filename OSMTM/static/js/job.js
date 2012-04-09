@@ -251,7 +251,11 @@ function takeOrUnlock(e) {
             if (textStatus == 'error') {
                 alert(responseText);
             } else {
-                showTilesStatus();
+                if (typeof prev_task == 'undefined') {
+                    tilesLayer.refresh();
+                } else {
+                    showTilesStatus();
+                }
             }
         }
     );

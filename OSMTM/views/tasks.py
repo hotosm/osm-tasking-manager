@@ -13,7 +13,7 @@ from OSMTM.models import TileHistory
 from OSMTM.models import User
 from OSMTM.models import Job
 
-from OSMTM.views.views import EXPIRATION_DURATION, checkTask
+from OSMTM.views.views import EXPIRATION_DURATION
 
 import geojson
 from geojson import dumps
@@ -88,7 +88,11 @@ def unlock(request):
     tile = session.query(Tile).get((task_id, job_id))
     tile.username = None 
     tile.update = datetime.now()
-    session.add(tile)
+    if (tile.job.tiled):
+        session.add(tile)
+    else:
+        session.delete(tile)
+        session.flush()
     return dict(job=tile.job,
                 prev_task=tile)
 

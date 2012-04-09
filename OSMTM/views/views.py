@@ -186,4 +186,8 @@ def checkTask(tile):
         if datetime.now() > tile.update + EXPIRATION_DURATION:
             tile.username = None 
             tile.update = datetime.now()
-            session.add(tile)
+            if (tile.job.tiled):
+                session.add(tile)
+            else:
+                session.delete(tile)
+                session.flush()
