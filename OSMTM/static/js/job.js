@@ -275,17 +275,6 @@ function take(id) {
     );
 }
 
-var task_time_left;
-$(function(){
-    var countdown = setInterval(function(){
-        $("span#countdown").html(Math.floor(task_time_left/60));
-        if (task_time_left === -10) {
-            window.location = window.location;
-        }
-        task_time_left--;
-    }, 1000);
-});
-
 var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
     onSelect: function(feature) {
         var attr = feature.attributes;

@@ -101,6 +101,16 @@
 
     <script type="text/javascript">
         var task_time_left = ${time_left};
+        var countdown;
+        $(function(){
+            countdown = setInterval(function(){
+                $("span#countdown").html(Math.floor(task_time_left/60));
+                if (task_time_left === -10) {
+                    window.location = window.location;
+                }
+                task_time_left--;
+            }, 1000);
+        });
         var jobZoom = ${tile.job.zoom};
         <%
             from geojson import dumps
