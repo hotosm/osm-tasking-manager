@@ -108,6 +108,9 @@ def home(request):
     user = session.query(User).get(username)
     jobs = session.query(Job).order_by(desc(Job.id))
     tag = request.params.get('tag')
+    if user is None:
+        redirect = request.params.get("redirect", request.route_url("logout")) 
+        return HTTPFound(location=redirect)
     if tag is not None:
         jobs = jobs.filter(Job.tags.any(tag=tag))
     if not user.is_admin():
