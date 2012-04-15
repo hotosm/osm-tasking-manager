@@ -35,6 +35,9 @@ Previously, you may need to install some packages::
 
     sudo apt-get install build-essential protobuf-compiler libprotobuf-dev libgeos-dev python-dev
 
+Edit the development.ini file and change the ``admin_user`` variable to match
+your OSM username. 
+
 Run OSMTM
 ---------
 

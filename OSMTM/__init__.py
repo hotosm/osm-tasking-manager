@@ -13,7 +13,8 @@ def main(global_config, **settings):
 
     settings['mako.directories'] = 'OSMTM:templates'
     engine = engine_from_config(settings, 'sqlalchemy.')
-    initialize_sql(engine)
+    admin_user = settings['admin_user']
+    initialize_sql(engine, admin_user)
     authn_policy = AuthTktAuthenticationPolicy(
             secret='super_secret', callback=group_membership)
     authz_policy = ACLAuthorizationPolicy()
