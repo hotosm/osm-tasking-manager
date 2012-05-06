@@ -35,7 +35,10 @@
                         </div>
                     </div>
                     <div class="input">
-                        <input type="submit" class="btn btn-primary" value="Mark task as done"/>
+                        <input type="submit" class="btn btn-primary" value="Mark task as done"/>  
+                        <button type="submit" value="Mark task as done, and take another" name="another" class="btn btn-primary">
+                        	Mark task as done, and take another
+                        </button>
                     </div>
                 </div>
             % else:

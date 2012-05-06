@@ -70,6 +70,9 @@ def done(request):
         #task is done
         tile.checkin = 1
     session.add(tile)
+    if 'another' in request.params:
+        return HTTPFound(location=request.route_url('task_take_random', job=job_id, checkin=0))
+    
     return dict(job=tile.job)
 
 @view_config(route_name='task_unlock', permission='job', renderer='task.mako')
