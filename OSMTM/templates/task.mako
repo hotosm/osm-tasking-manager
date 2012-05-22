@@ -13,11 +13,14 @@
                         <div class="span1">&nbsp;</div>
                         <div class="span4">
                             <div id="export">
-                                <a class="btn btn-small btn-info" data-toggle="modal" href="#josm_export_info" id="josm">JOSM</a>
+                                <a class="btn btn-small btn-info" data-toggle="modal" href="#josm_export_info" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
                                 <a class="btn btn-small btn-info" data-toggle="modal" href="#potlatch2_export_info" id="potlatch2">Potlatch 2</a>
                                 <a class="btn btn-small btn-info" href="javascript:void(0);" id="wp">Walking Papers</a>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        <p><a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to download the file.">.osm file</a>
                     </div>
                 </div>
             % if tile.checkin == 0:
@@ -77,7 +80,7 @@
                     <h3>Using JOSM?</h3>
                 </div>
                 <div class="modal-body">
-                    <p>If you have JOSM already running, closing this dialog box should load data for the area of the current task,</dd>
+                    <p></dd>
                     <p>Or you can manually open JOSM using the following <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}" target="_blank">.osm file.</a>
                     <span class="help-block">Right-click on the link to download the file.</span>
                     </p>
@@ -112,3 +115,6 @@
         });
     </script>
 % endif
+<script type="text/javascript">
+    $("[rel=tooltip]").tooltip();
+</script>
