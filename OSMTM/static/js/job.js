@@ -153,6 +153,7 @@ var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
             return false;
         }
         var id = feature.fid.split('-');
+        hideTooltips();
         $('#task').load(
             job_url + "/task/" + id[0] + "/" + id[1] + "/take",
             function(responseText, textStatus, request) {
@@ -247,6 +248,7 @@ $('form').live('submit', function(e) {
     var formData = $(this).serializeObject();
     var submitName = $("button[type=submit][clicked=true]").attr("name");
     formData[submitName] = true;
+    hideTooltips();
     $('#task').load(this.action, formData, function(responseText) {
         showTilesStatus();
     });
@@ -274,6 +276,7 @@ $.fn.serializeObject = function()
 };
 
 function takeOrUnlock(e) {
+    hideTooltips();
     $('#task').load(this.href, '',
         function(responseText, textStatus, request) {
             if (textStatus == 'error') {
@@ -288,6 +291,11 @@ function takeOrUnlock(e) {
 $('#unlock').live('click', takeOrUnlock);
 $('#validate').live('click', takeOrUnlock);
 $('#take_again').live('click', takeOrUnlock);
+
+function hideTooltips() {
+    $('[rel=tooltip]').tooltip('hide');
+    console.log("hey");
+}
 
 var task_time_left;
 $(function(){
