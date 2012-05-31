@@ -13,14 +13,16 @@
                         <div class="span1">&nbsp;</div>
                         <div class="span4">
                             <div id="export">
-                                <a class="btn btn-small btn-info" data-toggle="modal" href="#josm_export_info" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
-                                <a class="btn btn-small btn-info" data-toggle="modal" href="#potlatch2_export_info" id="potlatch2">Potlatch 2</a>
+                                <a class="btn btn-small btn-info" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
+                                <a class="btn btn-small btn-info" id="potlatch2">Potlatch 2</a>
                                 <a class="btn btn-small btn-info" href="javascript:void(0);" id="wp">Walking Papers</a>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <p><a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to download the file.">.osm file</a>
+                        <div class="span5">
+                            <p>Link to <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch)."> .osm</a> file.
+                        </div>
                     </div>
                 </div>
             % if tile.checkin == 0:
@@ -74,31 +76,6 @@
                 <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y)}" id="unlock">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
             </p>
             </form>
-            <div id="josm_export_info" class="modal hide fade" style="display:none;">
-                <div class="modal-header">
-                    <a href="#" class="close" data-dismiss="modal">&times;</a>
-                    <h3>Using JOSM?</h3>
-                </div>
-                <div class="modal-body">
-                    <p></dd>
-                    <p>Or you can manually open JOSM using the following <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}" target="_blank">.osm file.</a>
-                    <span class="help-block">Right-click on the link to download the file.</span>
-                    </p>
-                </div>
-            </div>
-            <div id="potlatch2_export_info" class="modal hide fade" style="display:none;">
-                <div class="modal-header">
-                    <a href="#" class="close" data-dismiss="modal">&times;</a>
-                    <h3>Using Potlatch2?</h3>
-                </div>
-                <div class="modal-body">
-                    <p>
-                    Please consider adding the tasks extent as a new vector file using the following url: <br />
-                    <code>${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y)}</code><br />
-                    </p>
-                    <p class="help-block">Copy the above link and close this dialog box. You'll then be redirected to Potlatch.</p>
-                </div>
-            </div>
             % endif
         </div>
 

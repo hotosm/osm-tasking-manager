@@ -38,11 +38,8 @@ var exportOpen = function() {
             bounds: bounds,
             protocol: 'lbrt'
         });
-        $('#josm_export_info')
-            .on('hide', function() {
-                var w = window.open(url);
-                window.setTimeout(function(){w.close();}, 500);
-            });
+        var w = window.open(url);
+        window.setTimeout(function(){w.close();}, 500);
         break;
     case "potlatch2":
         url = getLink({
@@ -51,10 +48,7 @@ var exportOpen = function() {
             zoom: jobZoom,
             protocol: 'llz'
         });
-        $('#potlatch2_export_info')
-            .on('hide', function() {
-                window.open(url);
-            });
+        window.open(url);
         break;
     case "wp":
         url = getLink({
