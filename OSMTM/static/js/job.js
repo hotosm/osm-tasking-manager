@@ -294,7 +294,6 @@ $('#take_again').live('click', takeOrUnlock);
 
 function hideTooltips() {
     $('[rel=tooltip]').tooltip('hide');
-    console.log("hey");
 }
 
 var task_time_left;
