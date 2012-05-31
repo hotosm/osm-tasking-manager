@@ -1,10 +1,10 @@
 % if job.imagery:
 % if job.requires_nextview:
 <p>Access to this imagery is limited by the
-<a href="${request.route_url('nextview')}?redirect=${request.current_route_url()}">NextView license agreement</a>.
+<a href="${request.route_url('nextview')}?redirect=${request.route_url('job', job=job.id)}">NextView license agreement</a>.
 % if not user.accepted_nextview:
 You may
-<a href="${request.route_url('nextview')}?redirect=${request.current_route_url()}">review and acknowledge</a>
+<a href="${request.route_url('nextview')}?redirect=${request.route_url('job', job=job.id)}">review and acknowledge</a>
 the agreement, if you like.
 % endif
 </p>
