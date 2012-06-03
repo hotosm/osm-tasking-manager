@@ -6,14 +6,6 @@
 @c-link: #417F90;
 
 // Mixins
-.border-radius(@radius: 5px) {
-    -webkit-background-clip: padding-box;
-    -webkit-border-radius: @radius;
-    -moz-background-clip: padding-box;
-    -moz-border-radius: @radius;
-    border-radius: @radius;
-    background-clip: padding-box;
-}
 .box-shadow(@horizontal: 0px, @vertical: 1px, @blur: 2px, @color: #CCC) {
   -webkit-box-shadow: @horizontal @vertical @blur @color;
   -moz-box-shadow: @horizontal @vertical @blur @color;
@@ -98,6 +90,7 @@ html, body {
     padding: 5px;
     border: 1px solid #999;
     .border-radius(5px);
+    background-clip: padding-box;
     .box-shadow(0, 0, 5px, rgba(0, 0, 0, 0.5));
     text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.7);
     display: none;
