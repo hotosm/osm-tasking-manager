@@ -124,6 +124,11 @@ def job_edit(request):
         job.short_description = request.params['short_description']
         job.description = request.params['description']
         job.workflow = request.params['workflow']
+        josm_preset = request.params['josm_preset']
+        josm_preset = josm_preset.value.decode('UTF-8') if josm_preset is not None else ''
+        job.josm_preset = josm_preset 
+        job.is_private = request.params.get('is_private', 0)
+        job.requires_nextview = request.params.get('requires_nextview', 0)
 
         session.add(job)
         return HTTPFound(location = route_url('job', request, job=job.id))
@@ -181,23 +186,16 @@ def job_delete(request):
 def job_new(request):
     if 'form.submitted' in request.params:
         session = DBSession()
-        josm_preset = request.params['josm_preset']
         job = Job(
             request.params['title'],
-            request.params['short_description'],
-            request.params['description'],
-            request.params['workflow'],
             request.params['geometry'],
             request.params['zoom'],
-            josm_preset.value.decode('UTF-8') if josm_preset is not None else '',
-            request.params.get('is_private', 0),
-            request.params['imagery'],
-            request.params.get('requires_nextview', 0)
+            request.params['imagery']
         )
 
         session.add(job)
         session.flush()
-        return HTTPFound(location = route_url('job', request, job=job.id))
+        return HTTPFound(location = route_url('job_edit', request, job=job.id))
     return {} 
 
 @view_config(route_name='job_users', renderer='job.users.mako', permission='admin')

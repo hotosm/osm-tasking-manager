@@ -4,7 +4,7 @@
 
 <div class="container">
     <h1>New Job</h1>
-    <form method="post" action="" class="form-horizontal" enctype="multipart/form-data">
+    <form method="post" action="" class="form-horizontal">
         <div class="control-group">
             <label for="id_title">Title</label> 
             <div class="controls"> 
@@ -76,66 +76,6 @@
                 <div class="span6">
                     <div id="map">
                     </div>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>Job's description</legend>
-            <div class="row flat">
-                <div class="col span6">
-                    <label for="id_short_description">Short Description</label>
-                    <textarea class="text span6" id="id_short_description" name="short_description"></textarea>
-                    <span class="help-block">
-                        <strong>Note:</strong> You can use markdown markup.
-                    </span>
-                </div>
-                <div class="col span6">
-                    <div id="id_short_description_preview"></div>
-                </div>
-            </div>
-            <div class="row flat">
-                <div class="col span6">
-                    <label for="id_description">Description</label>
-                    <textarea class="text span6" id="id_description" name="description"></textarea>
-                    <span class="help-block">
-                        <strong>Note:</strong> You can use markdown markup.
-                    </span>
-                </div>
-                <div class="col span6">
-                    <div id="id_description_preview"></div>
-                </div>
-            </div>
-            <div class="row flat">
-                <div class="col span6">
-                    <label for="id_workflow">Workflow</label>
-                    <textarea class="text span6" id="id_workflow" name="workflow"></textarea>
-                    <span class="help-block">
-                        <strong>Note:</strong> You can use markdown markup.
-                    </span>
-                </div>
-                <div class="col span6">
-                    <div id="id_workflow_preview"></div>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend>Advanced options</legend>
-            <div class="control-group">
-                <label for="id_josm_preset">JOSM Preset</label>
-                <div class="controls">
-                    <input type="file" id="id_josm_preset" name="josm_preset" accept="application/x- josm-preset" />
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="id_requires_nextview">Requires NextView?</label>
-                <div class="controls">
-                    <input type="checkbox" id="id_requires_nextview" name="requires_nextview" value="1" />
-                </div>
-            </div>
-            <div class="control-group">
-                <label for="id_is_private">Is private?</label>
-                <div class="controls">
-                    <input type="checkbox" id="id_is_private" name="is_private" value="1" />
                 </div>
             </div>
         </fieldset>

@@ -4,7 +4,7 @@
 
 <div class="container">
     <h1>Edit Job</h1>
-    <form method="post" action="" class="form-horizontal">
+    <form method="post" action="" class="form-horizontal" enctype="multipart/form-data">
         <div class="control-group">
             <label for="id_title">Title</label>
             <div class="controls">
@@ -71,6 +71,27 @@
                 <span id="workflow_preview"></span>
             </div>
         </div>
+        <fieldset>
+            <legend>Advanced options</legend>
+            <div class="control-group">
+                <label for="id_josm_preset">JOSM Preset</label>
+                <div class="controls">
+                    <input type="file" id="id_josm_preset" name="josm_preset" accept="application/x-josm-preset" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="id_requires_nextview">Requires NextView?</label>
+                <div class="controls">
+                    <input type="checkbox" id="id_requires_nextview" name="requires_nextview" value="1" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label for="id_is_private">Is private?</label>
+                <div class="controls">
+                    <input type="checkbox" id="id_is_private" name="is_private" value="1" />
+                </div>
+            </div>
+        </fieldset>
         <div class="form-actions">
             <input type="submit" class="btn btn-primary" value="Save the modifications" id="id_submit" name="form.submitted"/>
         </div>
