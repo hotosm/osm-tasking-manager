@@ -189,8 +189,7 @@ def job_new(request):
         job = Job(
             request.params['title'],
             request.params['geometry'],
-            request.params['zoom'],
-            request.params['imagery']
+            request.params['zoom']
         )
 
         session.add(job)

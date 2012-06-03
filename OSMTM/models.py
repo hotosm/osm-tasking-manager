@@ -124,9 +124,9 @@ class Job(Base):
     tags = relationship(Tag, secondary=job_tags_table, backref='tags')
 
     def __init__(self, title=None,
-                 geometry=None, zoom=None, status=1):
+                 geometry=None, zoom=None):
         self.title = title
-        self.status = status
+        self.status = 1
         self.geometry = geometry
         self.zoom = zoom
         self.short_description = u''
