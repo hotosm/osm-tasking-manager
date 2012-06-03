@@ -114,6 +114,7 @@ class Job(Base):
     workflow = Column(Unicode)
     imagery = Column(Unicode)
     zoom = Column(Integer)
+    josm_preset = Column(Unicode)
     is_private = Column(Boolean)
     requires_nextview = Column(Boolean)
     tiles = relationship(Tile, backref='job', cascade="all, delete, delete-orphan")
@@ -124,7 +125,8 @@ class Job(Base):
 
     def __init__(self, title=None,
                  short_description='', description=None, workflow=None,
-                 geometry=None, zoom=None, is_private=False, imagery=None,
+                 geometry=None, zoom=None, josm_preset=None,
+                 is_private=False, imagery=None,
                  requires_nextview=False, status=1):
         self.title = title
         self.status = status
@@ -134,6 +136,7 @@ class Job(Base):
         self.workflow = workflow
         self.imagery = imagery
         self.zoom = zoom
+        self.josm_preset = josm_preset
         self.is_private = is_private
         self.requires_nextview = requires_nextview
 

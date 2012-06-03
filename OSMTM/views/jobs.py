@@ -181,6 +181,7 @@ def job_delete(request):
 def job_new(request):
     if 'form.submitted' in request.params:
         session = DBSession()
+        josm_preset = request.params['josm_preset']
         job = Job(
             request.params['title'],
             request.params['short_description'],
@@ -188,6 +189,7 @@ def job_new(request):
             request.params['workflow'],
             request.params['geometry'],
             request.params['zoom'],
+            josm_preset.value.decode('UTF-8') if josm_preset is not None else '',
             request.params.get('is_private', 0),
             request.params['imagery'],
             request.params.get('requires_nextview', 0)
@@ -255,6 +257,17 @@ def job_export(request):
     myzip.close()
     content_disposition = 'attachment; filename=export.zip'
     return request.get_response(FileApp('/tmp/tiles.zip', **{"Content-Disposition":content_disposition}))
+
+@view_config(route_name='job_preset', permission='admin')
+def job_export(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+    response = Response()
+    response.text = job.josm_preset
+    response.content_disposition = 'attachment; filename=hotosm_tasking_manager_job_%s.xml' % job.id
+    response.content_type = 'application/x-josm-preset'
+    return response
 
 class StatUser():
     done = 0

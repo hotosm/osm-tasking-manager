@@ -28,6 +28,9 @@
                 % if job.imagery:
                 <%include file="imagery.mako" />
                 % endif
+                % if job.josm_preset:
+                Using JOSM? Don't hesitate to use the dedicated <a href="${request.route_url('job_preset', job=job.id)}">preset</a>.
+                % endif
             </div>
             <div class="tab-pane" id="task">
                 % if tile is not None:

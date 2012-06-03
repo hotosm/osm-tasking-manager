@@ -4,7 +4,7 @@
 
 <div class="container">
     <h1>New Job</h1>
-    <form method="post" action="" class="form-horizontal">
+    <form method="post" action="" class="form-horizontal" enctype="multipart/form-data">
         <div class="control-group">
             <label for="id_title">Title</label> 
             <div class="controls"> 
@@ -120,6 +120,12 @@
         </fieldset>
         <fieldset>
             <legend>Advanced options</legend>
+            <div class="control-group">
+                <label for="id_josm_preset">JOSM Preset</label>
+                <div class="controls">
+                    <input type="file" id="id_josm_preset" name="josm_preset" accept="application/x- josm-preset" />
+                </div>
+            </div>
             <div class="control-group">
                 <label for="id_requires_nextview">Requires NextView?</label>
                 <div class="controls">
