@@ -125,10 +125,10 @@ def job_edit(request):
         job.description = request.params['description']
         job.workflow = request.params['workflow']
         josm_preset = request.params['josm_preset']
-        josm_preset = josm_preset.value.decode('UTF-8') if josm_preset is not None else ''
+        josm_preset = josm_preset.value.decode('UTF-8') if josm_preset != '' else ''
         job.josm_preset = josm_preset 
-        job.is_private = request.params.get('is_private', 0)
-        job.requires_nextview = request.params.get('requires_nextview', 0)
+        job.is_private = request.params.get('is_private') == 'on'
+        job.requires_nextview = request.params.get('requires_nextview') == 'on'
 
         session.add(job)
         return HTTPFound(location = route_url('job', request, job=job.id))
