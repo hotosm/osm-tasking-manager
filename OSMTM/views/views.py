@@ -18,6 +18,8 @@ from pyramid.security import remember, forget, authenticated_userid
 from datetime import datetime, timedelta
 from sqlalchemy import desc
 
+from OSMTM.resources import main
+
 import logging
 log = logging.getLogger(__file__)
 

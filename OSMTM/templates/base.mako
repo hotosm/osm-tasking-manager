@@ -1,3 +1,7 @@
+<%
+    from OSMTM.resources import main
+    main.need()
+%>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -5,20 +9,6 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
         <meta name="keywords" content="HOT task server" />
         <meta name="description" content="HOT task server" />
-        <link rel="stylesheet"
-              href="${request.static_url('OSMTM:static/css/reset.css')}"
-              text="text/css" media="screen" />
-        <link rel="stylesheet"
-              href="${request.static_url('OSMTM:static/css/map.css')}"
-              text="text/css" media="screen" />
-        <link rel="stylesheet/less"
-              href="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/less/bootstrap.less')}"
-              media="all" />
-        <link rel="stylesheet" href="${request.static_url('OSMTM:static/js/openlayers/theme/default/style.css')}" type="text/css" ></link> 
-        <link rel="stylesheet/less"
-              href="${request.static_url('OSMTM:static/css/main.css')}?_cdsalt=1329416606709"
-              text="text/css" media="screen" />
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/less-1.2.2.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/jquery-1.7.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}?_cdsalt=1330087595137"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/showdown.js')}"></script>
