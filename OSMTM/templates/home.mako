@@ -1,5 +1,6 @@
 <%!
     import markdown
+    from OSMTM.utils import timesince
 %>
 <%inherit file="/base.mako"/>
 <%def name="id()">home</%def>
@@ -44,6 +45,12 @@
                     description = job.short_description if job.short_description != '' else job.description
                 %>
                 <p>${markdown.markdown(description)|n}</p>
+                <%
+                    last_update = job.last_update()
+                %>
+                % if last_update is not None:
+                <p>${timesince(job.last_update())}</p>
+                % endif
                 % if user.is_admin():
                 <p align="right">
                     % if job.status == 1:
