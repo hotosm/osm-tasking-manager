@@ -32,6 +32,20 @@
                     archived = 'archived' if job.status == 0 else ''
                 %>
                 <div class="job ${archived}">
+                <%
+                    from OSMTM.views.jobs import get_stats
+                    stats = get_stats(job)
+                %>
+                <ul class="nav job-stats">
+                    <li title="Contributors: ${len(stats['contributors'])} (${len(stats['current_users'])} currently)">
+                    <i class="icon-user"></i>${len(stats['contributors'])}
+                    % if len(stats['current_users']):
+                        (${len(stats['current_users'])})
+                    % endif
+                    </li>
+                <li class="progress" title="${job.percent_done()} % done" style="border: 1px solid #ccc"><div class="bar" style="width:${job.percent_done()}%">
+                </div></li>
+                </ul>
                 <h4>
                     <a href="${request.route_url('job', job=job.id)}">${job.title}</a>
                     % if job.is_private:
@@ -50,14 +64,6 @@
                 %>
                 % if last_update is not None:
                 <p>Last update: ${timesince(job.last_update())}</p>
-                % endif
-                <%
-                    from OSMTM.views.jobs import get_stats
-                    stats = get_stats(job)
-                %>
-                <p>Contributors: ${len(stats['contributors'])}
-                % if len(stats['current_users']):
-                    (${len(stats['current_users'])} currently)
                 % endif
                 % if user.is_admin():
                 <p align="right">
