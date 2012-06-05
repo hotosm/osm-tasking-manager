@@ -49,7 +49,7 @@
                     last_update = job.last_update()
                 %>
                 % if last_update is not None:
-                <p>${timesince(job.last_update())}</p>
+                <p>Last update: ${timesince(job.last_update())}</p>
                 % endif
                 <%
                     from OSMTM.views.jobs import get_stats
