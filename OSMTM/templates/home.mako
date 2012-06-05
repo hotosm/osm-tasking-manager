@@ -51,6 +51,14 @@
                 % if last_update is not None:
                 <p>${timesince(job.last_update())}</p>
                 % endif
+                <%
+                    from OSMTM.views.jobs import get_stats
+                    stats = get_stats(job)
+                %>
+                <p>Contributors: ${len(stats['contributors'])}
+                % if len(stats['current_users']):
+                    (${len(stats['current_users'])} currently)
+                % endif
                 % if user.is_admin():
                 <p align="right">
                     % if job.status == 1:
