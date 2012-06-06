@@ -68,7 +68,7 @@
             <a href="${request.route_url('job_new')}" class="btn">+ Create a new job</a>
         </div>
         % endif
-        <h5>Those users are currently working on tasks:</h5>
+        <h5>Users currently working on tasks:</h5>
         <ul>
             % for username in users:
             <li>${username}</li>
