@@ -58,7 +58,6 @@ def done(request):
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
     tile.username = None 
-    tile.update = datetime.now()
     tile.comment = request.params['comment']
     if 'invalidate' in request.params:
         # task goes back to the queue
@@ -80,7 +79,6 @@ def unlock(request):
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
     tile.username = None 
-    tile.update = datetime.now()
     session.add(tile)
     return dict(job=tile.job,
                 prev_task=tile)
@@ -140,7 +138,6 @@ def take(request):
         if tile is None:
             tile = tiles[random.randrange(0, len(tiles))]
         tile.username = username
-        tile.update = datetime.now()
         session.add(tile)
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:

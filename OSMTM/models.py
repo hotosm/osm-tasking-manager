@@ -8,6 +8,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
+from sqlalchemy import event
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
@@ -29,6 +30,8 @@ from shapely.wkt import loads
 
 from OSMTM.history_meta import VersionedMeta, VersionedListener
 from OSMTM.history_meta import _history_mapper 
+
+from datetime import datetime
 
 DBSession = scoped_session(sessionmaker(extension=[ZopeTransactionExtension(), VersionedListener()]))
 Base = declarative_base()
@@ -63,6 +66,12 @@ class Tile(Base):
         step = max/(2**(z - 1))
         tb = TileBuilder(step)
         return tb.create_square(self.x, self.y, srs)
+
+def tile_before_update(mapper, connection, target):
+    target.update = datetime.now()
+    print target
+
+event.listen(Tile, 'before_update', tile_before_update)
 
 TileHistory = Tile.__history_mapper__.class_
 
