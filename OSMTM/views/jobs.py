@@ -45,7 +45,7 @@ def job(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     try:
-        filter = and_(Tile.username==username, Tile.job_id==job.id)
+        filter = and_(Tile.username==username, Tile.checkout==True, Tile.job_id==job.id)
         current_task = session.query(Tile).filter(filter).one()
     except NoResultFound, e:
         current_task = None
@@ -93,9 +93,6 @@ def job_tiles(request):
     job = session.query(Job).get(id)
     tiles = []
     for tile in job.tiles:
-        checkout = None
-        if tile.username is not None:
-            checkout = tile.update.isoformat()
         tiles.append(Feature(geometry=tile.to_polygon(),
             id=str(tile.x) + '-' + str(tile.y)))
     return FeatureCollection(tiles)
@@ -107,10 +104,11 @@ def job_tiles_status(request):
     job = session.query(Job).get(id)
     tiles = {}
     for tile in job.tiles:
-        if tile.username is not None or tile.checkin != 0:
+        if tile.username is not None and tile.checkout is True \
+            or tile.checkin != 0:
             tiles[str(tile.x) + '-' + str(tile.y)] = dict(
                 checkin=tile.checkin,
-                username=tile.username)
+                username=(tile.username if tile.checkout is True else None))
     return tiles
 
 @view_config(route_name='job_edit', renderer='job.edit.mako', permission='admin')
@@ -141,7 +139,7 @@ def job_archive(request):
     session = DBSession()
 
     job = session.query(Job).get(id)
-    job.status = 0
+    job.checkin = 0
     session.add(job)
 
     request.session.flash('Job "%s" archived!' % job.title)
@@ -153,7 +151,7 @@ def job_publish(request):
     session = DBSession()
 
     job = session.query(Job).get(id)
-    job.status = 1
+    job.checkin = 1
     session.add(job)
 
     request.session.flash('Job "%s" published!' % job.title)
@@ -291,7 +289,7 @@ def get_stats(job):
     checkin = 0
     user = None
 
-    # the changes (date, status) to create a chart with
+    # the changes (date, checkin) to create a chart with
     changes = []
 
     for ndx, i in enumerate(tiles_history):
@@ -303,12 +301,12 @@ def get_stats(job):
             date = i.update
         # something has changed
         if user is not None:
-            status = compare_checkin(checkin, i.checkin)
-            update_user(user, status)
-            if status is not None:
+            checkin = compare_checkin(checkin, i.checkin)
+            update_user(user, checkin)
+            if checkin is not None:
                 # maintain compatibility for jobs that were created before the 'update' column creation
                 date = i.update if i.update != None else date
-                changes.append((date, status))
+                changes.append((date, checkin))
         checkin = i.checkin
 
         # new tile
@@ -318,12 +316,12 @@ def get_stats(job):
             tile = session.query(Tile) \
                 .get((i.x, i.y, job.id))
             if user is not None and tile is not None:
-                status = compare_checkin(checkin, tile.checkin)
-                update_user(user, status)
-                if status is not None:
+                checkin = compare_checkin(checkin, tile.checkin)
+                update_user(user, checkin)
+                if checkin is not None:
                     # maintain compatibility for jobs that were created before the 'update' column creation
                     date = tile.update if tile.update != None else date
-                    changes.append((date, status))
+                    changes.append((date, checkin))
 
             # let's move to a new tile
             # checkin is reinitialized
@@ -354,14 +352,14 @@ def get_stats(job):
     chart_validated = []
     done = 0
     validated = 0
-    for date, status in changes:
-        if status == 1:
+    for date, checkin in changes:
+        if checkin == 1:
             done += 1
             chart_done.append([date.isoformat(), done])
-        if status == 2:
+        if checkin == 2:
             validated += 1
             chart_validated.append([date.isoformat(), validated])
-        if status == 3:
+        if checkin == 3:
             done -= 1
             chart_done.append([date.isoformat(), done])
 
@@ -381,8 +379,8 @@ def compare_checkin(old, new):
     if old == 1 and new == 0:
         return 3
 
-def update_user(user, status):
-    if status == 1:
+def update_user(user, checkin):
+    if checkin == 1:
         user.done += 1
-    if status == 2 or status == 3:
+    if checkin == 2 or checkin == 3:
         user.validated += 1

@@ -52,7 +52,15 @@ class Tile(Base):
     job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
     username = Column(Unicode, ForeignKey('users.username'))
     update = Column(DateTime)
+    checkout = Column(Boolean, default=False)
+    """
+    checkin
+    None
+    1 = done
+    2 = validated
+    """
     checkin = Column(Integer)
+    change = Column(Boolean, default=False)
     comment = Column(Unicode)
 
     def __init__(self, x, y):
@@ -69,7 +77,6 @@ class Tile(Base):
 
 def tile_before_update(mapper, connection, target):
     target.update = datetime.now()
-    print target
 
 event.listen(Tile, 'before_update', tile_before_update)
 
