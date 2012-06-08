@@ -53,12 +53,6 @@ class Tile(Base):
     username = Column(Unicode, ForeignKey('users.username'))
     update = Column(DateTime)
     checkout = Column(Boolean, default=False)
-    """
-    checkin
-    None
-    1 = done
-    2 = validated
-    """
     checkin = Column(Integer)
     change = Column(Boolean, default=False)
     comment = Column(Unicode)
