@@ -114,12 +114,24 @@ a {
 
         li {
             float: left;
+            margin-left: 15px;
+            color: #666;
+            .icon-user {
+                .opacity(50);
+                padding-right: 3px;
+            }
         }
         .progress {
             height: 10px;
             width: 30px;
             border: 1px solid #ccc;
-            margin: 4px;
+            margin-top: 3px;
+            float: left;
+            margin-right: 4px;
+
+            .bar {
+                #gradient > .vertical(#ccc, #eee);
+            }
         }
     }
 }

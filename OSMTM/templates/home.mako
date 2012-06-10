@@ -43,8 +43,10 @@
                         (${len(stats['current_users'])})
                     % endif
                     </li>
-                <li class="progress" title="${job.percent_done()} % done" style="border: 1px solid #ccc"><div class="bar" style="width:${job.percent_done()}%">
-                </div></li>
+                    <li class="row">
+                        <div class="progress" style="border: 1px solid #ccc"><div class="bar" style="width:${job.percent_done()}%"></div></div>
+                        ${job.percent_done()}%
+                    </li>
                 </ul>
                 <h4>
                     <a href="${request.route_url('job', job=job.id)}">${job.title}</a>
