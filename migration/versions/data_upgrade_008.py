@@ -26,7 +26,7 @@ def compare_checkin(old, new):
         return 3
 
 for tile in tiles:
-    filter = and_(TileHistory.x==tile.x, TileHistory.y==tile.y)
+    filter = and_(TileHistory.x==tile.x, TileHistory.y==tile.y, TileHistory.job_id==tile.job_id)
     tiles_history = session.query(TileHistory) \
             .filter(filter) \
             .order_by(TileHistory.version) \
@@ -45,12 +45,12 @@ for tile in tiles:
     for ndx, i in enumerate(tiles_history):
         print "%s %s %s %s %s %s" % (i.job_id, i.x, i.y, i.username, i.checkin, i.version)
 
-        if i.checkout:
-            username = i.username
-            update = i.update
-            checkin = i.checkin
-
         if ndx > 0:
+            if i.checkout:
+                username = i.username
+                update = i.update
+                checkin = i.checkin
+
             status = compare_checkin(checkin, i.checkin)
             if status is not None:
                 i.change = True
@@ -65,7 +65,6 @@ for tile in tiles:
     if last_history is not None:
         status = compare_checkin(last_history.checkin, tile.checkin)
         if status is not None:
-            print "status current %s " % status
             tile.change = True
             tile.username = username
             tile.update = tile.update if tile.update != None else update 
