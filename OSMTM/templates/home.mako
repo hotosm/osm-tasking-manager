@@ -31,7 +31,7 @@
                 <%
                     archived = 'archived' if job.status == 0 else ''
                 %>
-                <div class="job ${archived}">
+                <div class="job ${archived} well">
                 <%
                     from OSMTM.views.jobs import get_stats
                     stats = get_stats(job)
@@ -61,14 +61,8 @@
                     description = job.short_description if job.short_description != '' else job.description
                 %>
                 <p>${markdown.markdown(description)|n}</p>
-                <%
-                    last_update = job.last_update()
-                %>
-                % if last_update is not None:
-                <p>Last update: ${timesince(job.last_update())}</p>
-                % endif
                 % if user.is_admin():
-                <p align="right">
+                <p class="admin-links">
                     % if job.status == 1:
                         <a href="${request.route_url('job_archive', job=job.id)}" class="archive" alt="archive" title="Archive the job">archive</a>
                     % elif job.status == 0:
@@ -79,6 +73,12 @@
                     |
                     <a href="${request.route_url('job_delete', job=job.id)}" class="delete" alt="delete" title="Delete the job">delete</a>
                 </p>
+                % endif
+                <%
+                    last_update = job.last_update()
+                %>
+                % if last_update is not None:
+                <p class="updated-at">Last updated ${timesince(last_update)} ago</p>
                 % endif
                 </div>
             % endif
