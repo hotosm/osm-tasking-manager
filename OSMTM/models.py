@@ -69,10 +69,12 @@ class Tile(Base):
         tb = TileBuilder(step)
         return tb.create_square(self.x, self.y, srs)
 
+"""
 def tile_before_update(mapper, connection, target):
     target.update = datetime.now()
 
 event.listen(Tile, 'before_update', tile_before_update)
+"""
 
 TileHistory = Tile.__history_mapper__.class_
 

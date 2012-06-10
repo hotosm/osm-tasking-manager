@@ -270,7 +270,7 @@ class StatUser():
 
 def get_stats(job):
     session = DBSession()
-    filter = and_(Tile.job_id==job.id, Tile.username!=None)
+    filter = and_(Tile.job_id==job.id, Tile.checkout==True)
     users = session.query(Tile.username).filter(filter)
     current_users = [user.username for user in users]
 
@@ -289,11 +289,11 @@ def get_stats(job):
 
             if i.checkin == 1:
                 user.done += 1
-            if i.checkin == 2 or i.checkin == 3:
+            if i.checkin == 2 or i.checkin == 0:
                 user.validated += 1
             """ maintain compatibility for jobs that were created before the 
                 'update' column creation """
-            date = i.update if i.update != None else date
+            date = i.update
             changes.append((date, i.checkin))
 
     """ get the tiles that changed """
