@@ -150,6 +150,22 @@ class Job(Base):
             tiles.append(Tile(i[0], i[1]))
         self.tiles = tiles
 
+    def last_update(self):
+        updates = []
+        for tile in self.tiles:
+            if tile.update is not None:
+                updates.append(tile.update)
+        updates.sort()
+        return updates[0] if len(updates) > 0 else None
+
+    def percent_done(self):
+        total = len(self.tiles)
+        done = 0
+        for tile in self.tiles:
+            if tile.checkin > 0:
+                done = done+1
+        return (done * 100 / total)
+
 def group_membership(username, request):
     session = DBSession()
     user = session.query(User).get(username)

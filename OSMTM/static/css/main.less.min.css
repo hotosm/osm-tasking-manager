@@ -620,6 +620,8 @@ html,body{background-color:#FFF;color:#111;padding-top:30px;}
 a{color:#417f90;}
 #home .job{padding:0 5px;border-bottom:1px solid #DFDFDF;}
 #home .archived{background:url(../img/closed_back.gif) transparent;}
+#home ul.job-stats{float:right;font-size:11px;}#home ul.job-stats li{float:left;}
+#home ul.job-stats .progress{height:10px;width:30px;border:1px solid #ccc;margin:4px;}
 #job_new #map{}
 #job_new #zoom_level_info{display:none;}
 #job_new .flat{margin-bottom:1em;}#job_new .flat label{float:none;}
