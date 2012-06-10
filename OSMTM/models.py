@@ -153,7 +153,7 @@ class Job(Base):
         for tile in self.tiles:
             if tile.update is not None:
                 updates.append(tile.update)
-        updates.sort()
+        updates.sort(reverse=True)
         return updates[0] if len(updates) > 0 else None
 
     def percent_done(self):
