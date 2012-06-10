@@ -123,11 +123,9 @@ def home(request):
     # unlock expired tiles
     for tile in tiles:
         checkTask(tile)
-    users = [tile.username for tile in tiles]
     tags = session.query(Tag).all()
     return dict(jobs=jobs,
             user=user,
-            users=users,
             admin=user.is_admin(),
             tags=tags,
             current_tag=tag)
