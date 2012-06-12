@@ -42,8 +42,16 @@
                     </li>
                     % endif
                     <li class="row">
-                        <div class="progress" style="border: 1px solid #ccc"><div class="bar" style="width:${job.get_percent_done()}%"></div></div>
-                        ${job.get_percent_done()}%
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="progress" style="border: 1px solid #ccc"><div class="bar" style="width:${job.get_percent_done()}%"></div></div>
+                                </td>
+                                <td>
+                                    ${job.get_percent_done()}%
+                                </td>
+                            </tr>
+                        </table>
                     </li>
                 </ul>
                 <h4>
