@@ -164,6 +164,13 @@ class Job(Base):
                 done = done+1
         return (done * 100 / total)
 
+    def get_current_users(self):
+        users = []
+        for tile in self.tiles:
+            if tile.checkout and tile.username not in users:
+                users.append(tile.username)
+        return users
+
 def group_membership(username, request):
     session = DBSession()
     user = session.query(User).get(username)

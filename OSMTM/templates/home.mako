@@ -33,16 +33,14 @@
                 %>
                 <div class="job ${archived} well">
                 <%
-                    from OSMTM.views.jobs import get_stats
-                    stats = get_stats(job)
+                    users = job.get_current_users()
                 %>
                 <ul class="nav job-stats">
-                    <li title="Contributors: ${len(stats['contributors'])} (${len(stats['current_users'])} currently)">
-                    <i class="icon-user"></i>${len(stats['contributors'])}
-                    % if len(stats['current_users']):
-                        (${len(stats['current_users'])})
-                    % endif
+                    % if len(users) > 0:
+                    <li title="Currently working: ${", ".join(users)|n}">
+                        <i class="icon-user"></i>${len(users)}
                     </li>
+                    % endif
                     <li class="row">
                         <div class="progress" style="border: 1px solid #ccc"><div class="bar" style="width:${job.get_percent_done()}%"></div></div>
                         ${job.get_percent_done()}%
