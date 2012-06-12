@@ -44,8 +44,8 @@
                     % endif
                     </li>
                     <li class="row">
-                        <div class="progress" style="border: 1px solid #ccc"><div class="bar" style="width:${job.percent_done()}%"></div></div>
-                        ${job.percent_done()}%
+                        <div class="progress" style="border: 1px solid #ccc"><div class="bar" style="width:${job.get_percent_done()}%"></div></div>
+                        ${job.get_percent_done()}%
                     </li>
                 </ul>
                 <h4>
@@ -75,7 +75,7 @@
                 </p>
                 % endif
                 <%
-                    last_update = job.last_update()
+                    last_update = job.get_last_update()
                 %>
                 % if last_update is not None:
                 <p class="updated-at">Last updated ${timesince(last_update)} ago</p>

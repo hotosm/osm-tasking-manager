@@ -148,7 +148,7 @@ class Job(Base):
             tiles.append(Tile(i[0], i[1]))
         self.tiles = tiles
 
-    def last_update(self):
+    def get_last_update(self):
         updates = []
         for tile in self.tiles:
             if tile.update is not None:
@@ -156,7 +156,7 @@ class Job(Base):
         updates.sort(reverse=True)
         return updates[0] if len(updates) > 0 else None
 
-    def percent_done(self):
+    def get_percent_done(self):
         total = len(self.tiles)
         done = 0
         for tile in self.tiles:
