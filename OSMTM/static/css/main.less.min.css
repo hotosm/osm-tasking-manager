@@ -618,6 +618,7 @@ html,body{background-color:#FFF;color:#111;padding-top:30px;}
 .navbar div>ul .dropdown-menu li a:hover{background-color:grey;}
 #flash{position:absolute;top:80px;width:200px;left:50%;margin-left:-100px;text-align:center;background-color:#9b9;padding:5px;border:1px solid #999;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;background-clip:padding-box;-webkit-box-shadow:0 0 5px rgba(0, 0, 0, 0.5);-moz-box-shadow:0 0 5px rgba(0, 0, 0, 0.5);box-shadow:0 0 5px rgba(0, 0, 0, 0.5);text-shadow:0px 1px 1px rgba(255, 255, 255, 0.7);display:none;z-index:1000;}
 a{color:#417f90;}
+#home #joblist{overflow:auto;}
 #home .job{padding:5px 5px 0 5px;margin-bottom:10px;border-bottom:1px solid #DFDFDF;}#home .job .admin-links{float:right;font-size:11px;}
 #home .archived{background:url(../img/closed_back.gif) transparent;}
 #home .updated-at{font-size:11px;color:#666;}

@@ -101,6 +101,53 @@ a {
     color: @c-link;
 }
 #home {
+    .job-search {
+        padding: 0 10px;
+        font-size: 11px;
+        line-height: 11px;
+    }
+    .filters {
+        padding: 5px 5px 0 5px;
+    }
+    .filter-nav {
+        margin-bottom: 10px;
+    } 
+    .nav-pills >li > a {
+        color: black;
+        .border-radius(0);
+        position: relative;
+        font-size: 11px;
+        .opacity(50);
+        margin: 0;
+        padding-bottom: 4px;
+    }
+    .nav-pills >li > a:hover {
+        .opacity(100);
+        background-color: transparent;
+    }
+    .nav-pills .active > a,
+    .nav-pills .active > a:hover {
+        background-color: transparent;
+        font-weight: bold;
+        .opacity(100);
+    }
+    .nav-pills .active a:after,
+    .nav-pills a:hover:after {
+        content: "";
+        position: absolute;
+        background-color: #C8C8C8;
+        height: 2px;
+        width: 25px;
+        bottom: 0;
+        left: 50%;
+        margin-left: -12px;
+    }
+    #jobslist {
+        overflow: auto;
+    }
+    #mapcanvas {
+        border: 1px solid red;
+    }
     .job {
         padding: 5px 5px 0 5px;
         margin-bottom: 10px;

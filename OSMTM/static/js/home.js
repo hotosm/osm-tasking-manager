@@ -5,4 +5,14 @@ $(document).ready(function() {
                 return false;
             }
         });
+
+    $(window).resize(function () {
+        var h = $(window).height(),
+            offsetTop = $('.navbar').height(),
+            offsetBottom = $('footer').height();
+
+        // Calculate the top offset
+        $('#mapcanvas').css('height', h - offsetTop - offsetTop);
+        $('#jobslist').css('height', h - offsetTop - offsetTop);
+    }).resize();
 });
