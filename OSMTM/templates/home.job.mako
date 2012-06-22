@@ -6,8 +6,9 @@
     % if user.is_admin() or job.status == 1:
         <%
             archived = 'archived' if job.status == 0 else ''
+            featured = 'featured' if job.featured == 1 else ''
         %>
-        <div class="job ${archived} well">
+        <div class="job ${archived} ${featured} well">
         <%
             users = job.get_current_users()
         %>

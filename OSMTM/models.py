@@ -127,6 +127,7 @@ class Job(Base):
     josm_preset = Column(Unicode)
     is_private = Column(Boolean)
     requires_nextview = Column(Boolean)
+    featured = Column(Boolean)
     tiles = relationship(Tile, backref='job', cascade="all, delete, delete-orphan")
     users = relationship(User,
                 secondary=job_whitelist_table,
