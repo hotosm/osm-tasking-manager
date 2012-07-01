@@ -224,6 +224,7 @@ a {
 
 .olControlZoomPanel {
     top: 14px;
+    left: 14px;
     .opacity(50);
 
     &:hover {
@@ -232,9 +233,35 @@ a {
 
     div {
         background-image: url(../img/zoom-panel.png);
+        position: absolute;
+        height: 18px;
+        width: 18px;
+        cursor: pointer;
+    }
+
+    .olControlZoomInItemInactive {
+        top: 0;
+        left: 0;
+        background-position: 0 0;
+    }
+
+    .olControlZoomToMaxExtentItemInactive {
+        top: 18px;
+        left: 0;
+        background-position: 0 -18px;
+    }
+
+    .olControlZoomOutItemInactive {
+        top: 36px;
+        left: 0;
+        background-position: 0 18px;
     }
 }
 .olControlAttribution {
+    font-size: smaller; 
+    right: 3px; 
+    position: absolute; 
+    display: block;
     bottom: 3px;
 }
 .inline {
