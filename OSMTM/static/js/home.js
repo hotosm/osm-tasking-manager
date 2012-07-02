@@ -15,4 +15,12 @@ $(document).ready(function() {
         $('#mapcanvas').css('height', h - offsetTop - offsetTop);
         $('#jobslist').css('height', h - offsetTop - offsetTop);
     }).resize();
+
+    ko.applyBindings(new JobViewModel());
 });
+
+function JobViewModel() {
+    // Data
+    var self = this;
+    self.jobs = jobs;
+}
