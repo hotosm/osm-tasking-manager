@@ -281,30 +281,32 @@ def get_stats(job):
     changes = []
 
     def read_tiles(tiles):
+        user = None
         for ndx, i in enumerate(tiles):
-            if not users.has_key(i.username):
+            if i.username is not None and not users.has_key(i.username):
                 users[i.username] = StatUser()
-            user = users[i.username]
+                user = users[i.username]
             date = i.update
 
-            if i.checkin == 1:
-                user.done += 1
-            if i.checkin == 2 or i.checkin == 0:
-                user.validated += 1
+            if user is not None:
+                if i.checkin == 1:
+                    user.done += 1
+                if i.checkin == 2 or i.checkin == 0:
+                    user.validated += 1
             """ maintain compatibility for jobs that were created before the 
                 'update' column creation """
             date = i.update
             changes.append((date, i.checkin))
 
     """ get the tiles that changed """
-    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id)
+    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
     tiles = session.query(TileHistory) \
             .filter(filter) \
             .all()
     read_tiles(tiles)
 
     """ same for tiles """
-    filter = and_(Tile.change==True, Tile.job_id==job.id)
+    filter = and_(Tile.change==True, Tile.job_id==job.id, Tile.username is not None)
     tiles = session.query(Tile) \
             .filter(filter) \
             .all()
