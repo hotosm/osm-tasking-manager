@@ -28,3 +28,23 @@
     </div>
 </div>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/home.js')}"></script>
+<script type="text/javascript">
+    <%
+        from json import dumps
+        import datetime
+        dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
+        def to_dict(job):
+            return dict(
+                title=job.title,
+                status=job.status,
+                short_description=job.short_description,
+                is_private=job.is_private,
+                featured=job.featured,
+                last_update=job.get_last_update(),
+                url=request.route_url('job', job=job.id)
+            )
+        jobs_json = dumps([to_dict(job) for job in jobs], default=dthandler)
+
+    %>
+    jobs = ${jobs_json|n}
+</script>
