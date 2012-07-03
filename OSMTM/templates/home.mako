@@ -23,6 +23,9 @@
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
                     <ul class="nav job-stats">
+                        <!-- ko if: featured -->
+                        <li title="Featured job"><i class="icon-star"></i></li>
+                        <!-- /ko -->
                         <!-- ko if: users.length > 0 -->
                         <li data-bind="attr: {title: usersText}">
                             <i class="icon-user"></i>
