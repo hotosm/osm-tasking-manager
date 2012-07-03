@@ -8,7 +8,7 @@
             <input type="text" class="search-query job-search span6" placeholder="Find a job..."
                 data-bind="value: searchValue, valueUpdate: 'afterkeydown'">
             <ul class="nav nav-pills filter-nav">
-                <li data-bind="css: {active: filter() == null}">
+                <li data-bind="css: {active: filter() == 'all'}">
                     <a href="#" data-bind="click: clearFilter">All Jobs</a>
                 </li>
                 <li data-bind="css: {active: filter() == 'featured'}" class="pull-right"><a href="#" data-bind="click: showFeatured"><i class="icon-star"></i>Featured Jobs</a></li>
@@ -83,6 +83,7 @@
     </div>
 </div>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/home.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/sammy-latest.min.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/knockout-2.1.0.js')}"></script>
 <script type="text/javascript">
     <%

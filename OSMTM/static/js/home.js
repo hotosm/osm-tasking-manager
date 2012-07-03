@@ -23,15 +23,16 @@ function JobViewModel(initialJobs) {
     // Data
     var self = this;
     self.jobs = ko.observableArray(initialJobs);
-    self.filter = ko.observable();
+    self.filter = ko.observable('all');
     self.searchValue = ko.observable();
     
-    self.searchValue.subscribe(function(value) {
-        this.search();
-    }, this);
-    self.filter.subscribe(function(value) {
-        this.search();
-    }, this);
+    function changeHash() {
+        var search = this.searchValue() ?
+            '/' + this.searchValue() : '';
+        location.hash = this.filter() + search;
+    }
+    self.searchValue.subscribe(changeHash, this);
+    self.filter.subscribe(changeHash, this);
 
     this.filterByFeatured = function() {
         var jobs = this.jobs();
@@ -58,6 +59,21 @@ function JobViewModel(initialJobs) {
     }.bind(this);
 
     this.clearFilter = function() {
-        this.filter(null);
+        this.filter('all');
     }.bind(this);
+
+    // Client-side routes    
+    Sammy(function() {
+        this.get('#:filter', function() {
+            self.filter(this.params.filter);
+            self.search();
+        });
+        this.get('#:filter/:search', function() {
+            self.filter(this.params.filter);
+            self.searchValue(this.params.search);
+            self.search();
+        });
+    
+        this.get('', function() { this.app.runRoute('get', '#all/') });
+    }).run();
 }
