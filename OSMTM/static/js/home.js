@@ -73,7 +73,5 @@ function JobViewModel(initialJobs) {
             self.searchValue(this.params.search);
             self.search();
         });
-    
-        this.get('', function() { this.app.runRoute('get', '#all/') });
     }).run();
 }
