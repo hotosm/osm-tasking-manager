@@ -189,5 +189,6 @@ def checkTask(tile):
     if tile.checkout is not None:
         if datetime.now() > tile.update + EXPIRATION_DURATION:
             tile.username = None 
+            tile.checkout = False
             tile.update = datetime.now()
             session.add(tile)
