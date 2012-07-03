@@ -44,6 +44,9 @@ function JobViewModel(initialJobs) {
     this.showFeatured = function() {
         this.filter('featured');
     }.bind(this);
+    this.showMine = function() {
+        this.filter('mine');
+    }.bind(this);
 
     this.search = function() {
         var jobs = [].concat(initialJobs);
@@ -54,7 +57,8 @@ function JobViewModel(initialJobs) {
         this.jobs.remove(function(job) {
             var text = [job.title, job.description, job.short_description, job.tags.join(',')].join('');
             return (searchVal && text.toLowerCase().indexOf(searchVal) == -1) ||
-                (filter == 'featured' && job.featured !== true);
+                (filter == 'featured' && job.featured !== true) ||
+                (filter == 'mine' && job.is_mine !== true);
         });
     }.bind(this);
 

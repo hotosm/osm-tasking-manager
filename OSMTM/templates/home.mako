@@ -12,7 +12,7 @@
                     <a href="#" data-bind="click: clearFilter">All Jobs</a>
                 </li>
                 <li data-bind="css: {active: filter() == 'featured'}" class="pull-right"><a href="#" data-bind="click: showFeatured"><i class="icon-star"></i>Featured Jobs</a></li>
-                <li><a href="#"><i class="icon-bookmark"></i>My Jobs</a></li>
+                <li data-bind="css: {active: filter() == 'mine'}"><a href="#" data-bind="click: showMine"><i class="icon-bookmark"></i>My Jobs</a></li>
             </ul>
         </div>
     </div>
@@ -23,6 +23,9 @@
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
                     <ul class="nav job-stats">
+                        <!-- ko if: is_mine -->
+                        <li title="My job"><i class="icon-bookmark"></i></li>
+                        <!-- /ko -->
                         <!-- ko if: featured -->
                         <li title="Featured job"><i class="icon-star"></i></li>
                         <!-- /ko -->
@@ -111,7 +114,8 @@
                 percent_done=job.get_percent_done(),
                 users=job.get_current_users(),
                 usersText="Currently working: %s" % ", ".join(job.get_current_users()),
-                tags=[tag.tag for tag in job.tags]
+                tags=[tag.tag for tag in job.tags],
+                is_mine=job.id in [job for job in my_jobs]
             )
         jobs_json = dumps([to_dict(job) for job in jobs], default=dthandler)
 
