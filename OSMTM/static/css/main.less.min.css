@@ -627,7 +627,8 @@ a{color:#417f90;}
 #home .nav-pills .active a:after,#home .nav-pills a:hover:after{content:"";position:absolute;background-color:#C8C8C8;height:2px;width:25px;bottom:0;left:50%;margin-left:-12px;}
 #home #jobslist{overflow:auto;}
 #home #mapcanvas{border:1px solid red;}
-#home .job{padding:5px 5px 0 5px;margin-bottom:10px;border-bottom:1px solid #DFDFDF;}#home .job .admin-links{float:right;font-size:11px;}
+#home .job{padding:5px 5px 0 5px;margin-bottom:10px;border-bottom:1px solid #DFDFDF;}#home .job .admin-links{float:right;font-size:11px;display:none;}
+#home .job :hover .admin-links{display:block;}
 #home .archived{background:url(../img/closed_back.gif) transparent;}
 #home .featured{background-color:#FFE9C9;}
 #home .updated-at{font-size:11px;color:#666;}
