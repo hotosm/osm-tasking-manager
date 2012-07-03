@@ -5,23 +5,19 @@
     <div class="row"> 
         <div class="span7">
         <div class="filters">
-            <input type="text" class="search-query job-search span6" placeholder="Find a job...">
+            <input type="text" class="search-query job-search span6" placeholder="Find a job..."
+                data-bind="value: searchValue, valueUpdate: 'afterkeydown'">
             <ul class="nav nav-pills filter-nav">
-                <li ><a href="#">All Jobs</a></li>
-                <li class="active pull-right"><a href="#"><i class="icon-star"></i>Featured Jobs</a></li>
+                <li data-bind="css: {active: filter() == null}">
+                    <a href="#" data-bind="click: clearFilter">All Jobs</a>
+                </li>
+                <li data-bind="css: {active: filter() == 'featured'}" class="pull-right"><a href="#" data-bind="click: showFeatured"><i class="icon-star"></i>Featured Jobs</a></li>
                 <li><a href="#"><i class="icon-bookmark"></i>My Jobs</a></li>
             </ul>
         </div>
     </div>
     </div>
     <div class="row"> 
-        <!--<div class="span7" id="jobslist">-->
-        <!--% if jobs:-->
-            <!--<div id="jobs">-->
-                <!--<%include file="/home.job.mako" />-->
-            <!--</div>-->
-        <!--% endif-->
-        <!--</div>-->
         <div class="span7" id="jobslist">
             <div id="jobs" data-bind="foreach: jobs">
                 <div class="job well"
@@ -110,7 +106,8 @@
                 delete_url=request.route_url('job_delete', job=job.id),
                 percent_done=job.get_percent_done(),
                 users=job.get_current_users(),
-                usersText="Currently working: %s" % ", ".join(job.get_current_users())
+                usersText="Currently working: %s" % ", ".join(job.get_current_users()),
+                tags=[tag.tag for tag in job.tags]
             )
         jobs_json = dumps([to_dict(job) for job in jobs], default=dthandler)
 
