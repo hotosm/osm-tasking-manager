@@ -5,16 +5,25 @@ $(document).ready(function() {
                 return false;
             }
         });
+    
+    // See http://www.finalclap.com/tuto/float-fixed-scroll-jquery-css-rocket-83/
+    var navBarHeight = $('.navbar').height() + 20;
+    var fixedLimit = $('#jobslist').offset().top - navBarHeight;
+    $('#mapcanvas').css('height', 250);
+    // keep the width size given by bootstrap to get the same when fixed
+    $('#mapcanvas').css('width', $('#mapcanvas').width());
+    $(window).trigger('scroll');
+    $(window).scroll(function () {
+        windowScroll = $(window).scrollTop();
+        if (windowScroll >= fixedLimit) {
+            console.log("too high");
+            $('#mapcanvas').css('position', 'fixed');
+            $('#mapcanvas').css('top', navBarHeight);
 
-    $(window).resize(function () {
-        var h = $(window).height(),
-            offsetTop = $('.navbar').height(),
-            offsetBottom = $('footer').height();
-
-        // Calculate the top offset
-        $('#mapcanvas').css('height', h - offsetTop - offsetTop);
-        $('#jobslist').css('height', h - offsetTop - offsetTop);
-    }).resize();
+        } else {
+            $('#mapcanvas').css('position', '');
+        }
+    });
 
     ko.applyBindings(new JobViewModel(jobs));
 });
