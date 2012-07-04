@@ -98,6 +98,7 @@
         from OSMTM.utils import timesince
         dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
         def to_dict(job):
+            centroid = job.get_centroid()
             return dict(
                 title=job.title,
                 status=job.status,
@@ -114,7 +115,9 @@
                 users=job.get_current_users(),
                 usersText="Currently working: %s" % ", ".join(job.get_current_users()),
                 tags=[tag.tag for tag in job.tags],
-                is_mine=job.id in [job for job in my_jobs]
+                is_mine=job.id in [_job for _job in my_jobs],
+                lon=centroid.x,
+                lat=centroid.y
             )
         jobs_json = dumps([to_dict(job) for job in jobs], default=dthandler)
 

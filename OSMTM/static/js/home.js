@@ -24,6 +24,12 @@ $(document).ready(function() {
     });
 
     ko.applyBindings(new JobViewModel(jobs));
+
+    for (var i=0; i < jobs.length; i++) {
+        var lonlat = new OpenLayers.Geometry.Point(jobs[i].lon, jobs[i].lat);
+        lonlat.transform('EPSG:900913', 'EPSG:4326');
+        jobsLayer.addFeatures([new OpenLayers.Feature.Vector(lonlat)]);
+    }
 });
 
 var map = new OpenLayers.Map('mapcanvas', {
@@ -48,6 +54,10 @@ var bm = new OpenLayers.Layer.Image( "Blue Marble",
 );
 map.addLayer(bm);
 map.zoomToMaxExtent();
+
+var jobsLayer = new OpenLayers.Layer.Vector('jobs', {
+});
+map.addLayer(jobsLayer);
 
 function JobViewModel(initialJobs) {
     // Data

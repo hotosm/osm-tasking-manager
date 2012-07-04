@@ -172,6 +172,10 @@ class Job(Base):
                 users.append(tile.username)
         return users
 
+    def get_centroid(self):
+        geom = loads(self.geometry)
+        return geom.centroid
+
 def group_membership(username, request):
     session = DBSession()
     user = session.query(User).get(username)
