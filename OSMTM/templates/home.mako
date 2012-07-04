@@ -19,6 +19,7 @@
     </div>
     <div class="row"> 
         <div class="span6" id="jobslist">
+            &nbsp;
             <div id="jobs" data-bind="foreach: jobs">
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">

@@ -23,13 +23,16 @@ $(document).ready(function() {
         }
     });
 
-    ko.applyBindings(new JobViewModel(jobs));
-
     for (var i=0; i < jobs.length; i++) {
         var lonlat = new OpenLayers.Geometry.Point(jobs[i].lon, jobs[i].lat);
         lonlat.transform('EPSG:900913', 'EPSG:4326');
-        jobsLayer.addFeatures([new OpenLayers.Feature.Vector(lonlat)]);
+        var f = new OpenLayers.Feature.Vector(lonlat);
+        // keep a reference on the feature for later usage
+        jobs[i].feature = f;
+        jobsLayer.addFeatures([f]);
     }
+
+    ko.applyBindings(new JobViewModel(jobs));
 });
 
 var map = new OpenLayers.Map('mapcanvas', {
@@ -56,6 +59,27 @@ map.addLayer(bm);
 map.zoomToMaxExtent();
 
 var jobsLayer = new OpenLayers.Layer.Vector('jobs', {
+    styleMap: new OpenLayers.StyleMap({
+        'default': {
+            externalGraphic: 'static/img/map_pin.png',
+            graphicWidth: 10,
+            graphicHeight: 10,
+            graphicYOffset: -10,
+            graphicOpacity: 0.4,
+            graphicZIndex: 10
+        },
+        'select': {
+            externalGraphic: 'static/img/map_pin.png',
+            graphicWidth: 16,
+            graphicHeight: 16,
+            graphicYOffset: -16,
+            graphicOpacity: 1,
+            graphicZIndex: 20
+        }
+    }),
+    rendererOptions: {
+        zIndexing: true
+    }
 });
 map.addLayer(jobsLayer);
 
@@ -73,6 +97,16 @@ function JobViewModel(initialJobs) {
     }
     self.searchValue.subscribe(changeHash, this);
     self.filter.subscribe(changeHash, this);
+    self.jobs.subscribe(function() {
+        for (var i=0; i < initialJobs.length; i++) {
+            initialJobs[i].feature.renderIntent = 'default';
+        }
+        var jobs = self.jobs();
+        for (var i=0; i < jobs.length; i++) {
+            jobs[i].feature.renderIntent = 'select';
+        }
+        jobsLayer.redraw();
+    }, this);
 
     this.filterByFeatured = function() {
         var jobs = this.jobs();
