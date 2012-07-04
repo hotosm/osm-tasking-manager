@@ -42,7 +42,7 @@
                                         <div class="progress"
                                              style="border: 1px solid #ccc">
                                             <div class="bar"
-                                                data-bind="style: {width: percent_done}"></div>
+                                                data-bind="style: {width: (percent_done + '%')}"></div>
                                         </div>
                                     </td>
                                     <td>
