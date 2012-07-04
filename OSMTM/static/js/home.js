@@ -16,7 +16,6 @@ $(document).ready(function() {
     $(window).scroll(function () {
         windowScroll = $(window).scrollTop();
         if (windowScroll >= fixedLimit) {
-            console.log("too high");
             $('#mapcanvas').css('position', 'fixed');
             $('#mapcanvas').css('top', navBarHeight);
 
