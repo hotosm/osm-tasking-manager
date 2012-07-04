@@ -9,7 +9,6 @@ $(document).ready(function() {
     // See http://www.finalclap.com/tuto/float-fixed-scroll-jquery-css-rocket-83/
     var navBarHeight = $('.navbar').height() + 20;
     var fixedLimit = $('#jobslist').offset().top - navBarHeight;
-    $('#mapcanvas').css('height', 250);
     // keep the width size given by bootstrap to get the same when fixed
     $('#mapcanvas').css('width', $('#mapcanvas').width());
     $(window).trigger('scroll');
@@ -26,6 +25,29 @@ $(document).ready(function() {
 
     ko.applyBindings(new JobViewModel(jobs));
 });
+
+var map = new OpenLayers.Map('mapcanvas', {
+    theme: null,
+    maxResolution: 'auto',
+    controls: [
+        new OpenLayers.Control.Attribution()
+    ]
+});
+var baseLayer = new OpenLayers.Layer('baseLayer', {
+    isBaseLayer: true
+});
+map.addLayer(baseLayer);
+var bm = new OpenLayers.Layer.Image( "Blue Marble",
+    "static/img/bm.jpeg",
+    new OpenLayers.Bounds(-180, -90, 180, 90),
+    new OpenLayers.Size(600, 300),
+    {
+        isBaseLayer: false,
+        alwaysInRange: true
+    }
+);
+map.addLayer(bm);
+map.zoomToMaxExtent();
 
 function JobViewModel(initialJobs) {
     // Data

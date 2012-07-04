@@ -18,7 +18,7 @@
     </div>
     </div>
     <div class="row"> 
-        <div class="span7" id="jobslist">
+        <div class="span6" id="jobslist">
             <div id="jobs" data-bind="foreach: jobs">
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
@@ -81,11 +81,12 @@
                 </div>
             </div>
         </div>
-        <div class="span5">
+        <div class="span6">
             <div id="mapcanvas"></div>
         </div>
     </div>
 </div>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/home.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/sammy-latest.min.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/knockout-2.1.0.js')}"></script>
