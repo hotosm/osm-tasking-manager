@@ -77,6 +77,8 @@ def ugettext(a):
 
 def timesince(d, now=None):
     
+    if d is None:
+        return
     """
     Takes two datetime objects and returns the time between d and now
     as a nicely formatted string, e.g. "10 minutes".  If d occurs after now,
