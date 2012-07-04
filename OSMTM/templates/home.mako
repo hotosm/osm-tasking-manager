@@ -45,9 +45,7 @@
                                                 data-bind="style: {width: (percent_done + '%')}"></div>
                                         </div>
                                     </td>
-                                    <td>
-                                        <span data-bind="text: percent_done"></span> %
-                                    </td>
+                                    <td data-bind="text: (percent_done + '%')"></td>
                                 </tr>
                             </table>
                         </li>
