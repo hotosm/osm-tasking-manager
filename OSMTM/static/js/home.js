@@ -86,7 +86,7 @@ map.addLayer(jobsLayer);
 function JobViewModel(initialJobs) {
     // Data
     var self = this;
-    self.jobs = ko.observableArray(initialJobs);
+    self.jobs = ko.observableArray();
     self.filter = ko.observable('all');
     self.searchValue = ko.observable();
     
@@ -107,6 +107,7 @@ function JobViewModel(initialJobs) {
         }
         jobsLayer.redraw();
     }, this);
+    self.jobs(initialJobs);
 
     this.filterByFeatured = function() {
         var jobs = this.jobs();
