@@ -41,9 +41,9 @@ your OSM username.
 Run OSMTM
 ---------
 
-To run OSMTM the easiest is to use ``paster serve``::
+To run OSMTM the easiest is to use ``pserve``::
 
-    paster serve development.ini
+    pserve --reload development.ini
 
 Installation as a mod_wsgi Application
 --------------------------------------
