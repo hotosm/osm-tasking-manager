@@ -114,7 +114,7 @@ def home(request):
         redirect = request.params.get("redirect", request.route_url("logout")) 
         return HTTPFound(location=redirect)
     if not user.is_admin():
-        jobs = [job for job in jobs if not job.is_private] + user.private_jobs
+        jobs = [job for job in jobs if not job.is_private and job.status == 1] + user.private_jobs
     tiles = session.query(Tile) \
         .filter(Tile.username!=None) \
         .group_by(Tile.username)
