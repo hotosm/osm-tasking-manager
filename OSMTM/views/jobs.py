@@ -157,6 +157,18 @@ def job_publish(request):
     request.session.flash('Job "%s" published!' % job.title)
     return HTTPFound(location = route_url('home', request))
 
+@view_config(route_name='job_feature', permission='admin')
+def job_publish(request):
+    id = request.matchdict['job']
+    session = DBSession()
+
+    job = session.query(Job).get(id)
+    job.featured = not job.featured 
+    session.add(job)
+
+    request.session.flash('Job "%s" featured status changed!' % job.title)
+    return HTTPFound(location = route_url('home', request))
+
 @view_config(route_name='job_delete', permission='admin')
 def job_delete(request):
     id = request.matchdict['job']

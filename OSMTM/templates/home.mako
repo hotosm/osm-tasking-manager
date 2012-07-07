@@ -66,6 +66,15 @@
                     <p data-bind="html: short_description"></p>
                     % if user.is_admin():
                     <p class="admin-links">
+                        <!-- ko if: featured == 1 -->
+                        <a data-bind="attr: {href: feature_url}"
+                            class="feature" alt="feature" title="Mark as unfeatured">mark as unfeatured</a>
+                        <!-- /ko -->
+                        <!-- ko ifnot: featured == 1 -->
+                        <a data-bind="attr: {href: feature_url}"
+                            class="feature" alt="feature" title="Mark as featured">mark as featured</a>
+                        <!-- /ko -->
+                        |
                         <!-- ko if: status == 1 -->
                         <a data-bind="attr: {href: archive_url}"
                             class="archive" alt="archive" title="Archive the job">archive</a>
@@ -114,6 +123,7 @@
                 featured=job.featured,
                 last_update=timesince(job.get_last_update()),
                 url=request.route_url('job', job=job.id),
+                feature_url=request.route_url('job_feature', job=job.id),
                 archive_url=request.route_url('job_archive', job=job.id),
                 publish_url=request.route_url('job_publish', job=job.id),
                 edit_url=request.route_url('job_edit', job=job.id),
