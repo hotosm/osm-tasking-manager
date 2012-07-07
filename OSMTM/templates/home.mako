@@ -30,9 +30,6 @@
                     </div>
                     <!-- /ko -->
                     <ul class="nav job-stats">
-                        <!-- ko if: is_mine -->
-                        <li title="My job"><i class="icon-star"></i></li>
-                        <!-- /ko -->
                         <!-- ko if: users.length > 0 -->
                         <li data-bind="attr: {title: usersText}">
                             <i class="icon-user"></i>
@@ -56,6 +53,12 @@
                     </ul>
                     <h4><a data-bind="text: title,
                             attr: {href: url}"></a>
+                        <!-- ko if: featured -->
+                        <i title="Featured job" class="icon-fire"></i>
+                        <!-- /ko -->
+                        <!-- ko if: is_mine -->
+                        <i title="My job" class="icon-star"></i>
+                        <!-- /ko -->
                         <!-- ko if: is_private -->
                         <img src="${request.static_url('OSMTM:static/img/lock.gif')}" alt="private" title="private job" />
                         <!-- /ko -->

@@ -632,10 +632,11 @@ a{color:#417f90;}
 #home .job .admin-links{float:right;font-size:11px;display:none;}
 #home .job .ribbon{opacity:0.95;position:absolute;left:0;top:0;width:3px;height:100%;border-radius:4px 0 0 4px;}
 #home .job .red.ribbon{background-color:#9a0000;}
+#home .job .icon-fire,#home .job .icon-star,#home .job .icon-user{opacity:0.5;filter:alpha(opacity=50);filter:alpha(opacity=30);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5;}
 #home .job:hover .admin-links{display:block;}
 #home .archived{background:url(../img/closed_back.gif) transparent;}
 #home .updated-at{font-size:11px;color:#666;}
-#home ul.job-stats{float:right;font-size:11px;}#home ul.job-stats li{float:left;margin-left:10px;color:#666;}#home ul.job-stats li .icon-bookmark,#home ul.job-stats li .icon-star,#home ul.job-stats li .icon-user{opacity:0.5;filter:alpha(opacity=50);filter:alpha(opacity=30);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5;}
+#home ul.job-stats{float:right;font-size:11px;}#home ul.job-stats li{float:left;margin-left:10px;color:#666;}
 #home ul.job-stats .progress{height:10px;width:30px;border:1px solid #ccc;margin-bottom:0;}#home ul.job-stats .progress .bar{background-color:#dadada;background-image:-moz-linear-gradient(top, #cccccc, #eeeeee);background-image:-ms-linear-gradient(top, #cccccc, #eeeeee);background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#cccccc), to(#eeeeee));background-image:-webkit-linear-gradient(top, #cccccc, #eeeeee);background-image:-o-linear-gradient(top, #cccccc, #eeeeee);background-image:linear-gradient(top, #cccccc, #eeeeee);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#eeeeee', GradientType=0);background-color:#eeeeee;background-repeat:repeat-x;background-image:-khtml-gradient(linear, left top, left bottom, from(#cccccc), to(#eeeeee));background-image:-moz-linear-gradient(top, #cccccc, #eeeeee);background-image:-ms-linear-gradient(top, #cccccc, #eeeeee);background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #cccccc), color-stop(100%, #eeeeee));background-image:-webkit-linear-gradient(top, #cccccc, #eeeeee);background-image:-o-linear-gradient(top, #cccccc, #eeeeee);background-image:linear-gradient(top, #cccccc, #eeeeee);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#eeeeee', GradientType=0);}
 #job_new #map{}
 #job_new #zoom_level_info{display:none;}
