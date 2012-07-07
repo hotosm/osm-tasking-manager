@@ -26,10 +26,7 @@
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
                     <!-- ko if: featured -->
-                    <div class="right ribbon-holder">
-                        <p class="red ribbon">
-                            <span class="text"></span>
-                        </p>
+                    <div class="red ribbon">
                     </div>
                     <!-- /ko -->
                     <ul class="nav job-stats">

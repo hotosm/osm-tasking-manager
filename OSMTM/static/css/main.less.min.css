@@ -630,13 +630,8 @@ a{color:#417f90;}
 #home .job{padding:5px 5px 0 5px;margin-bottom:10px;border-bottom:1px solid #DFDFDF;position:relative;}#home .job .nav{margin-bottom:0;}
 #home .job h4{padding-bottom:4px;}
 #home .job .admin-links{float:right;font-size:11px;display:none;}
-#home .job .ribbon-holder{position:absolute;bottom:0;overflow:hidden;height:10em;font-size:8px;}
-#home .job .right.ribbon-holder{right:0;}
-#home .job .ribbon{letter-spacing:-0.1px;opacity:0.95;padding:0.25em 0;position:relative;bottom:-8em;-moz-box-shadow:0 0 8px #888;-webkit-box-shadow:0 0 8px #888;color:#FFF;display:block;line-height:1.35em;}
-#home .job .ribbon .text{padding:0.1em 3em;}
-#home .job .right .ribbon{-moz-transform:rotate(-45deg);-webkit-transform:rotate(-45deg);right:-2em;}
-#home .job .red.ribbon{background-color:#9a0000;background:-webkit-gradient(linear, left bottom, left top, from(#9a0000), to(#a90000));}
-#home .job .red.ribbon .text{font-size:8px;border:1px solid #bf6060;}
+#home .job .ribbon{opacity:0.95;position:absolute;left:0;top:0;width:3px;height:100%;border-radius:4px 0 0 4px;}
+#home .job .red.ribbon{background-color:#9a0000;}
 #home .job:hover .admin-links{display:block;}
 #home .archived{background:url(../img/closed_back.gif) transparent;}
 #home .updated-at{font-size:11px;color:#666;}
