@@ -139,7 +139,7 @@ def job_archive(request):
     session = DBSession()
 
     job = session.query(Job).get(id)
-    job.checkin = 0
+    job.status = 0
     session.add(job)
 
     request.session.flash('Job "%s" archived!' % job.title)
@@ -151,11 +151,11 @@ def job_publish(request):
     session = DBSession()
 
     job = session.query(Job).get(id)
-    job.checkin = 1
+    job.status = 1
     session.add(job)
 
     request.session.flash('Job "%s" published!' % job.title)
-    return HTTPFound(location = route_url('job', request, job=job.id))
+    return HTTPFound(location = route_url('home', request))
 
 @view_config(route_name='job_delete', permission='admin')
 def job_delete(request):
