@@ -1,4 +1,54 @@
+var map, jobsLayer;
 $(document).ready(function() {
+
+    map = new OpenLayers.Map('mapcanvas', {
+        theme: null,
+        maxResolution: 'auto',
+        controls: [
+            new OpenLayers.Control.Attribution()
+        ]
+    });
+    var baseLayer = new OpenLayers.Layer('baseLayer', {
+        isBaseLayer: true
+    });
+    map.addLayer(baseLayer);
+    var bm = new OpenLayers.Layer.Image( "Blue Marble",
+        "static/img/bm.jpeg",
+        new OpenLayers.Bounds(-180, -90, 180, 90),
+        new OpenLayers.Size(600, 300),
+        {
+            isBaseLayer: false,
+            alwaysInRange: true
+        }
+    );
+    map.addLayer(bm);
+    map.zoomToMaxExtent();
+
+    jobsLayer = new OpenLayers.Layer.Vector('jobs', {
+        styleMap: new OpenLayers.StyleMap({
+            'default': {
+                externalGraphic: 'static/img/map_pin.png',
+                graphicWidth: 10,
+                graphicHeight: 10,
+                graphicYOffset: -10,
+                graphicOpacity: 0.4,
+                graphicZIndex: 10
+            },
+            'select': {
+                externalGraphic: 'static/img/map_pin.png',
+                graphicWidth: 16,
+                graphicHeight: 16,
+                graphicYOffset: -16,
+                graphicOpacity: 1,
+                graphicZIndex: 20
+            }
+        }),
+        rendererOptions: {
+            zIndexing: true
+        }
+    });
+    map.addLayer(jobsLayer);
+
     $('.delete')
         .click(function() {
             if (!confirm("Are you sure you want to delete this job?")) {
@@ -34,54 +84,6 @@ $(document).ready(function() {
 
     ko.applyBindings(new JobViewModel(jobs));
 });
-
-var map = new OpenLayers.Map('mapcanvas', {
-    theme: null,
-    maxResolution: 'auto',
-    controls: [
-        new OpenLayers.Control.Attribution()
-    ]
-});
-var baseLayer = new OpenLayers.Layer('baseLayer', {
-    isBaseLayer: true
-});
-map.addLayer(baseLayer);
-var bm = new OpenLayers.Layer.Image( "Blue Marble",
-    "static/img/bm.jpeg",
-    new OpenLayers.Bounds(-180, -90, 180, 90),
-    new OpenLayers.Size(600, 300),
-    {
-        isBaseLayer: false,
-        alwaysInRange: true
-    }
-);
-map.addLayer(bm);
-map.zoomToMaxExtent();
-
-var jobsLayer = new OpenLayers.Layer.Vector('jobs', {
-    styleMap: new OpenLayers.StyleMap({
-        'default': {
-            externalGraphic: 'static/img/map_pin.png',
-            graphicWidth: 10,
-            graphicHeight: 10,
-            graphicYOffset: -10,
-            graphicOpacity: 0.4,
-            graphicZIndex: 10
-        },
-        'select': {
-            externalGraphic: 'static/img/map_pin.png',
-            graphicWidth: 16,
-            graphicHeight: 16,
-            graphicYOffset: -16,
-            graphicOpacity: 1,
-            graphicZIndex: 20
-        }
-    }),
-    rendererOptions: {
-        zIndexing: true
-    }
-});
-map.addLayer(jobsLayer);
 
 function JobViewModel(initialJobs) {
     // Data

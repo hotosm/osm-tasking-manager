@@ -11,8 +11,8 @@
                 <li data-bind="css: {active: filter() == 'all'}">
                     <a href="#" data-bind="click: clearFilter">All Jobs</a>
                 </li>
-                <li data-bind="css: {active: filter() == 'featured'}" class="pull-right"><a href="#" data-bind="click: showFeatured"><i class="icon-star"></i>Featured Jobs</a></li>
-                <li data-bind="css: {active: filter() == 'mine'}"><a href="#" data-bind="click: showMine"><i class="icon-bookmark"></i>My Jobs</a></li>
+                <li data-bind="css: {active: filter() == 'featured'}" class="pull-right"><a href="#" data-bind="click: showFeatured"><i class="icon-fire"></i>Featured Jobs</a></li>
+                <li data-bind="css: {active: filter() == 'mine'}"><a href="#" data-bind="click: showMine"><i class="icon-star"></i>My Jobs</a></li>
             </ul>
         </div>
     </div>
@@ -25,12 +25,16 @@
             <div id="jobs" data-bind="foreach: jobs">
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
+                    <!-- ko if: featured -->
+                    <div class="right ribbon-holder">
+                        <p class="red ribbon">
+                            <span class="text"></span>
+                        </p>
+                    </div>
+                    <!-- /ko -->
                     <ul class="nav job-stats">
                         <!-- ko if: is_mine -->
-                        <li title="My job"><i class="icon-bookmark"></i></li>
-                        <!-- /ko -->
-                        <!-- ko if: featured -->
-                        <li title="Featured job"><i class="icon-star"></i></li>
+                        <li title="My job"><i class="icon-star"></i></li>
                         <!-- /ko -->
                         <!-- ko if: users.length > 0 -->
                         <li data-bind="attr: {title: usersText}">
