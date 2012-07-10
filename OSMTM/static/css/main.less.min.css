@@ -630,10 +630,9 @@ a{color:#417f90;}
 #home .job{padding:5px 5px 0 5px;margin-bottom:10px;border-bottom:1px solid #DFDFDF;position:relative;}#home .job .nav{margin-bottom:0;}
 #home .job h4{padding-bottom:4px;}
 #home .job .admin-links{float:right;font-size:11px;display:none;}
-#home .job .ribbon{opacity:0.95;position:absolute;left:0;top:0;width:3px;height:100%;border-radius:4px 0 0 4px;}
-#home .job .red.ribbon{background-color:#9a0000;}
 #home .job .icon-fire,#home .job .icon-star,#home .job .icon-user{opacity:0.5;filter:alpha(opacity=50);filter:alpha(opacity=30);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5;}
 #home .job:hover .admin-links{display:block;}
+#home .featured{border-color:rgba(255, 120, 0, 0.5);}
 #home .archived{background:url(../img/closed_back.gif) transparent;}
 #home .updated-at{font-size:11px;color:#666;}
 #home ul.job-stats{float:right;font-size:11px;}#home ul.job-stats li{float:left;margin-left:10px;color:#666;}

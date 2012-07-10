@@ -25,10 +25,6 @@
             <div id="jobs" data-bind="foreach: jobs">
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
-                    <!-- ko if: featured -->
-                    <div class="red ribbon">
-                    </div>
-                    <!-- /ko -->
                     <ul class="nav job-stats">
                         <!-- ko if: users.length > 0 -->
                         <li data-bind="attr: {title: usersText}">

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="New document 1">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective3612"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       id="filter3626"
+       inkscape:label="Blur content"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Blur the contents of objects, preserving the outline"
+       color-interpolation-filters="sRGB">
+      <feColorMatrix
+         id="feColorMatrix3628"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result7" />
+      <feGaussianBlur
+         id="feGaussianBlur3630"
+         result="result6"
+         stdDeviation="5" />
+      <feComposite
+         id="feComposite3632"
+         in2="result7"
+         operator="atop"
+         in="result6"
+         result="result91" />
+      <feComposite
+         id="feComposite3634"
+         in2="result91"
+         operator="in" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3688"
+       x="-0.039699945"
+       width="1.0793999"
+       y="-0.11680813"
+       height="1.2336163">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="11.681562"
+         id="feGaussianBlur3690" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.12865422"
+     inkscape:cx="-972.46817"
+     inkscape:cy="821.34164"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-grids="true"
+     inkscape:window-width="1623"
+     inkscape:window-height="1052"
+     inkscape:window-x="103"
+     inkscape:window-y="34"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2818" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="opacity:0.81589954;fill:#2f0000;fill-opacity:1;stroke:#000000;stroke-width:5.57791185;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;filter:url(#filter3688)"
+       d="m 1600,492.36218 c -149.3333,0 -341.3333,33.3355 -485.3334,93.3394 -143.6196,59.8453 -48,113.3405 -90.6666,146.676 117.3333,-33.3355 469.3333,-86.6722 613.3333,-146.676 144.0001,-60.0039 112,-93.3394 -37.3333,-93.3394 z m -96,40.0026 c 82.4746,0 92.0257,23.8797 21.3333,53.3368 -70.6924,29.457 -194.8588,53.3367 -277.3333,53.3367 -82.4746,0 -92.0258,-23.8797 -21.3334,-53.3367 70.6925,-29.4571 194.8588,-53.3368 277.3334,-53.3368 z"
+       id="path2822-7" />
+    <path
+       style="fill:#c30000;stroke:#000000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       d="M 380 132.375 C 220 132.375 100 232.375 100 412.375 C 100 591.89944 340 752.375 380 852.375 C 420 752.375 660 592.375 660 412.375 C 660 232.375 540 132.375 380 132.375 z M 380 252.375 C 468.36556 252.375 540 324.00944 540 412.375 C 540 500.74056 468.36556 572.375 380 572.375 C 291.63444 572.375 220 500.74056 220 412.375 C 220 324.00944 291.63444 252.375 380 252.375 z "
+       id="path2822" />
+  </g>
+</svg>

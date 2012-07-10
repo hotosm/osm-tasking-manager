@@ -18,7 +18,8 @@ $(document).ready(function() {
         new OpenLayers.Size(600, 300),
         {
             isBaseLayer: false,
-            alwaysInRange: true
+            alwaysInRange: true,
+            opacity: 0.5
         }
     );
     map.addLayer(bm);
@@ -27,20 +28,31 @@ $(document).ready(function() {
     jobsLayer = new OpenLayers.Layer.Vector('jobs', {
         styleMap: new OpenLayers.StyleMap({
             'default': {
-                externalGraphic: 'static/img/map_pin.png',
-                graphicWidth: 10,
-                graphicHeight: 10,
-                graphicYOffset: -10,
-                graphicOpacity: 0.4,
-                graphicZIndex: 10
+                externalGraphic: 'static/img/marker_grey.png',
+                graphicWidth: 8,
+                graphicHeight: 10.5,
+                graphicYOffset: -10.5,
+                graphicZIndex: 10,
+                backgroundGraphic: 'static/img/marker_shadow.png',
+                backgroundWidth: 11.5,
+                backgroundHeight: 4,
+                backgroundXOffset: 0,
+                backgroundYOffset: -4,
+                backgroundGraphicZIndex: 5
             },
             'select': {
-                externalGraphic: 'static/img/map_pin.png',
-                graphicWidth: 16,
-                graphicHeight: 16,
-                graphicYOffset: -16,
+                externalGraphic: 'static/img/marker.png',
+                graphicWidth: 12,
+                graphicHeight: 15.75,
+                graphicYOffset: -15.75,
                 graphicOpacity: 1,
-                graphicZIndex: 20
+                graphicZIndex: 20,
+                backgroundGraphic: 'static/img/marker_shadow.png',
+                backgroundWidth: 17.25,
+                backgroundHeight: 6,
+                backgroundXOffset: 0,
+                backgroundYOffset: -6,
+                backgroundGraphicZIndex: 7 
             }
         }),
         rendererOptions: {
