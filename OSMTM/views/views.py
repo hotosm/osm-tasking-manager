@@ -44,6 +44,9 @@ USER_DETAILS_URL = 'http://api.openstreetmap.org/api/0.6/user/details'
 # an oauth consumer instance using our key and secret
 consumer = oauth.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
 
+#Maps the string representation of a job status to its numeric code. 
+JOB_STATUS_TYPES = {'published': 1, 'archived': 0, 'draft': 2}
+
 @view_config(route_name='login')
 def login(request):
     # get the request token
@@ -110,11 +113,14 @@ def home(request):
     user = session.query(User).get(username)
     jobs = session.query(Job).order_by(desc(Job.id))
     tag = request.params.get('tag')
+    status = request.params.get('status')
     if user is None:
         redirect = request.params.get("redirect", request.route_url("logout")) 
         return HTTPFound(location=redirect)
     if tag is not None:
         jobs = jobs.filter(Job.tags.any(tag=tag))
+    if status is not None:
+        jobs = jobs.filter(Job.status==JOB_STATUS_TYPES.get(status, status))
     if not user.is_admin():
         jobs = [job for job in jobs if not job.is_private] + user.private_jobs
     tiles = session.query(Tile) \
@@ -130,7 +136,8 @@ def home(request):
             users=users,
             admin=user.is_admin(),
             tags=tags,
-            current_tag=tag)
+            current_tag=tag,
+            status=status)
 
 @view_config(route_name='about', renderer='about.mako')
 def about(request):

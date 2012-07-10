@@ -11,14 +11,23 @@
             % if current_tag is not None:
             <div class="inline">${current_tag}&nbsp;<a class="close" title="Show all jobs" href="?">&times;</a></div>
             % endif
+            % if status is not None:
+            <div class="inline">${status}&nbsp;<a class="close" title="Show all jobs" href="?">&times;</a></div>
+            % endif
             <div class="dropdown inline">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tags
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Filter
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
                     % for tag in tags:
-                    <li><a href="?tag=${tag.tag}">${tag.tag}</a></li>
+                    <li><a href="?tag=${tag.tag}">Tag: ${tag.tag}</a></li>
                     % endfor
+                    % if user.is_admin():
+                    <li class="divider"></li>
+                    <li><a href="?status=published">Status: published</a></li>
+                    <li><a href="?status=archived">Status: archived</a></li>
+                    <li><a href="?status=draft">Status: draft</a></li>
+                    % endif
                 </ul>
             </div>
         </div>
