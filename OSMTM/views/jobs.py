@@ -127,6 +127,7 @@ def job_edit(request):
         job.josm_preset = josm_preset 
         job.is_private = request.params.get('is_private') == 'on'
         job.requires_nextview = request.params.get('requires_nextview') == 'on'
+        job.imagery = request.params['imagery']
 
         session.add(job)
         return HTTPFound(location = route_url('job', request, job=job.id))

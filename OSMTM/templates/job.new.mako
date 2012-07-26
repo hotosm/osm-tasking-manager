@@ -65,13 +65,6 @@
                             </p>
                         </div> 
                     </div>
-                    <div class="control-group">
-                        <label for="id_imagery">Imagery URL</label>
-                        <div class="controls"> 
-                            <input type="text" class="text" id="id_imagery" name="imagery" value="" />
-                            <input type="button" id="id_imagery_toggle" value="Show" />
-                        </div>
-                    </div>
                 </div>
                 <div class="span6">
                     <div id="map">
