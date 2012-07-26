@@ -122,7 +122,7 @@ def take(request):
         tile = session.query(Tile).get((tilex, tiley, job_id))
 
         # task is already checked out by someone else
-        if tile.username is not None and tile.user != user:
+        if tile.checkout is True and tile.username != user:
             msg = 'You cannot take this task. Someone else is already working on it.'
             return dict(job=job, error_msg=msg)
 
