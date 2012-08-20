@@ -57,8 +57,6 @@ def done(request):
     y = request.matchdict['y']
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
-    tile.username = None 
-    tile.update = datetime.now()
     tile.comment = request.params['comment']
     if 'invalidate' in request.params:
         # task goes back to the queue
@@ -69,6 +67,8 @@ def done(request):
     else:
         #task is done
         tile.checkin = 1
+    tile.checkout = False
+    tile.change = True
     session.add(tile)
     return dict(job=tile.job)
 
@@ -80,7 +80,8 @@ def unlock(request):
     session = DBSession()
     tile = session.query(Tile).get((x, y, job_id))
     tile.username = None 
-    tile.update = datetime.now()
+    tile.checkout = False
+    tile.change = False
     session.add(tile)
     return dict(job=tile.job,
                 prev_task=tile)
@@ -121,7 +122,7 @@ def take(request):
         tile = session.query(Tile).get((tilex, tiley, job_id))
 
         # task is already checked out by someone else
-        if tile.username is not None and tile.user != user:
+        if tile.checkout is True and tile.username != user:
             msg = 'You cannot take this task. Someone else is already working on it.'
             return dict(job=job, error_msg=msg)
 
@@ -130,7 +131,7 @@ def take(request):
             return dict(job=job, error_msg=msg)
 
     # check if user has no task he's currently working on
-    filter = and_(Tile.username==username, Tile.job_id==job_id)
+    filter = and_(Tile.username==username, Tile.checkout==True, Tile.job_id==job_id)
     tiles_current = session.query(Tile).filter(filter).all()
     if len(tiles_current) > 0 and tile.user != user:
         request.session.flash('You already have a task to work on. Finish it before you can accept a new one.')
@@ -140,7 +141,8 @@ def take(request):
         if tile is None:
             tile = tiles[random.randrange(0, len(tiles))]
         tile.username = username
-        tile.update = datetime.now()
+        tile.checkout = True
+        tile.change = False
         session.add(tile)
         return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
     except:

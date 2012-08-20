@@ -9,6 +9,7 @@ from OSMTM.models import DBSession
 from OSMTM.models import Job
 from OSMTM.models import User
 from OSMTM.models import Tile
+from OSMTM.models import TileHistory
 from OSMTM.models import Tag
 
 import oauth2 as oauth
@@ -109,28 +110,26 @@ def home(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     jobs = session.query(Job).order_by(desc(Job.id))
-    tag = request.params.get('tag')
     if user is None:
         redirect = request.params.get("redirect", request.route_url("logout")) 
         return HTTPFound(location=redirect)
-    if tag is not None:
-        jobs = jobs.filter(Job.tags.any(tag=tag))
     if not user.is_admin():
-        jobs = [job for job in jobs if not job.is_private] + user.private_jobs
+        jobs = [job for job in jobs if not job.is_private and job.status == 1] + user.private_jobs
     tiles = session.query(Tile) \
         .filter(Tile.username!=None) \
         .group_by(Tile.username)
     # unlock expired tiles
     for tile in tiles:
         checkTask(tile)
-    users = [tile.username for tile in tiles]
-    tags = session.query(Tag).all()
+    my_jobs = session.query(TileHistory) \
+        .filter(TileHistory.username==user.username) \
+        .group_by(TileHistory.job_id)
+    my_jobs = [tile.job_id for tile in my_jobs]
+    
     return dict(jobs=jobs,
             user=user,
-            users=users,
             admin=user.is_admin(),
-            tags=tags,
-            current_tag=tag)
+            my_jobs=my_jobs)
 
 @view_config(route_name='about', renderer='about.mako')
 def about(request):
@@ -188,8 +187,9 @@ EXPIRATION_DURATION = timedelta(seconds=2 * 60 * 60)
 # unlock the tile if expired
 def checkTask(tile):
     session = DBSession()
-    if tile.username is not None:
+    if tile.checkout is not False and tile.checkout is not None:
         if datetime.now() > tile.update + EXPIRATION_DURATION:
             tile.username = None 
+            tile.checkout = False
             tile.update = datetime.now()
             session.add(tile)

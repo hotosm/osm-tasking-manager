@@ -45,7 +45,7 @@ def job(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     try:
-        filter = and_(Tile.username==username, Tile.job_id==job.id)
+        filter = and_(Tile.username==username, Tile.checkout==True, Tile.job_id==job.id)
         current_task = session.query(Tile).filter(filter).one()
     except NoResultFound, e:
         current_task = None
@@ -93,9 +93,6 @@ def job_tiles(request):
     job = session.query(Job).get(id)
     tiles = []
     for tile in job.tiles:
-        checkout = None
-        if tile.username is not None:
-            checkout = tile.update.isoformat()
         tiles.append(Feature(geometry=tile.to_polygon(),
             id=str(tile.x) + '-' + str(tile.y)))
     return FeatureCollection(tiles)
@@ -107,10 +104,11 @@ def job_tiles_status(request):
     job = session.query(Job).get(id)
     tiles = {}
     for tile in job.tiles:
-        if tile.username is not None or tile.checkin != 0:
+        if tile.username is not None and tile.checkout is True \
+            or tile.checkin != 0:
             tiles[str(tile.x) + '-' + str(tile.y)] = dict(
                 checkin=tile.checkin,
-                username=tile.username)
+                username=(tile.username if tile.checkout is True else None))
     return tiles
 
 @view_config(route_name='job_edit', renderer='job.edit.mako', permission='admin')
@@ -129,6 +127,7 @@ def job_edit(request):
         job.josm_preset = josm_preset 
         job.is_private = request.params.get('is_private') == 'on'
         job.requires_nextview = request.params.get('requires_nextview') == 'on'
+        job.imagery = request.params['imagery']
 
         session.add(job)
         return HTTPFound(location = route_url('job', request, job=job.id))
@@ -157,7 +156,19 @@ def job_publish(request):
     session.add(job)
 
     request.session.flash('Job "%s" published!' % job.title)
-    return HTTPFound(location = route_url('job', request, job=job.id))
+    return HTTPFound(location = route_url('home', request))
+
+@view_config(route_name='job_feature', permission='admin')
+def job_publish(request):
+    id = request.matchdict['job']
+    session = DBSession()
+
+    job = session.query(Job).get(id)
+    job.featured = not job.featured 
+    session.add(job)
+
+    request.session.flash('Job "%s" featured status changed!' % job.title)
+    return HTTPFound(location = route_url('home', request))
 
 @view_config(route_name='job_delete', permission='admin')
 def job_delete(request):
@@ -255,7 +266,7 @@ def job_export(request):
     content_disposition = 'attachment; filename=export.zip'
     return request.get_response(FileApp('/tmp/tiles.zip', **{"Content-Disposition":content_disposition}))
 
-@view_config(route_name='job_preset', permission='admin')
+@view_config(route_name='job_preset')
 def job_export(request):
     id = request.matchdict['job']
     session = DBSession()
@@ -272,78 +283,52 @@ class StatUser():
 
 def get_stats(job):
     session = DBSession()
-    filter = and_(Tile.job_id==job.id, Tile.username!=None)
+    filter = and_(Tile.job_id==job.id, Tile.checkout==True)
     users = session.query(Tile.username).filter(filter)
     current_users = [user.username for user in users]
 
-    #filter = and_(TileHistory.job_id==job.id, TileHistory.username!=None)
-    #users = session.query(TileHistory.username).filter(filter).distinct()
-    #all_time_users = [user.username for user in users]
-
-    # get the users who actually did some work
-    tiles_history = session.query(TileHistory) \
-            .filter(TileHistory.job_id==job.id) \
-            .order_by(TileHistory.x, TileHistory.y) \
-            .all()
-
     users = {}
-    # checkin is 0 when the tile was created
-    checkin = 0
     user = None
 
-    # the changes (date, status) to create a chart with
+    """ the changes (date, checkin) to create a chart with """
     changes = []
 
-    for ndx, i in enumerate(tiles_history):
-        # a user checked out a tile, let's add him to the list
-        if i.username:
-            if not users.has_key(i.username):
-                users[i.username] = StatUser()
-            user = users[i.username]
-            date = i.update
-        # something has changed
-        if user is not None:
-            status = compare_checkin(checkin, i.checkin)
-            update_user(user, status)
-            if status is not None:
-                # maintain compatibility for jobs that were created before the 'update' column creation
-                date = i.update if i.update != None else date
-                changes.append((date, status))
-        checkin = i.checkin
+    def read_tiles(tiles):
+        for ndx, i in enumerate(tiles):
+            if i.username is not None:
+                if not users.has_key(i.username):
+                    users[i.username] = StatUser()
+                user = users[i.username]
+                date = i.update
 
-        # new tile
-        if ndx < len(tiles_history) - 1 and tiles_history[ndx + 1].version == 1 or \
-                ndx == len(tiles_history) - 1:
-            # compare to the current checkin value
-            tile = session.query(Tile) \
-                .get((i.x, i.y, job.id))
-            if user is not None and tile is not None:
-                status = compare_checkin(checkin, tile.checkin)
-                update_user(user, status)
-                if status is not None:
-                    # maintain compatibility for jobs that were created before the 'update' column creation
-                    date = tile.update if tile.update != None else date
-                    changes.append((date, status))
+                if i.checkin == 1:
+                    user.done += 1
+                if i.checkin == 2 or i.checkin == 0:
+                    user.validated += 1
+                """ maintain compatibility for jobs that were created before the 
+                    'update' column creation """
+                date = i.update
+                changes.append((date, i.checkin))
 
-            # let's move to a new tile
-            # checkin is reinitialized
-            checkin = 0
-            user = None
-
-    # also add the current users
-    tiles = session.query(Tile) \
-            .filter(Tile.job_id== job.id) \
+    """ get the tiles that changed """
+    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
+    tiles = session.query(TileHistory) \
+            .filter(filter) \
             .all()
-    for i in tiles:
-        if i.username:
-            if not users.has_key(i.username):
-                users[i.username] = StatUser()
+    read_tiles(tiles)
+
+    """ same for tiles """
+    filter = and_(Tile.change==True, Tile.job_id==job.id, Tile.username is not None)
+    tiles = session.query(Tile) \
+            .filter(filter) \
+            .all()
+    read_tiles(tiles)
 
     contributors = []
     validators = []
     for i in users:
-        # only keep users who have actually done something
-        # or who are currently working on a task
+        """ only keep users who have actually done something
+            or who are currently working on a task """
         if users[i].done != 0 or i in current_users:
             contributors.append((i, users[i].done, i in current_users))
         if users[i].validated != 0:
@@ -354,14 +339,14 @@ def get_stats(job):
     chart_validated = []
     done = 0
     validated = 0
-    for date, status in changes:
-        if status == 1:
+    for date, checkin in changes:
+        if checkin == 1:
             done += 1
             chart_done.append([date.isoformat(), done])
-        if status == 2:
+        if checkin == 2:
             validated += 1
             chart_validated.append([date.isoformat(), validated])
-        if status == 3:
+        if checkin == 0:
             done -= 1
             chart_done.append([date.isoformat(), done])
 
@@ -370,19 +355,8 @@ def get_stats(job):
             chart_done=simplejson.dumps(chart_done),
             chart_validated=simplejson.dumps(chart_validated))
 
-def compare_checkin(old, new):
-    # task done
-    if old == 0 and new == 1:
-        return 1
-    # task validated
-    if old == 1 and new == 2:
-        return 2
-    # task invalidated
-    if old == 1 and new == 0:
-        return 3
-
-def update_user(user, status):
-    if status == 1:
+def update_user(user, checkin):
+    if checkin == 1:
         user.done += 1
-    if status == 2 or status == 3:
+    if checkin == 2 or checkin == 3:
         user.validated += 1

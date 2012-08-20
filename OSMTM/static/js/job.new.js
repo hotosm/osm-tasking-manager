@@ -1,18 +1,6 @@
 var map = null,
     vectorLayer = null,
-    imageryLayer = null,
     tiles = null;
-
-function showImageryLayer () {
-    if (imageryLayer == null) {
-        imageryLayer = new OpenLayers.Layer.XYZ(
-            "Imagery", $("#id_imagery").val(), {sphericalMercator: true});
-        map.addLayer(imageryLayer);
-        // map.setLayerIndex(imageryLayer, 1);
-    }
-    imageryLayer.setVisibility(true);
-    return imageryLayer;
-}
 
 function updateSubmitBtnStatus() {
     var disabled = $('#id_title').val() === '' ||
@@ -31,11 +19,6 @@ function resetMap () {
     });
     var osm = new OpenLayers.Layer.OSM();
     map.addLayer(osm);
-    if ($('#id_imagery_toggle').val() == 'Hide') {
-        // that means show the layer, then
-        imageryLayer = null;
-        showImageryLayer();
-    }
 }
 
 function activateDrawControl() {
@@ -133,29 +116,6 @@ $('#id_relation')
 
             map.addLayer(vectorLayer);
         }
-    });
-
-$('#id_imagery')
-    .change(function() {
-        if (imageryLayer) {
-            map.removeLayer(imageryLayer);
-            imageryLayer = null;
-            $('#id_imagery_toggle').val('Show');
-        }
-    });
-
-$('#id_imagery_toggle')
-    .click(function() {
-        var value = $('#id_imagery_toggle').val();
-        if ($('#id_imagery') == '') return;
-        if (value == 'Show') {
-            showImageryLayer();
-            value = 'Hide';
-        } else {
-            if (imageryLayer) imageryLayer.setVisibility(false);
-            value = 'Show';
-        }
-        $('#id_imagery_toggle').val(value);
     });
 
 $('#id_zoom')

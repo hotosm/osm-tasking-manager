@@ -80,6 +80,12 @@
                 </div>
             </div>
             <div class="control-group">
+                <label for="id_imagery">Imagery</label>
+                <div class="controls">
+                    <input type="text" id="id_imagery" name="imagery" />
+                </div>
+            </div>
+            <div class="control-group">
                 <label for="id_requires_nextview">Requires NextView?</label>
                 <div class="controls">
                     <input type="checkbox" id="id_requires_nextview" name="requires_nextview" ${'checked="checked"' if job.requires_nextview else ''} />

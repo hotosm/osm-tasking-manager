@@ -8,6 +8,7 @@ from sqlalchemy import DateTime
 from sqlalchemy import Table
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
+from sqlalchemy import event
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
@@ -30,6 +31,8 @@ from shapely.wkt import loads
 from OSMTM.history_meta import VersionedMeta, VersionedListener
 from OSMTM.history_meta import _history_mapper 
 
+from datetime import datetime
+
 DBSession = scoped_session(sessionmaker(extension=[ZopeTransactionExtension(), VersionedListener()]))
 Base = declarative_base()
 
@@ -47,9 +50,11 @@ class Tile(Base):
     x = Column(Integer, primary_key=True)
     y = Column(Integer, primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
-    username = Column(Unicode, ForeignKey('users.username'))
+    username = Column(Unicode, ForeignKey('users.username'), index=True)
     update = Column(DateTime)
+    checkout = Column(Boolean, default=False)
     checkin = Column(Integer)
+    change = Column(Boolean, default=False)
     comment = Column(Unicode)
 
     def __init__(self, x, y):
@@ -63,6 +68,11 @@ class Tile(Base):
         step = max/(2**(z - 1))
         tb = TileBuilder(step)
         return tb.create_square(self.x, self.y, srs)
+
+def tile_before_update(mapper, connection, target):
+    target.update = datetime.now()
+
+event.listen(Tile, 'before_update', tile_before_update)
 
 TileHistory = Tile.__history_mapper__.class_
 
@@ -117,6 +127,7 @@ class Job(Base):
     josm_preset = Column(Unicode)
     is_private = Column(Boolean)
     requires_nextview = Column(Boolean)
+    featured = Column(Boolean)
     tiles = relationship(Tile, backref='job', cascade="all, delete, delete-orphan")
     users = relationship(User,
                 secondary=job_whitelist_table,
@@ -137,6 +148,33 @@ class Job(Base):
         for i in get_tiles_in_geom(loads(geometry), int(zoom)):
             tiles.append(Tile(i[0], i[1]))
         self.tiles = tiles
+
+    def get_last_update(self):
+        updates = []
+        for tile in self.tiles:
+            if tile.update is not None:
+                updates.append(tile.update)
+        updates.sort(reverse=True)
+        return updates[0] if len(updates) > 0 else None
+
+    def get_percent_done(self):
+        total = len(self.tiles)
+        done = 0
+        for tile in self.tiles:
+            if tile.checkin > 0:
+                done = done+1
+        return (done * 100 / total)
+
+    def get_current_users(self):
+        users = []
+        for tile in self.tiles:
+            if tile.checkout and tile.username not in users:
+                users.append(tile.username)
+        return users
+
+    def get_centroid(self):
+        geom = loads(self.geometry)
+        return geom.centroid
 
 def group_membership(username, request):
     session = DBSession()
