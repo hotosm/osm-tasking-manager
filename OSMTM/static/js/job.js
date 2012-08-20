@@ -155,7 +155,7 @@ var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
         var id = feature.fid.split('-');
         hideTooltips();
         $('#task').load(
-            job_url + "/task/" + id[0] + "/" + id[1] + "/take",
+            [job_url, "task", id[0], id[1], id[2], "take"].join('/'),
             function(responseText, textStatus, request) {
                 if (textStatus == 'error') {
                     alert(responseText);

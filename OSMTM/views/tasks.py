@@ -29,8 +29,9 @@ def task(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
     y = request.matchdict['y']
+    zoom = request.matchdict['zoom']
     session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
+    tile = session.query(Tile).get((x, y, zoom, job_id))
     if tile is None:
         return HTTPNotFound()
     username = authenticated_userid(request)
@@ -55,8 +56,9 @@ def done(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
     y = request.matchdict['y']
+    zoom = request.matchdict['zoom']
     session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
+    tile = session.query(Tile).get((x, y, zoom, job_id))
     tile.comment = request.params['comment']
     if 'invalidate' in request.params:
         # task goes back to the queue
@@ -77,8 +79,9 @@ def unlock(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
     y = request.matchdict['y']
+    zoom = request.matchdict['zoom']
     session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
+    tile = session.query(Tile).get((x, y, zoom, job_id))
     tile.username = None 
     tile.checkout = False
     tile.change = False
@@ -117,9 +120,10 @@ def take(request):
                     break
     # x / y given, selecting the tile
     else:
-        tilex = request.matchdict['x']
-        tiley = request.matchdict['y']
-        tile = session.query(Tile).get((tilex, tiley, job_id))
+        x = request.matchdict['x']
+        y = request.matchdict['y']
+        zoom = request.matchdict['zoom']
+        tile = session.query(Tile).get((x, y, zoom, job_id))
 
         # task is already checked out by someone else
         if tile.checkout is True and tile.username != user:
@@ -144,7 +148,7 @@ def take(request):
         tile.checkout = True
         tile.change = False
         session.add(tile)
-        return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y))
+        return HTTPFound(location=request.route_url('task', job=job_id, x=tile.x, y=tile.y, zoom=tile.zoom))
     except:
         if int(checkin) == 1:
             msg = 'Sorry. No task available to validate.'
@@ -166,6 +170,7 @@ def task_export(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
     y = request.matchdict['y']
+    zoom = request.matchdict['zoom']
     session = DBSession()
-    tile = session.query(Tile).get((x, y, job_id))
+    tile = session.query(Tile).get((x, y, zoom, job_id))
     return dict(polygon=tile.to_polygon(4326))

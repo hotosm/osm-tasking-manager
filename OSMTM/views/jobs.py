@@ -68,7 +68,7 @@ def job(request):
                        .order_by(TileHistory.version.desc())\
                        .first()
             if task is not None and version == task.version:
-                prev_task = session.query(Tile).get((task.x, task.y, task.job_id))
+                prev_task = session.query(Tile).get((task.x, task.y, task.job_id, task.zoom))
 
     admin = user.is_admin() if user else False
     stats = get_stats(job)
@@ -94,7 +94,7 @@ def job_tiles(request):
     tiles = []
     for tile in job.tiles:
         tiles.append(Feature(geometry=tile.to_polygon(),
-            id=str(tile.x) + '-' + str(tile.y)))
+            id=str(tile.x) + '-' + str(tile.y) + '-' + str(tile.zoom)))
     return FeatureCollection(tiles)
 
 @view_config(route_name='job_tiles_status', renderer='json', permission='edit')
@@ -106,7 +106,7 @@ def job_tiles_status(request):
     for tile in job.tiles:
         if tile.username is not None and tile.checkout is True \
             or tile.checkin != 0:
-            tiles[str(tile.x) + '-' + str(tile.y)] = dict(
+            tiles[str(tile.x) + '-' + str(tile.y) + '-' + str(tile.zoom)] = dict(
                 checkin=tile.checkin,
                 username=(tile.username if tile.checkout is True else None))
     return tiles

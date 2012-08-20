@@ -49,6 +49,7 @@ class Tile(Base):
     __tablename__ = "tiles"
     x = Column(Integer, primary_key=True)
     y = Column(Integer, primary_key=True)
+    zoom = Column(Integer, primary_key=True)
     job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
     username = Column(Unicode, ForeignKey('users.username'), index=True)
     update = Column(DateTime)
@@ -57,15 +58,15 @@ class Tile(Base):
     change = Column(Boolean, default=False)
     comment = Column(Unicode)
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, zoom):
         self.x = x
         self.y = y
+        self.zoom = zoom
         self.checkin = 0
 
     def to_polygon(self, srs=900913):
-        z = self.job.zoom
         # tile size (in meters) at the required zoom level
-        step = max/(2**(z - 1))
+        step = max/(2**(self.zoom - 1))
         tb = TileBuilder(step)
         return tb.create_square(self.x, self.y, srs)
 
@@ -139,14 +140,13 @@ class Job(Base):
         self.title = title
         self.status = 1
         self.geometry = geometry
-        self.zoom = zoom
         self.short_description = u''
         self.description = u''
         self.workflow = u''
 
         tiles = []
         for i in get_tiles_in_geom(loads(geometry), int(zoom)):
-            tiles.append(Tile(i[0], i[1]))
+            tiles.append(Tile(i[0], i[1], int(zoom)))
         self.tiles = tiles
 
     def get_last_update(self):

@@ -45,7 +45,7 @@ var exportOpen = function() {
         url = getLink({
             base: 'http://www.openstreetmap.org/edit?editor=potlatch2&',
             bounds: bounds,
-            zoom: jobZoom,
+            zoom: zoom,
             protocol: 'llz'
         });
         window.open(url);
