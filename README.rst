@@ -81,3 +81,26 @@ Create a new `OSMTM.wsgi` in your virtual env directory with the following::
 
 You can then test config and restart Apache.
 Your application should be available at http://host.domain/OSMTM
+
+Upgrade notes
+-------------
+
+If you upgrade database from 8 to 9, the following procedure is required.
+
+Make sure you first create a copy of your database::
+
+    cp OSMTM.db OSMTM_copy.db
+
+Comment the following line in ``models.py``::
+
+    event.listen(Tile, 'before_update', tile_before_update)
+
+Upgrade the database::
+
+    python migration/manage.py upgrade sqlite:///OSMTM.db migration/
+
+As mention in the return messages, launch the migration script::
+
+   python migration/versions/data_upgrade_008.py
+
+Uncomment the following line in ``models.py``.
