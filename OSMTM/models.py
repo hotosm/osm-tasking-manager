@@ -143,6 +143,7 @@ class Job(Base):
         self.short_description = u''
         self.description = u''
         self.workflow = u''
+        self.zoom = zoom
 
         tiles = []
         for i in get_tiles_in_geom(loads(geometry), int(zoom)):
@@ -158,12 +159,15 @@ class Job(Base):
         return updates[0] if len(updates) > 0 else None
 
     def get_percent_done(self):
-        total = len(self.tiles)
+        total = 0
         done = 0
         for tile in self.tiles:
+            area = 1.0/(1 + tile.zoom - self.zoom)**2
+            total = total + area
             if tile.checkin > 0:
-                done = done+1
-        return (done * 100 / total)
+                done = done + area
+        print self.id, done, total
+        return round(done * 100 / total)
 
     def get_current_users(self):
         users = []
