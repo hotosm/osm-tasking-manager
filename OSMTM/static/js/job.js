@@ -291,6 +291,15 @@ function takeOrUnlock(e) {
 $('#unlock').live('click', takeOrUnlock);
 $('#validate').live('click', takeOrUnlock);
 $('#take_again').live('click', takeOrUnlock);
+$('#split').live('click', takeOrUnlock);
+
+function splitTask(id, newTiles) {
+    var feature = tilesLayer.getFeatureByFid(id);
+    tilesLayer.removeFeatures([feature]);
+
+    var format = new OpenLayers.Format.GeoJSON();
+    tilesLayer.addFeatures(format.read(newTiles));
+}
 
 function hideTooltips() {
     $('[rel=tooltip]').tooltip('hide');

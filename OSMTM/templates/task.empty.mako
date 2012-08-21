@@ -18,3 +18,12 @@ Or choose one by <strong>clicking</strong> on the map.
     var current_tile = null;
     $("[rel=tooltip]").tooltip();
 </script>
+% if split_id is not UNDEFINED:
+    <%
+        from geojson import dumps
+        tiles = dumps(new_tiles)
+    %>
+<script type="text/javascript">
+    splitTask("${split_id}", ${tiles|n});
+</script>
+% endif

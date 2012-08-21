@@ -11,7 +11,7 @@ from OSMTM.models import Job
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
-from geojson import Feature
+from geojson import Feature, FeatureCollection
 from geojson import dumps
 from sqlalchemy.sql.expression import and_
 
@@ -164,6 +164,32 @@ def take_random(request):
 @view_config(route_name='task_take', permission='job', renderer="task.mako")
 def take_tile(request):
     return take(request)
+
+@view_config(route_name='task_split', permission='job', renderer="task.mako")
+def split_tile(request):
+    job_id = request.matchdict['job']
+    x = request.matchdict['x']
+    y = request.matchdict['y']
+    zoom = request.matchdict['zoom']
+    session = DBSession()
+    job = session.query(Job).get(job_id)
+    tile = session.query(Tile).get((x, y, zoom, job_id))
+    session.delete(tile)
+
+    new_tiles = []
+    t = []
+    for i in range(0, 2):
+        for j in range(0, 2):
+            print i, j
+            tile = Tile(int(x)*2 + i, int(y)*2 + j, int(zoom)+1)
+            tile.job = job
+            t.append(tile)
+    for tile in t:
+        new_tiles.append(Feature(geometry=tile.to_polygon(),
+            id=str(tile.x) + '-' + str(tile.y) + '-' + str(tile.zoom)))
+    return dict(job=tile.job,
+            split_id="-".join([x, y, zoom]),
+            new_tiles=FeatureCollection(new_tiles))
 
 @view_config(route_name="task_export", renderer="task.osm.mako")
 def task_export(request):

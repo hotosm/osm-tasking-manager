@@ -75,6 +75,9 @@
                 Can't work on this task right now? No problem.
                 <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
             </p>
+            <p>
+                You can also <a href="${request.route_url('task_split', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="split">Split it!</a> into smaller pieces.
+            </p>
             </form>
             % endif
         </div>
