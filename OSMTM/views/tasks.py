@@ -180,7 +180,6 @@ def split_tile(request):
     t = []
     for i in range(0, 2):
         for j in range(0, 2):
-            print i, j
             tile = Tile(int(x)*2 + i, int(y)*2 + j, int(zoom)+1)
             tile.job = job
             t.append(tile)
