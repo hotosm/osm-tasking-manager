@@ -203,11 +203,13 @@ def populate(admin_user):
     session.add(job)
     session.flush()
     transaction.commit()
+    return session
     
 def initialize_sql(engine, admin_user=u'admin_user'):
     Base.metadata.bind = engine
     Base.metadata.create_all(engine)
     try:
-        populate(admin_user)
+        session = populate(admin_user)
+        return session
     except IntegrityError:
         transaction.abort()
