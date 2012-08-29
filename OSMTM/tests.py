@@ -172,6 +172,12 @@ class FunctionalTests(unittest.TestCase):
         self.failUnless('About The Tasking Manager' in res.body)
         self.failUnless('Login' in res.body)
 
+    def test_logout(self):
+        headers = self.__remember('foo')
+        res = self.testapp.get('/logout', headers=headers, status=302)
+        res2 = res.follow(headers=headers, status=200)
+        self.failUnless('About The Tasking Manager' in res2.body)
+
     def test_authenticated(self):
         headers = self.__remember('foo')
         try:
@@ -278,6 +284,20 @@ class FunctionalTests(unittest.TestCase):
             self.assertTrue(res3.form['admin'].checked)
         finally:
             self.__forget()
+
+    ##########
+    ## jobs  #
+    ##########
+
+    def test_job_not_found(self):
+        headers = self.__remember('foo')
+        try:
+            res = self.testapp.get('/job/2', headers=headers,
+                    status=302)
+            res2 = res.follow(headers=headers, status=200)
+        finally:
+            self.__forget()
+        self.assertTrue("Sorry, this job doesn" in res2.body)
 
     ##########
     ## tasks #
