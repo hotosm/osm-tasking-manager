@@ -15,7 +15,12 @@
                 <li data-bind="css: {active: filter() == 'mine'}"><a href="#" data-bind="click: showMine"><i class="icon-star"></i>My Jobs</a></li>
             </ul>
         </div>
-    </div>
+        </div>
+        % if admin:
+        <div class="span5">
+            <a href="${request.route_url('job_new')}" class="btn btn-small pull-right">+ Create a new job</a>
+        </div>
+        % endif
     </div>
     <div class="row"> 
         <div class="span6" id="jobslist">
