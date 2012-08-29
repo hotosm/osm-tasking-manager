@@ -8,6 +8,12 @@
     <div class="page-header">
         <h3>${job.title}</h3>
     </div>
+    % if job.status == 0:
+    <div class="alert">
+        <b>Warning!</b>
+        This job has been archived. You're not supposed to work on it anymore.
+    </div>
+    % endif
     <div class="row">
     <div class="span6">
         <ul class="nav nav-tabs">
