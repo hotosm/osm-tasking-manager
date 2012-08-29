@@ -166,7 +166,6 @@ class Job(Base):
             total = total + area
             if tile.checkin > 0:
                 done = done + area
-        print self.id, done, total
         return round(done * 100 / total)
 
     def get_current_users(self):
