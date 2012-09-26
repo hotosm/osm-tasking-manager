@@ -104,7 +104,7 @@
     </div>
 </div>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/home.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/home.js')}?_cdsalt=1348670520"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/sammy-latest.min.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/knockout-2.1.0.js')}"></script>
 <script type="text/javascript">
