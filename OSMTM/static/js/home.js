@@ -157,6 +157,10 @@ function JobViewModel(initialJobs) {
 
     // Client-side routes
     Sammy(function() {
+        this.get('/', function() {
+            self.filter('featured');
+            self.search();
+        });
         this.get('#:filter', function() {
             self.filter(this.params.filter);
             self.search();
