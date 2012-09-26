@@ -52,7 +52,7 @@ $(document).ready(function() {
                 backgroundHeight: 6,
                 backgroundXOffset: 0,
                 backgroundYOffset: -6,
-                backgroundGraphicZIndex: 7 
+                backgroundGraphicZIndex: 7
             }
         }),
         rendererOptions: {
@@ -67,7 +67,7 @@ $(document).ready(function() {
                 return false;
             }
         });
-    
+
     // See http://www.finalclap.com/tuto/float-fixed-scroll-jquery-css-rocket-83/
     var navBarHeight = $('.navbar').height() + 20;
     var fixedLimit = $('#jobslist').offset().top - navBarHeight;
@@ -103,7 +103,7 @@ function JobViewModel(initialJobs) {
     self.jobs = ko.observableArray();
     self.filter = ko.observable('featured');
     self.searchValue = ko.observable();
-    
+
     function changeHash() {
         var search = this.searchValue() ?
             '/' + this.searchValue() : '';
@@ -155,7 +155,7 @@ function JobViewModel(initialJobs) {
         this.filter('all');
     }.bind(this);
 
-    // Client-side routes    
+    // Client-side routes
     Sammy(function() {
         this.get('#:filter', function() {
             self.filter(this.params.filter);
