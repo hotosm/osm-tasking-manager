@@ -101,7 +101,7 @@ function JobViewModel(initialJobs) {
     // Data
     var self = this;
     self.jobs = ko.observableArray();
-    self.filter = ko.observable('all');
+    self.filter = ko.observable('featured');
     self.searchValue = ko.observable();
     
     function changeHash() {
