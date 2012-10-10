@@ -30,28 +30,6 @@
             <div id="jobs" data-bind="foreach: jobs">
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
-                    <ul class="nav job-stats">
-                        <!-- ko if: users.length > 0 -->
-                        <li data-bind="attr: {title: usersText}">
-                            <i class="icon-user"></i>
-                            <span data-bind="text: users.length"></span>
-                        </li>
-                        <!-- /ko -->
-                        <li class="row">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div class="progress"
-                                             style="border: 1px solid #ccc">
-                                            <div class="bar"
-                                                data-bind="style: {width: (percent_done + '%')}"></div>
-                                        </div>
-                                    </td>
-                                    <td data-bind="text: (percent_done + '%')"></td>
-                                </tr>
-                            </table>
-                        </li>
-                    </ul>
                     <h4><a data-bind="text: title,
                             attr: {href: url}"></a>
                         <!-- ko if: featured -->
@@ -92,8 +70,7 @@
                             class="delete" alt="delete" title="Delete the job">delete</a>
                     </p>
                     % endif
-                    <p class="updated-at">Last updated 
-                        <span data-bind="text: last_update"></span>
+                    <p class="updated-at">&nbsp;
                     </p>
                 </div>
             </div>
@@ -122,16 +99,12 @@
                 short_description=markdown(job.short_description),
                 is_private=job.is_private,
                 featured=job.featured,
-                last_update=timesince(job.get_last_update()),
                 url=request.route_url('job', job=job.id),
                 feature_url=request.route_url('job_feature', job=job.id),
                 archive_url=request.route_url('job_archive', job=job.id),
                 publish_url=request.route_url('job_publish', job=job.id),
                 edit_url=request.route_url('job_edit', job=job.id),
                 delete_url=request.route_url('job_delete', job=job.id),
-                percent_done=job.get_percent_done(),
-                users=job.get_current_users(),
-                usersText="Currently working: %s" % ", ".join(job.get_current_users()),
                 tags=[tag.tag for tag in job.tags],
                 is_mine=job.id in [_job for _job in my_jobs],
                 lon=centroid.x,
