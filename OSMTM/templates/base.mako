@@ -79,7 +79,7 @@
                 See the <a href="${request.route_url('about')}">about</a> page for complete information.<br />
                 </p>
                 <p class="pull-right">
-                Fork the code on <a href="http://github.com/pgiraud/OSMTM">github</a>.</p>
+                Fork the code on <a href="http://github.com/hotosm/osm-tasking-manager">github</a>.</p>
             </div>
         </footer>
 

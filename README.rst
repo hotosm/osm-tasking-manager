@@ -3,14 +3,33 @@ OpenStreetMap Tasking Manager
 
 About
 -----
-This application is intented to be used as a way to organize collaborative work on specific areas by defining workflows and tasks (tiles) to be achieved.
+
+OSMTM enables collaborative work on specific areas in OpenStreetMap by defining
+clear workflows to be achieved and by breaking tasks down into pieces.
+
+The application is written in Python using the Pylons framework.
+
+
+Dependencies
+------------
+
+OSMTM has a set of dependencies that you need to install first.
+
+On debian systems you can do::
+
+    sudo apt-get install build-essential protobuf-compiler libprotobuf-dev libgeos-dev python-dev
+
+On OS X you can do::
+
+    brew install protobuf geos
+
 
 Installation
 ------------
 
 First clone the git repository::
 
-    git clone git://github.com/pgiraud/OSMTM.git
+    git clone git://github.com/hotosm/osm-tasking-manager.git
 
 Update and load the submodules::
     
@@ -20,23 +39,19 @@ Installing OSMTM in a Virtual Python environment is recommended.
 
 To create a virtual Python environment::
 
-    wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.7.tar.gz
-    tar xvzf virtualenv-1.7.tar.gz
-    python virtualenv-1.7/virtualenv.py --distribute --no-site-packages env
+    wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.8.tar.gz
+    tar xvzf virtualenv-1.8.tar.gz
+    python virtualenv-1.8/virtualenv.py --distribute --no-site-packages env
     source env/bin/activate
 
 To install OSMTM from source (the only option at this point) in the virtual
 Python environment execute the ``setup.py`` script::
 
-    cd OSMTM
     python setup.py install
-
-Previously, you may need to install some packages::
-
-    sudo apt-get install build-essential protobuf-compiler libprotobuf-dev libgeos-dev python-dev
 
 Edit the development.ini file and change the ``admin_user`` variable to match
 your OSM username. 
+
 
 Run OSMTM
 ---------
@@ -44,6 +59,7 @@ Run OSMTM
 To run OSMTM the easiest is to use ``pserve``::
 
     pserve --reload development.ini
+
 
 Installation as a mod_wsgi Application
 --------------------------------------
