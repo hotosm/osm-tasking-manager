@@ -82,6 +82,13 @@ Create a new `OSMTM.wsgi` in your virtual env directory with the following::
 You can then test config and restart Apache.
 Your application should be available at http://host.domain/OSMTM
 
+Run Tests
+---------
+
+To ensure your build is working properly run the tests (in active virtual env)::
+
+    nosetests
+
 Upgrade notes
 -------------
 
