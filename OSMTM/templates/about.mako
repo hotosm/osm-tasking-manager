@@ -26,7 +26,7 @@
     </div>
     <div class="row">
         <div class="span6">
-            The <a href="http://github.com/pgiraud/OSMTM">code</a> is available on Github.
+            The <a href="http://github.com/hotosm/osm-tasking-manager">code</a> is available on Github.
         </div>
     </div>
     <div class="row">
@@ -34,7 +34,7 @@
             <h4>Contributors</h4>
             <p>
                 <ul>
-                    <li><a href="https://github.com/pgiraud/OSMTM">pgiraud</a></li>
+                    <li><a href="https://github.com/hotosm/osm-tasking-manager">pgiraud</a></li>
                     <li><a href="https://github.com/schuyler/OSMTM">Schuyler</a></li>
                     <li><a href="https://github.com/pmauduit/OSMTM">pmauduit</a></li>
                     <li><a href="https://github.com/tonio/OSMTM">tonio</a></li>
