@@ -30,6 +30,24 @@
             <div id="jobs" data-bind="foreach: jobs">
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
+                    <ul class="nav job-stats">
+                        <li class="row">
+                            <!-- ko if: done -->
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="progress"
+                                             style="border: 1px solid #ccc">
+                                            <div class="bar"
+                                                data-bind="style: {width: (done + '%')}"></div>
+                                        </div>
+                                    </td>
+                                    <td data-bind="text: (done + '%')"></td>
+                                </tr>
+                            </table>
+                            <!-- /ko -->
+                        </li>
+                    </ul>
                     <h4><a data-bind="text: title,
                             attr: {href: url}"></a>
                         <!-- ko if: featured -->
@@ -70,7 +88,8 @@
                             class="delete" alt="delete" title="Delete the job">delete</a>
                     </p>
                     % endif
-                    <p class="updated-at">&nbsp;
+                    <p class="updated-at">
+                        <span data-bind="text: last_update"></span>
                     </p>
                 </div>
             </div>
@@ -99,6 +118,8 @@
                 short_description=markdown(job.short_description),
                 is_private=job.is_private,
                 featured=job.featured,
+                last_update=timesince(job.last_update),
+                done=job.done,
                 url=request.route_url('job', job=job.id),
                 feature_url=request.route_url('job_feature', job=job.id),
                 archive_url=request.route_url('job_archive', job=job.id),

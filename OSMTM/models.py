@@ -71,7 +71,10 @@ class Tile(Base):
         return tb.create_square(self.x, self.y, srs)
 
 def tile_before_update(mapper, connection, target):
-    target.update = datetime.now()
+    d = datetime.now()
+    target.update = d
+    target.job.done = target.job.get_percent_done()
+    target.job.last_update = d
 
 event.listen(Tile, 'before_update', tile_before_update)
 
@@ -129,6 +132,9 @@ class Job(Base):
     is_private = Column(Boolean)
     requires_nextview = Column(Boolean)
     featured = Column(Boolean)
+    # percentage done
+    done = Column(Integer)
+    last_update = Column(DateTime)
     tiles = relationship(Tile, backref='job', cascade="all, delete, delete-orphan")
     users = relationship(User,
                 secondary=job_whitelist_table,
