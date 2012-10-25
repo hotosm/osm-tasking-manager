@@ -108,22 +108,11 @@ To ensure your build is working properly run the tests (in active virtual env)::
 Upgrade notes
 -------------
 
-If you upgrade database from 8 to 9, the following procedure is required.
+Database versions are now managed using Alembic.
+The following commands should help upgrading the database.
 
-Make sure you first create a copy of your database::
+*Don't forget to make copies of your db file before running any upgrade.*::
 
-    cp OSMTM.db OSMTM_copy.db
+    alembic upgrade head
 
-Comment the following line in ``models.py``::
-
-    event.listen(Tile, 'before_update', tile_before_update)
-
-Upgrade the database::
-
-    python migration/manage.py upgrade sqlite:///OSMTM.db migration/
-
-As mention in the return messages, launch the migration script::
-
-   python migration/versions/data_upgrade_008.py
-
-Uncomment the following line in ``models.py``.
+Note: Please contact the maintainer if you encounter problems.
