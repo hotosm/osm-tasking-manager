@@ -50,7 +50,7 @@ class Tile(Base):
     x = Column(Integer, primary_key=True)
     y = Column(Integer, primary_key=True)
     zoom = Column(Integer, primary_key=True)
-    job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True)
+    job_id = Column(Integer, ForeignKey('jobs.id'), primary_key=True, index=True)
     username = Column(Unicode, ForeignKey('users.username'), index=True)
     update = Column(DateTime)
     checkout = Column(Boolean, default=False)
@@ -71,7 +71,10 @@ class Tile(Base):
         return tb.create_square(self.x, self.y, srs)
 
 def tile_before_update(mapper, connection, target):
-    target.update = datetime.now()
+    d = datetime.now()
+    target.update = d
+    target.job.done = target.job.get_percent_done()
+    target.job.last_update = d
 
 event.listen(Tile, 'before_update', tile_before_update)
 
@@ -129,6 +132,9 @@ class Job(Base):
     is_private = Column(Boolean)
     requires_nextview = Column(Boolean)
     featured = Column(Boolean)
+    # percentage done
+    done = Column(Integer)
+    last_update = Column(DateTime)
     tiles = relationship(Tile, backref='job', cascade="all, delete, delete-orphan")
     users = relationship(User,
                 secondary=job_whitelist_table,
@@ -167,13 +173,6 @@ class Job(Base):
             if tile.checkin > 0:
                 done = done + area
         return round(done * 100 / total)
-
-    def get_current_users(self):
-        users = []
-        for tile in self.tiles:
-            if tile.checkout and tile.username not in users:
-                users.append(tile.username)
-        return users
 
     def get_centroid(self):
         geom = loads(self.geometry)

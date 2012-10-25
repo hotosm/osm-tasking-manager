@@ -30,6 +30,7 @@ requires = [
     'papyrus==0.7',
     'pyramid_fanstatic',
     'js.lesscss',
+    'alembic'
     ]
 
 if sys.version_info[:3] < (2,5,0):
