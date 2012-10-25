@@ -16,8 +16,12 @@ import oauth2 as oauth
 
 from pyramid.security import remember, forget, authenticated_userid
 
+from json import dumps
+from markdown import markdown
+from OSMTM.utils import timesince
 from datetime import datetime, timedelta
-from sqlalchemy import desc
+from sqlalchemy import desc, distinct
+from sqlalchemy.sql.expression import and_
 
 from OSMTM.resources import main
 
@@ -125,6 +129,38 @@ def home(request):
         .filter(TileHistory.username==user.username) \
         .group_by(TileHistory.job_id)
     my_jobs = [tile.job_id for tile in my_jobs]
+
+    dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
+    def to_dict(job):
+        centroid = job.get_centroid()
+        filter = and_(Tile.job==job,Tile.checkout==True, Tile.username!=None)
+        current_users = session.query(distinct(Tile.username)) \
+                .filter(filter).all()
+        current_users = [u[0] for u in current_users]
+        print current_users
+        return dict(
+            title=job.title,
+            status=job.status,
+            short_description=markdown(job.short_description),
+            is_private=job.is_private,
+            featured=job.featured,
+            last_update=timesince(job.last_update),
+            done=job.done,
+            users=current_users,
+            usersText="Currently working: %s" % ", ".join(current_users),
+            url=request.route_url('job', job=job.id),
+            feature_url=request.route_url('job_feature', job=job.id),
+            archive_url=request.route_url('job_archive', job=job.id),
+            publish_url=request.route_url('job_publish', job=job.id),
+            edit_url=request.route_url('job_edit', job=job.id),
+            delete_url=request.route_url('job_delete', job=job.id),
+            tags=[tag.tag for tag in job.tags],
+            is_mine=job.id in [_job for _job in my_jobs],
+            lon=centroid.x,
+            lat=centroid.y
+        )
+
+    jobs = dumps([to_dict(job) for job in jobs], default=dthandler)
     
     return dict(jobs=jobs,
             user=user,

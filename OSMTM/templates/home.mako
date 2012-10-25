@@ -31,6 +31,12 @@
                 <div class="job well"
                     data-bind="css: {archived: status == 0, featured: featured == 1}">
                     <ul class="nav job-stats">
+                        <!-- ko if: users.length > 0 -->
+                        <li data-bind="attr: {title: usersText}">
+                            <i class="icon-user"></i>
+                            <span data-bind="text: users.length"></span>
+                        </li>
+                        <!-- /ko -->
                         <li class="row">
                             <!-- ko if: done -->
                             <table>
@@ -104,35 +110,5 @@
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/sammy-latest.min.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/knockout-2.1.0.js')}"></script>
 <script type="text/javascript">
-    <%
-        from json import dumps
-        import datetime
-        from markdown import markdown
-        from OSMTM.utils import timesince
-        dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
-        def to_dict(job):
-            centroid = job.get_centroid()
-            return dict(
-                title=job.title,
-                status=job.status,
-                short_description=markdown(job.short_description),
-                is_private=job.is_private,
-                featured=job.featured,
-                last_update=timesince(job.last_update),
-                done=job.done,
-                url=request.route_url('job', job=job.id),
-                feature_url=request.route_url('job_feature', job=job.id),
-                archive_url=request.route_url('job_archive', job=job.id),
-                publish_url=request.route_url('job_publish', job=job.id),
-                edit_url=request.route_url('job_edit', job=job.id),
-                delete_url=request.route_url('job_delete', job=job.id),
-                tags=[tag.tag for tag in job.tags],
-                is_mine=job.id in [_job for _job in my_jobs],
-                lon=centroid.x,
-                lat=centroid.y
-            )
-        jobs_json = dumps([to_dict(job) for job in jobs], default=dthandler)
-
-    %>
-    jobs = ${jobs_json|n}
+    jobs = ${jobs|n}
 </script>
