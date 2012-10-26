@@ -137,7 +137,6 @@ def home(request):
         current_users = session.query(distinct(Tile.username)) \
                 .filter(filter).all()
         current_users = [u[0] for u in current_users]
-        print current_users
         return dict(
             title=job.title,
             status=job.status,
@@ -205,7 +204,6 @@ def user_add(request):
     session = DBSession()
     username = request.params.get("username")
     if session.query(User).get(username) is None:
-        print(username)
         session.add(User(username))
         session.flush()
     return HTTPFound(location=request.route_url('user', id=username)) 
