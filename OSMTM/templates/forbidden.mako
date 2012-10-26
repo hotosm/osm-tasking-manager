@@ -16,7 +16,7 @@
     OpenStreetMap has been shown to be an effective collection mechanism for infrastructure data.  One thing that is lacking is the ability to coordinate workers surveying in the field or working remotely.  The goal of the OpenStreetMap Tasking Tool is to make it easy for administrators to define collection areas of interest and collection workflows as well as allowing workers to easily determine what areas they should be working on.
     </div>
     <div class="span6">
-        <h2>${title()}</h4>
+        <h2>${title()}</h2>
         % if user is not None:
             <div class="alert-message error">
                 <strong>Sorry.</strong> You're not allowed to view this page!
@@ -24,6 +24,9 @@
         % else:
             <a href="${request.route_url('login', _query=[('came_from', request.url)])}" class="btn">Log in using your OpenStreetMap account »</a>
         % endif
+        <hr />
+        <h3>New to the Tasking Manager?</h3>
+        <a href="${request.route_url('tour')}" class="btn">Take the Tour</a>
     </div>
     </div>
 </div>

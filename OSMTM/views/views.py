@@ -215,6 +215,10 @@ def users(request):
     current_user = session.query(User).get(current_username)
     return dict(users = session.query(User), admin=current_user.is_admin())
 
+@view_config(route_name='tour', renderer='tour.mako')
+def tour(request):
+    return dict()
+
 # the time delta after which the task is unlocked (in seconds)
 EXPIRATION_DURATION = timedelta(seconds=2 * 60 * 60)
 
