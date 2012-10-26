@@ -54,7 +54,7 @@ def job(request):
     prev_task = None
     if current_task is None:
         # first find task taken by the user
-        filter = and_(TileHistory.username==username, Tile.job_id==job.id)
+        filter = and_(TileHistory.username==username, TileHistory.job_id==job.id)
         task = session.query(TileHistory)\
                        .filter(filter)\
                        .order_by(TileHistory.update.desc())\
