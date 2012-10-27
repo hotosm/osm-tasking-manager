@@ -267,7 +267,7 @@ def job_export(request):
     return request.get_response(FileApp('/tmp/tiles.zip', **{"Content-Disposition":content_disposition}))
 
 @view_config(route_name='job_preset')
-def job_export(request):
+def job_preset(request):
     id = request.matchdict['job']
     session = DBSession()
     job = session.query(Job).get(id)
