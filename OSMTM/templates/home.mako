@@ -11,7 +11,7 @@
                 <li data-bind="css: {active: filter() == 'all'}">
                     <a href="#" data-bind="click: clearFilter">All Jobs</a>
                 </li>
-                <li data-bind="css: {active: filter() == 'featured'}" class="pull-right"><a href="#" data-bind="click: showFeatured"><i class="icon-fire"></i>Featured Jobs</a></li>
+                <li data-bind="css: {active: filter() == 'featured'}"><a href="#" data-bind="click: showFeatured"><i class="icon-fire"></i>Featured Jobs</a></li>
                 <li data-bind="css: {active: filter() == 'mine'}"><a href="#" data-bind="click: showMine"><i class="icon-star"></i>My Jobs</a></li>
             </ul>
         </div>
