@@ -1,4 +1,4 @@
-@import "../twitter-bootstrap-b0bd3ef/less/bootstrap.less";
+@import "../bootstrap/less/bootstrap.less";
 
 @size1: 28px;
 @rhythm: 20px;
@@ -29,6 +29,12 @@ html, body {
     background-color: #FFF;
     color: #111;
     padding-top: 30px;
+    font-size: 13px;
+    line-height: 18px;
+}
+h4 {
+    font-size: 14px;
+    line-height: 18px;
 }
 // Basic Layout
 .wrap {
@@ -67,8 +73,10 @@ html, body {
   @shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
   .box-shadow(@shadow);
 }
+.navbar .brand,
 .navbar .nav > li > a {
-    color: #ccc;
+    text-shadow: none;
+    color: white;
 }
 .navbar div > ul {
   .dropdown-menu {
@@ -141,6 +149,9 @@ a {
         bottom: 0;
         left: 50%;
         margin-left: -12px;
+    }
+    .nav-pills > .active > a > [class^="icon-"] {
+        background-image: url("../bootstrap/less/../img/glyphicons-halflings.png");
     }
     #jobslist {
         overflow: auto;
@@ -375,4 +386,12 @@ a {
     padding-right: 4px;
 }
 
-@import "map.css";
+.carousel .item {
+    height: 500px;
+}
+.carousel .item > img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@import "map.less";

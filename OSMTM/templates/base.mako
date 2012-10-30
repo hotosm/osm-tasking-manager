@@ -13,17 +13,17 @@
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}?_cdsalt=1330087595137"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/showdown.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-tooltip.js')}"></script>
+                src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-tooltip.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-popover.js')}"></script>
+                src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-popover.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-dropdown.js')}"></script>
+                src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-dropdown.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-modal.js')}"></script>
+                src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-modal.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-typeahead.js')}"></script>
+                src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-typeahead.js')}"></script>
         <script type="text/javascript"
-                src="${request.static_url('OSMTM:static/twitter-bootstrap-b0bd3ef/js/bootstrap-tab.js')}"></script>
+                src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-tab.js')}"></script>
     </head>
     <body id="${self.id()}">
         <%
