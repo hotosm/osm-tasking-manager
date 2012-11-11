@@ -159,7 +159,7 @@ def job_publish(request):
     return HTTPFound(location = route_url('home', request))
 
 @view_config(route_name='job_feature', permission='admin')
-def job_publish(request):
+def job_feature(request):
     id = request.matchdict['job']
     session = DBSession()
 
