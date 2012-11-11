@@ -13,7 +13,7 @@ $(document).ready(function() {
     });
     map.addLayer(baseLayer);
     var bm = new OpenLayers.Layer.Image( "Blue Marble",
-        "static/img/bm.jpeg",
+        "static/img/bm.jpg",
         new OpenLayers.Bounds(-180, -90, 180, 90),
         new OpenLayers.Size(600, 300),
         {
