@@ -141,6 +141,7 @@ def home(request):
             title=job.title,
             status=job.status,
             short_description=markdown(job.short_description),
+            author=job.author,
             is_private=job.is_private,
             featured=job.featured,
             last_update=timesince(job.last_update),
