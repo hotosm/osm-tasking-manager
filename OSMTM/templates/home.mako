@@ -95,6 +95,9 @@
                     </p>
                     % endif
                     <p class="updated-at">
+                        <!-- ko ifnot: last_update -->
+                        &nbsp;
+                        <!-- /ko -->
                         <span data-bind="text: last_update"></span>
                     </p>
                 </div>
