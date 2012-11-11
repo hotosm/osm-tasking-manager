@@ -33,6 +33,7 @@ First clone the git repository::
 
 Update and load the submodules::
     
+    cd osm-tasking-manager
     git submodule update --init
 
 Installing OSMTM in a Virtual Python environment is recommended.
