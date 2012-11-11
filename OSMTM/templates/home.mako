@@ -98,7 +98,9 @@
                         <!-- ko ifnot: last_update -->
                         &nbsp;
                         <!-- /ko -->
-                        <span data-bind="text: last_update"></span>
+                        <!-- ko if: last_update -->
+                        Updated <span data-bind="text: last_update"></span> ago
+                        <!-- /ko -->
                     </p>
                 </div>
             </div>
