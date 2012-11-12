@@ -135,6 +135,7 @@ class Job(Base):
     # percentage done
     done = Column(Integer)
     last_update = Column(DateTime)
+    author = Column(Unicode, ForeignKey('users.username'))
     tiles = relationship(Tile, backref='job', cascade="all, delete, delete-orphan")
     users = relationship(User,
                 secondary=job_whitelist_table,
@@ -142,7 +143,7 @@ class Job(Base):
     tags = relationship(Tag, secondary=job_tags_table, backref='tags')
 
     def __init__(self, title=None,
-                 geometry=None, zoom=None):
+                 geometry=None, zoom=None, author=None):
         self.title = title
         self.status = 1
         self.geometry = geometry
@@ -150,6 +151,7 @@ class Job(Base):
         self.description = u''
         self.workflow = u''
         self.zoom = zoom
+        self.author = author
 
         tiles = []
         for i in get_tiles_in_geom(loads(geometry), int(zoom)):
