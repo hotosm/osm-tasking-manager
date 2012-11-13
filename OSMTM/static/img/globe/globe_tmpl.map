@@ -4,13 +4,13 @@ MAP
     IMAGECOLOR 255 255 255
     SIZE 100 100
 
-    IMAGETYPE png8
+    IMAGETYPE png
 
     OUTPUTFORMAT
-      NAME "png8"
-      DRIVER AGG/PNG8
-      MIMETYPE "image/png; mode=8bit"
-      IMAGEMODE RGB
+      NAME "png"
+      DRIVER AGG/PNG
+      MIMETYPE "image/png;"
+      IMAGEMODE RGBA
       EXTENSION "png"
       FORMATOPTION "QUANTIZE_FORCE=on"
       FORMATOPTION "QUANTIZE_COLORS=256"
@@ -57,6 +57,7 @@ MAP
             STYLE
                 SYMBOL 'marker'
                 SIZE 10 
+                OFFSET 0 -5
             END
         END
         PROJECTION
