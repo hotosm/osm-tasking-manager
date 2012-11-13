@@ -54,7 +54,8 @@
                             <!-- /ko -->
                         </li>
                     </ul>
-                    <h4><a data-bind="text: title,
+                    <h4>
+                        <a data-bind="text: title,
                             attr: {href: url}"></a>
                         <!-- ko if: featured -->
                         <i title="Featured job" class="icon-fire"></i>
@@ -71,7 +72,9 @@
                         Created by <span data-bind="text: author"></span>
                     </p>
                     <!-- /ko -->
+                    <img data-bind="attr: {src: globe}" class="globe"/>
                     <p data-bind="html: short_description"></p>
+                    <div class="clear"></div>
                     % if user.is_admin():
                     <p class="admin-links">
                         <!-- ko if: featured == 1 -->
@@ -109,9 +112,6 @@
                     </p>
                 </div>
             </div>
-        </div>
-        <div class="span6">
-            <div id="mapcanvas"></div>
         </div>
     </div>
 </div>

@@ -24,6 +24,7 @@ from sqlalchemy import desc, distinct
 from sqlalchemy.sql.expression import and_
 
 from OSMTM.resources import main
+from OSMTM.utils import transform_900913_to_4326
 
 import logging
 log = logging.getLogger(__file__)
@@ -131,12 +132,21 @@ def home(request):
     my_jobs = [tile.job_id for tile in my_jobs]
 
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
+
+    def to_five(i):
+        return int(round(i/5)) * 5 
+
     def to_dict(job):
         centroid = job.get_centroid()
         filter = and_(Tile.job==job,Tile.checkout==True, Tile.username!=None)
         current_users = session.query(distinct(Tile.username)) \
                 .filter(filter).all()
         current_users = [u[0] for u in current_users]
+
+        x, y = transform_900913_to_4326(centroid.x, centroid.y)
+        x5 = to_five(x)
+        y5 = to_five(y)
+
         return dict(
             title=job.title,
             status=job.status,
@@ -157,7 +167,8 @@ def home(request):
             tags=[tag.tag for tag in job.tags],
             is_mine=job.id in [_job for _job in my_jobs],
             lon=centroid.x,
-            lat=centroid.y
+            lat=centroid.y,
+            globe=request.static_url('OSMTM:static/img/globe/images/globe_%i-%i.png' % (x5, y5))
         )
 
     jobs = dumps([to_dict(job) for job in jobs], default=dthandler)
