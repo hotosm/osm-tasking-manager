@@ -4,7 +4,18 @@ MAP
     IMAGECOLOR 255 255 255
     SIZE 100 100
 
-    IMAGETYPE jpeg 
+    IMAGETYPE png8
+
+    OUTPUTFORMAT
+      NAME "png8"
+      DRIVER AGG/PNG8
+      MIMETYPE "image/png; mode=8bit"
+      IMAGEMODE RGB
+      EXTENSION "png"
+      FORMATOPTION "QUANTIZE_FORCE=on"
+      FORMATOPTION "QUANTIZE_COLORS=256"
+      FORMATOPTION "GAMMA=0.75"
+    END
 
     PROJECTION
         "proj=ortho"
@@ -45,6 +56,7 @@ MAP
         CLASS
             STYLE
                 SYMBOL 'marker'
+                SIZE 10 
             END
         END
         PROJECTION
@@ -55,6 +67,6 @@ MAP
     SYMBOL
         NAME "marker"
         TYPE pixmap
-        IMAGE "marker.png"
+        IMAGE "../marker.png"
     END
 END

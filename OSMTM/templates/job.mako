@@ -6,7 +6,19 @@
 <%def name="title()">Job - ${job.title}</%def>
 <div class="container">
     <div class="page-header">
-        <h3>${job.title}</h3>
+        <h3>
+        <%
+            from OSMTM.utils import transform_900913_to_4326
+            centroid = job.get_centroid()
+            x, y = transform_900913_to_4326(centroid.x, centroid.y)
+            def to_five(i):
+                return int(round(i/5)) * 5 
+            x = to_five(x)
+            y = to_five(y)
+        %>
+        <img src="${request.static_url('OSMTM:static/img/globe/images/globe_%i-%i.png' % (x, y))}" class="globe" />
+        ${job.title}
+        </h3>
     </div>
     % if job.status == 0:
     <div class="alert">
