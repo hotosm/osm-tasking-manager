@@ -1,0 +1,60 @@
+MAP
+    NAME "globe"
+
+    IMAGECOLOR 255 255 255
+    SIZE 100 100
+
+    IMAGETYPE jpeg 
+
+    PROJECTION
+        "proj=ortho"
+        "lat_0=90"
+        "lon_0=180"
+        "x_0=0"
+        "y_0=0"
+        "a=6370997"
+        "b=6370997"
+        "units=m"
+        "no_defs"
+    END
+
+    WEB
+        METADATA
+            "ows_enable_request" "*"
+        END
+    END
+
+    LAYER
+        NAME 'globe'
+        TYPE RASTER
+        STATUS ON
+        PROCESSING "RESAMPLE=AVERAGE"
+        DATA "Natural_earth.tif"
+        PROJECTION
+            "init=epsg:4326"
+        END
+    END
+
+    LAYER
+        NAME 'marker'
+        TYPE POINT
+        STATUS ON
+        FEATURE
+           POINTS 180 90 END 
+        END
+        CLASS
+            STYLE
+                SYMBOL 'marker'
+            END
+        END
+        PROJECTION
+            "init=epsg:4326"
+        END
+    END
+
+    SYMBOL
+        NAME "marker"
+        TYPE pixmap
+        IMAGE "marker.png"
+    END
+END
