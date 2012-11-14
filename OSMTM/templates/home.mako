@@ -67,6 +67,7 @@
                         <img src="${request.static_url('OSMTM:static/img/lock.gif')}" alt="private" title="private job" />
                         <!-- /ko -->
                     </h4>
+                    <div class="clear"></div>
                     <!-- ko if: author -->
                     <p class="created-by">
                         Created by <span data-bind="text: author"></span>

@@ -18,15 +18,7 @@ MAP
     END
 
     PROJECTION
-        "proj=ortho"
-        "lat_0=90"
-        "lon_0=180"
-        "x_0=0"
-        "y_0=0"
-        "a=6370997"
-        "b=6370997"
-        "units=m"
-        "no_defs"
+        "init=epsg:4326"
     END
 
     WEB
@@ -56,18 +48,13 @@ MAP
         CLASS
             STYLE
                 SYMBOL 'marker'
-                SIZE 10 
-                OFFSET 0 -5
             END
-        END
-        PROJECTION
-            "init=epsg:4326"
         END
     END
 
     SYMBOL
         NAME "marker"
         TYPE pixmap
-        IMAGE "../marker.png"
+        IMAGE "star.png"
     END
 END
