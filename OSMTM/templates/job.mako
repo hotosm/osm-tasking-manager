@@ -11,12 +11,12 @@
             from OSMTM.utils import transform_900913_to_4326
             centroid = job.get_centroid()
             x, y = transform_900913_to_4326(centroid.x, centroid.y)
-            def to_five(i):
-                return int(round(i/5)) * 5 
-            x = to_five(x)
-            y = to_five(y)
+            left = (x + 180) * 120 / 360 - 1
+            top = (-y + 90) * 60 / 180 - 1
         %>
-        <img src="${request.static_url('OSMTM:static/img/globe/images/globe_%i-%i.png' % (x, y))}" class="globe" />
+        <div class="world_map">
+            <div class="marker" style="top:${top}px;left:${left}px"></div>
+        </div>
         ${job.title}
         </h3>
     </div>

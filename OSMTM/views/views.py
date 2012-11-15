@@ -144,8 +144,8 @@ def home(request):
         current_users = [u[0] for u in current_users]
 
         x, y = transform_900913_to_4326(centroid.x, centroid.y)
-        x5 = to_five(x)
-        y5 = to_five(y)
+        left = (x + 180) * 120 / 360 - 1
+        top = (-y + 90) * 60 / 180 - 1
 
         return dict(
             title=job.title,
@@ -168,7 +168,8 @@ def home(request):
             is_mine=job.id in [_job for _job in my_jobs],
             lon=centroid.x,
             lat=centroid.y,
-            globe=request.static_url('OSMTM:static/img/globe/images/globe_%i-%i.png' % (x5, y5))
+            left=left,
+            top=top
         )
 
     jobs = dumps([to_dict(job) for job in jobs], default=dthandler)

@@ -73,7 +73,9 @@
                         Created by <span data-bind="text: author"></span>
                     </p>
                     <!-- /ko -->
-                    <img data-bind="attr: {src: globe}" class="globe"/>
+                    <div class="world_map">
+                        <div class="marker" data-bind="style: {top: (top + 'px'), left: (left + 'px')}"></div>
+                    </div>
                     <p data-bind="html: short_description"></p>
                     <div class="clear"></div>
                     % if user.is_admin():
