@@ -118,7 +118,7 @@
     </div>
     </div>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/OpenLayers.js')}"></script>
 <script type="text/javascript">
     <%
         from pyramid.security import authenticated_userid
@@ -137,6 +137,6 @@
 <script type="text/javascript">
     OpenLayers.ImgPath = "${request.static_url('OSMTM:static/img/')}";
 </script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/highcharts.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/highcharts.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.js')}?_cdsalt=1345635507"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js')}?_cdsalt=1345635507"></script>

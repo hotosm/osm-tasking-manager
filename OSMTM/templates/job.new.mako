@@ -77,7 +77,7 @@
         </div>
     </form>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/OpenLayers.js')}"></script>
 <script type="text/javascript">
     OpenLayers.ProxyHost = '${request.route_url('osmproxy')}?url=';
 </script>
