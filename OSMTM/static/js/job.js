@@ -148,28 +148,35 @@ var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
         if (attr.checkin >=  2 || attr.username) {
             return false;
         }
-        if (current_tile) {
+        if (current_tile && current_tile.user == user) {
             alert("You already have a task to work on");
             return false;
         }
         var id = feature.fid.split('-');
         hideTooltips();
-        $('#task').load(
-            [job_url, "task", id[0], id[1], id[2], "take"].join('/'),
-            function(responseText, textStatus, request) {
-                if (textStatus == 'error') {
-                    alert(responseText);
-                } else {
-                    $('#task_tab').tab('show');
-                    showTilesStatus();
-                }
-            }
-        );
+        location.hash = ["task", id[0], id[1], id[2]].join('/');
     }
 });
 map.addControls([featureControl]);
 featureControl.activate();
 featureControl.handlers.feature.stopDown = false;
+
+function loadTask(x, y, zoom) {
+    $('#task').load(
+        [job_url, "task", x, y, zoom].join('/'),
+        function(responseText, textStatus, request) {
+            if (textStatus == 'error') {
+                alert(responseText);
+            } else {
+                $('#task_tab').tab('show');
+                var id = [x, y, zoom].join('-');
+                var feature = tilesLayer.getFeatureByFid(id);
+                map.zoomToExtent(feature.geometry.getBounds());
+            }
+        }
+    );
+}
+
 
 var chart_drawn = false;
 $('a[href="#chart"]').on('shown', function (e) {
@@ -315,3 +322,10 @@ $(function(){
         task_time_left--;
     }, 1000);
 });
+
+// Client-side routes
+Sammy(function() {
+    this.get('#task/:x/:y/:zoom', function() {
+        loadTask(this.params.x, this.params.y, this.params.zoom);
+    });
+}).run();

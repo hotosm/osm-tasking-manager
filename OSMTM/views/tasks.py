@@ -23,9 +23,9 @@ from pyramid.security import authenticated_userid
 import logging
 log = logging.getLogger(__file__)
 
-@view_config(route_name='task', renderer='task.mako', permission='job',
+@view_config(route_name='task_xhr', renderer='task.mako', permission='job',
         http_cache=0)
-def task(request):
+def task_xhr(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
     y = request.matchdict['y']
@@ -37,9 +37,9 @@ def task(request):
     username = authenticated_userid(request)
     user = session.query(User).get(username)
     time_left = 'null'
-    if tile.user != user:
-        request.session.flash('You cannot see this task.')
-        return HTTPFound(location=request.route_url('job', job=job_id))
+    #if tile.user != user:
+        #request.session.flash('You cannot see this task.')
+        #return HTTPFound(location=request.route_url('job', job=job_id))
     if tile.update:
         time_left = (tile.update - (datetime.now() - EXPIRATION_DURATION)) \
             .seconds

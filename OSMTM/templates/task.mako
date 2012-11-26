@@ -5,31 +5,23 @@
     <%include file="/task.empty.mako" />
 % else:
         <div> 
-            % if tile.username:
-            <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal">
-                <div class="well">
-                    <p>1. Open the area in your favorite editing tool.</p>
-                    <div class="row">
-                        <div class="span1">&nbsp;</div>
-                        <div class="span4">
-                            <div id="export">
-                                <a class="btn btn-small btn-info" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
-                                <a class="btn btn-small btn-info" id="potlatch2">Potlatch 2</a>
-                                <a class="btn btn-small btn-info" href="javascript:void(0);" id="wp">Walking Papers</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="span5">
-                            <p>Link to <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch)."> .osm</a> file.
+                <div class="row">
+                    <div class="span6">
+                        <div id="export">
+                            <a class="btn btn-small btn-info" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
+                            <a class="btn btn-small btn-info" id="potlatch2">Potlatch 2</a>
+                            <a class="btn btn-small btn-info" href="javascript:void(0);" id="wp">Walking Papers</a>
+                            <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch).">osm format</a>
                         </div>
                     </div>
                 </div>
+                <%include file="task.comments.mako" />
+            % if tile.username and tile.username == user.username:
+            <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal">
             % if tile.checkin == 0:
                 <div class="well">
                     <p>2. Trace the elements.</p>
                     <%include file="imagery.mako" />
-                    <%include file="task.comments.mako" />
                 </div>
                 <div class="well">
                     <p>3. Add a comment and mark the task as done.</p>
@@ -78,6 +70,14 @@
             <p>
             You can also <a href="${request.route_url('task_split', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="split" class="btn btn-small"><i class="icon-split"></i>Split it!</a> into smaller pieces.
             </p>
+            </form>
+            % else:
+            <form action="${request.route_url('task_take', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}">
+            <div class="row">
+                <div class="span6">
+                    <input type="submit" class="btn btn-primary input" id="take" value="Lock it" />
+                </div>
+            </div>
             </form>
             % endif
         </div>

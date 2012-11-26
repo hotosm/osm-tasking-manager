@@ -24,6 +24,8 @@
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-typeahead.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-tab.js')}"></script>
+        <script type="text/javascript"
+                src="${request.static_url('OSMTM:static/js/lib/sammy-latest.min.js')}"></script>
     </head>
     <body id="${self.id()}">
         <%
