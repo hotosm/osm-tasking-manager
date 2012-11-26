@@ -5,50 +5,12 @@
     <%include file="/task.empty.mako" />
 % else:
         <div> 
-                <div class="row">
-                    <div class="span6">
-                        <div id="export">
-                            <a class="btn btn-small btn-info" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
-                            <a class="btn btn-small btn-info" id="potlatch2">Potlatch 2</a>
-                            <a class="btn btn-small btn-info" href="javascript:void(0);" id="wp">Walking Papers</a>
-                            <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch).">osm format</a>
-                        </div>
-                    </div>
-                </div>
-                <%include file="task.comments.mako" />
             % if tile.username and tile.username == user.username:
-            <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal">
+            <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal" method="POST">
             % if tile.checkin == 0:
-                <div class="well">
-                    <p>2. Trace the elements.</p>
-                    <%include file="imagery.mako" />
-                </div>
-                <div class="well">
-                    <p>3. Add a comment and mark the task as done.</p>
-                    <div class="control-group">
-                        <label for="task_comment" class="control-label">Comment</label>
-                        <div class="controls">
-                            <textarea id="task_comment" name="comment"></textarea>
-                        </div>
-                    </div>
-                    <div class="input">
-                        <input type="submit" class="btn btn-primary" value="Mark task as done"/>
-                    </div>
-                </div>
+            <p>
+                <a data-toggle="modal" href="#commentModal" class="btn btn-primary" >Mark task as done</a>
             % else:
-                <div class="well">
-                    <p>2. Review the work done.</p>
-                    <%include file="imagery.mako" />
-                    <%include file="task.comments.mako" />
-                </div>
-                <div class="well">
-                    <p>3. Give a thumb up if work is correct and complete, or send the task back to the queue.</p>
-                    <div class="control-group">
-                        <label for="task_comment" class="control-label">Comment</label>
-                        <div class="controls">
-                            <textarea id="task_comment" name="comment"></textarea>
-                        </div>
-                    </div>
                     <div class="control-group">
                         <div class="controls">
                         <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input btn-danger">
@@ -61,25 +23,41 @@
                         </button>
                         </div>
                     </div>
-                </div>
             % endif
-            <p>
-                Can't work on this task right now? No problem.
-                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
+                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small"><i class="icon-lock"></i>Unlock</a>
+                <a href="${request.route_url('task_split', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="split" class="btn btn-small"><i class="icon-split"></i>Split it!</a>
             </p>
-            <p>
-            You can also <a href="${request.route_url('task_split', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="split" class="btn btn-small"><i class="icon-split"></i>Split it!</a> into smaller pieces.
-            </p>
-            </form>
-            % else:
-            <form action="${request.route_url('task_take', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}">
-            <div class="row">
-                <div class="span6">
-                    <input type="submit" class="btn btn-primary input" id="take" value="Lock it" />
+            <div id="commentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <h3 id="commentModalLabel">Please add a comment</h3>
+                </div>
+                <div class="modal-body">
+                    <textarea id="task_comment" name="comment" class="span6">Your comment here</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" aria-hidden="true" type="submit">OK</button>
                 </div>
             </div>
             </form>
+            % else:
+            <p>
+                % if tile.checkout != True:
+                <form action="${request.route_url('task_take', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" method="POST">
+                    <button type="submit" class="btn btn-primary input" id="take" ><i class="icon-lock icon-white"></i> Lock it</button>
+                </form>
+                % else:
+                This task has been locked by <b>${tile.username}</b>. 
+                % endif
+            </p>
             % endif
+            <p id="export">
+                <a class="btn btn-small btn-info" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
+                <a class="btn btn-small btn-info" id="potlatch2">Potlatch 2</a>
+                <a class="btn btn-small btn-info" href="javascript:void(0);" id="wp">Walking Papers</a>
+                <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch).">osm format</a>
+            </p>
+            <%include file="task.comments.mako" />
+            <%include file="imagery.mako" />
         </div>
 
     <script type="text/javascript">
