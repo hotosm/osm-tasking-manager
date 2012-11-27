@@ -252,13 +252,27 @@ $('a[href="#chart"]').on('shown', function (e) {
 });
 
 $('form').live('submit', function(e) {
-    var formData = $(this).serializeObject();
-    var submitName = $("button[type=submit][clicked=true]").attr("name");
-    formData[submitName] = true;
-    hideTooltips();
-    $('#task').load(this.action, formData, function(responseText) {
-        showTilesStatus();
-    });
+    var form = this;
+    function load() {
+        hideTooltips();
+        var formData = $(form).serializeObject();
+        var submitName = $("button[type=submit][clicked=true]").attr("name");
+        formData[submitName] = true;
+        $('#task').load(form.action, formData, function(responseText) {
+            showTilesStatus();
+        });
+    }
+    if ($(form).has($('#commentModal')).length > 0) {
+        $('#commentModal').modal('show');
+        $('#commentModalCloseBtn').on('click', function() {
+            if ($('#task_comment')[0].value !== '') {
+                $('#commentModal').modal('hide');
+                load();
+            }
+        });
+    } else {
+        load();
+    }
     return false;
 });
 $("form button[type=submit]").live('click', function() {
