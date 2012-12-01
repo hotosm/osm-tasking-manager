@@ -32,25 +32,30 @@ var context = {
         return colors[checkin];
     },
     getStrokeColor: function(feature) {
-        return (feature.attributes.username) ?
-            "orange" : "black";
+        if (feature.attributes.username) {
+            return "orange";
+        }
+        if (feature.fid == current_task) {
+            return "blue";
+        }
+        return "black";
     },
     getStrokeWidth: function(feature) {
-        return (feature.attributes.username) ?
+        return (feature.fid == current_task || feature.attributes.username) ?
             2 : 0.3;
     },
     getStrokeOpacity: function(feature) {
-        return (feature.attributes.username) ?
+        return (feature.fid == current_task || feature.attributes.username) ?
             1 : 0.5;
     },
     getZIndex: function(feature) {
-        return (feature.attributes.username) ?
-            2 : 1;
-    },
-    getCursor: function(feature) {
-        return ((feature.attributes.checkin < 2 ||
-            !feature.attributes.checkin) &&
-            !feature.attributes.username) ? "pointer" : "auto";
+        if (feature.attributes.username) {
+            return 2;
+        }
+        if (feature.fid == current_task) {
+            return 3;
+        }
+        return 1;
     }
 };
 var template = {
@@ -60,7 +65,7 @@ var template = {
     strokeWidth: "${getStrokeWidth}",
     strokeOpacity: "${getStrokeOpacity}",
     graphicZIndex: "${getZIndex}",
-    cursor: "${getCursor}"
+    cursor: "pointer"
 };
 var style = new OpenLayers.Style(template, {context: context});
 var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
@@ -87,12 +92,6 @@ function showTilesStatus() {
                 $.each(response.features, function(id, val) {
                     var feature = tilesLayer.getFeatureByFid(id);
                     feature.attributes = val;
-                    if (val.username == user) {
-                        var zoom = map.getZoomForExtent(feature.geometry.getBounds()),
-                            centroid = feature.geometry.getCentroid(),
-                            lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
-                        map.setCenter(lonlat, zoom - 1);
-                    }
                     if (val.checkin == 1 || val.checkin == 2) {
                         done++;
                     }
@@ -137,6 +136,18 @@ protocol = new OpenLayers.Protocol.HTTP({
         if (response.success()) {
             tilesLayer.addFeatures(response.features);
             showTilesStatus();
+            // Client-side routes
+            Sammy(function() {
+                this.get('#task/:x/:y/:zoom', function() {
+                    loadTask(this.params.x, this.params.y, this.params.zoom);
+                });
+                this.get('#task/:x/:y/:zoom/:action', function() {
+                    loadTask(this.params.x, this.params.y, this.params.zoom);
+                });
+                this.get('', function() {
+                    loadEmptyTask();
+                });
+            }).run();
         }
     }
 });
@@ -144,14 +155,15 @@ protocol.read();
 
 var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
     onSelect: function(feature) {
-        var attr = feature.attributes;
-        if (attr.checkin >=  2 || attr.username) {
-            return false;
-        }
-        if (current_tile && current_tile.user == user) {
-            alert("You already have a task to work on");
-            return false;
-        }
+        //var attr = feature.attributes;
+        //if (attr.checkin >=  2 || attr.username) {
+            //return false;
+        //}
+        // FIXME
+        //if (current_tile && current_tile.user == user) {
+            //alert("You already have a task to work on");
+            //return false;
+        //}
         var id = feature.fid.split('-');
         hideTooltips();
         location.hash = ["task", id[0], id[1], id[2]].join('/');
@@ -161,7 +173,16 @@ map.addControls([featureControl]);
 featureControl.activate();
 featureControl.handlers.feature.stopDown = false;
 
+var current_task;
+function loadEmptyTask() {
+    current_task = null;
+    tilesLayer.redraw();
+    $('#task').load([job_url, "task"].join('/'));
+}
 function loadTask(x, y, zoom) {
+    hideTooltips();
+    // it may already be done
+    location.hash = ["task", x, y, zoom].join('/');
     $('#task').load(
         [job_url, "task", x, y, zoom].join('/'),
         function(responseText, textStatus, request) {
@@ -170,8 +191,14 @@ function loadTask(x, y, zoom) {
             } else {
                 $('#task_tab').tab('show');
                 var id = [x, y, zoom].join('-');
+                current_task = id;
                 var feature = tilesLayer.getFeatureByFid(id);
-                map.zoomToExtent(feature.geometry.getBounds());
+                tilesLayer.redraw();
+                var z = map.getZoomForExtent(feature.geometry.getBounds()),
+                    centroid = feature.geometry.getCentroid(),
+                    lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
+                map.zoomTo(zoom - 1);
+                map.panTo(lonlat);
             }
         }
     );
@@ -259,6 +286,7 @@ $('form').live('submit', function(e) {
         var submitName = $("button[type=submit][clicked=true]").attr("name");
         formData[submitName] = true;
         $('#task').load(form.action, formData, function(responseText) {
+            location.hash = "#";
             showTilesStatus();
         });
     }
@@ -296,22 +324,36 @@ $.fn.serializeObject = function()
     return o;
 };
 
-function takeOrUnlock(e) {
+function unlock(e) {
     hideTooltips();
-    $('#task').load(this.href, '',
-        function(responseText, textStatus, request) {
-            if (textStatus == 'error') {
-                alert(responseText);
-            } else {
-                showTilesStatus();
-            }
-        }
-    );
     return false;
 }
+function takeOrUnlock(e) {
+    hideTooltips();
+    $.getJSON(this.href, function(data) {
+        showTilesStatus();
+        if (data.tile) {
+            var tile = data.tile;
+            loadTask(tile.x, tile.y, tile.z);
+            return;
+        }
+        if (data.error_msg) {
+            $('#task_error_msg').html(data.error_msg).show()
+                .delay(3000)
+                .fadeOut();
+            return;
+        }
+        if (data.split_id) {
+            splitTask(data.split_id, data.new_tiles);
+        }
+        location.hash = "";
+    });
+    return false;
+}
+$('#take_random').live('click', takeOrUnlock);
+$('#lock').live('click', takeOrUnlock);
 $('#unlock').live('click', takeOrUnlock);
 $('#validate').live('click', takeOrUnlock);
-$('#take_again').live('click', takeOrUnlock);
 $('#split').live('click', takeOrUnlock);
 
 function splitTask(id, newTiles) {
@@ -337,9 +379,3 @@ $(function(){
     }, 1000);
 });
 
-// Client-side routes
-Sammy(function() {
-    this.get('#task/:x/:y/:zoom', function() {
-        loadTask(this.params.x, this.params.y, this.params.zoom);
-    });
-}).run();

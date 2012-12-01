@@ -56,7 +56,7 @@
                 % if tile is not None:
                     <script type="text/javascript">
                         $(document).ready(function() {
-                            $('#task').load('${request.route_url('task_xhr', x=tile.x, y=tile.y, zoom=tile.zoom, job=tile.job_id)}');
+                            location.hash = ["task", ${tile.x}, ${tile.y}, ${tile.zoom}].join('/');
                         });
                     </script>
                 % else:

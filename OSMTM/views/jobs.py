@@ -15,6 +15,7 @@ from OSMTM.models import Tag
 from OSMTM.models import License
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
+from OSMTM.views.tasks import get_locked_task
 
 from shapely.wkt import loads
 
@@ -23,7 +24,6 @@ from geojson import dumps
 
 import simplejson
 
-from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import and_
 
 from pyramid.security import authenticated_userid
@@ -45,38 +45,14 @@ def job(request):
 
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    try:
-        filter = and_(Tile.username==username, Tile.checkout==True, Tile.job_id==job.id)
-        current_task = session.query(Tile).filter(filter).one()
-    except NoResultFound, e:
-        current_task = None
 
-    # search for a previously taken task
-    prev_task = None
-    if current_task is None:
-        # first find task taken by the user
-        filter = and_(TileHistory.username==username, TileHistory.job_id==job.id)
-        task = session.query(TileHistory)\
-                       .filter(filter)\
-                       .order_by(TileHistory.update.desc())\
-                       .first()
-        if task is not None:
-            version = task.version
-            filter = and_(TileHistory.x==task.x, TileHistory.y==task.y,
-                    TileHistory.job_id==job.id)
-            task = session.query(TileHistory)\
-                       .filter(filter)\
-                       .order_by(TileHistory.version.desc())\
-                       .first()
-            if task is not None and version == task.version:
-                prev_task = session.query(Tile).get((task.x, task.y, task.job_id, task.zoom))
+    current_task = get_locked_task(id, username)
 
     admin = user.is_admin() if user else False
     stats = get_stats(job)
     return dict(job=job, user=user, 
             bbox=loads(job.geometry).bounds,
             tile=current_task,
-            prev_task=prev_task,
             admin=admin,
             stats=stats)
 
