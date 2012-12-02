@@ -870,7 +870,6 @@ a{color:#417f90;}
 #job #map_legend>ul li div.checkin1,#job_new #map_legend>ul li div.checkin1,#task #map_legend>ul li div.checkin1{background-color:red;}
 #job #map_legend>ul li div.checkin2,#job_new #map_legend>ul li div.checkin2,#task #map_legend>ul li div.checkin2{background-color:green;}
 #job #map_legend>ul li div.checkout,#job_new #map_legend>ul li div.checkout,#task #map_legend>ul li div.checkout{border-color:orange;background-color:transparent;}
-#job .well,#job_new .well,#task .well{padding:10px;}
 #job ul.contributors,#job_new ul.contributors,#task ul.contributors{margin:0;}#job ul.contributors li.online,#job_new ul.contributors li.online,#task ul.contributors li.online,#job ul.contributors li.offline,#job_new ul.contributors li.offline,#task ul.contributors li.offline{list-style-type:none;padding-left:20px;}
 #job ul.contributors li.online,#job_new ul.contributors li.online,#task ul.contributors li.online{background:url(../img/status.png) no-repeat 0 0.1em;}
 #job ul.contributors li.offline,#job_new ul.contributors li.offline,#task ul.contributors li.offline{background:url(../img/status-offline.png) no-repeat 0 0.1em;}

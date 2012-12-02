@@ -6,13 +6,6 @@
 % else:
         <div> 
             <p id="task_error_msg" class="alert alert-error hide"></p>
-            <p id="export" class="well">
-                <i class="icon-share-alt"></i>
-                <a class="btn btn-small" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
-                <a class="btn btn-small" id="potlatch2">Potlatch 2</a>
-                <a class="btn btn-small" href="javascript:void(0);" id="wp">Walking Papers</a>
-                <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch).">osm format</a>
-            </p>
             % if tile.username == user.username:
             <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal" method="POST">
             % if tile.checkin == 0:
@@ -67,6 +60,13 @@
                     <a href="#" class="btn btn-small btn-link">Clear selection</a>
             </p>
             % endif
+            <p id="export" class="well well-small">
+                <i class="icon-share-alt"></i>
+                <a class="btn btn-small" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
+                <a class="btn btn-small" id="potlatch2">Potlatch 2</a>
+                <a class="btn btn-small" href="javascript:void(0);" id="wp">Walking Papers</a>
+                <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch).">osm format</a>
+            </p>
             <%include file="task.comments.mako" />
             <%include file="imagery.mako" />
         </div>

@@ -320,9 +320,6 @@ a {
             }
         }
     }
-    .well {
-        padding: 10px;
-    }
     ul.contributors {
         margin: 0;
 
@@ -339,13 +336,23 @@ a {
         }
     }
     .history {
+        padding: 4px;
+        background-color: transparent;
+        border: solid #dfdfdf;
+        border-width: 0 1px 1px 1px;
         p, blockquote {
             margin: 0;
         }
         .icon-comment {
             .opacity(50)
         }
-        margin-bottom: 4px;
+    }
+    .history.first {
+        border-top-width: 1px;
+        .border-radius(5px 5px 0 0);
+    }
+    .history.last {
+        .border-radius(0 0 5px 5px);
     }
 }
 

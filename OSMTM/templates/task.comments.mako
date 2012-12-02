@@ -10,9 +10,13 @@
 %>
 <hr />
 <h4>History</h4>
-% for step in history:
+% for i, step in enumerate(steps):
     % if step.change or step.checkout:
-        <div class="history">
+        <%
+            first = "first" if i == 0 else ""
+            last = "last" if i == len(steps) - 1 else ""
+        %>
+        <div class="history ${first} ${last}">
         <p>
         <b>
         % if step.checkout:
