@@ -144,9 +144,6 @@ protocol = new OpenLayers.Protocol.HTTP({
                 this.get('#task/:x/:y/:zoom/:action', function() {
                     loadTask(this.params.x, this.params.y, this.params.zoom);
                 });
-                this.get('', function() {
-                    loadEmptyTask();
-                });
             }).run();
         }
     }
@@ -286,7 +283,7 @@ $('form').live('submit', function(e) {
         var submitName = $("button[type=submit][clicked=true]").attr("name");
         formData[submitName] = true;
         $('#task').load(form.action, formData, function(responseText) {
-            location.hash = "#";
+            loadEmptyTask();
             showTilesStatus();
         });
     }
@@ -325,10 +322,6 @@ $.fn.serializeObject = function()
     return o;
 };
 
-function unlock(e) {
-    hideTooltips();
-    return false;
-}
 function takeOrUnlock(e) {
     hideTooltips();
     $.getJSON(this.href, function(data) {
@@ -347,7 +340,7 @@ function takeOrUnlock(e) {
         if (data.split_id) {
             splitTask(data.split_id, data.new_tiles);
         }
-        location.hash = "";
+        loadEmptyTask();
     });
     return false;
 }
@@ -356,6 +349,7 @@ $('#lock').live('click', takeOrUnlock);
 $('#unlock').live('click', takeOrUnlock);
 $('#validate').live('click', takeOrUnlock);
 $('#split').live('click', takeOrUnlock);
+$('#clear').live('click', loadEmptyTask);
 
 function splitTask(id, newTiles) {
     var feature = tilesLayer.getFeatureByFid(id);
