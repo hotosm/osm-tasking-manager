@@ -23,7 +23,7 @@
             % endif
                 <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small btn-link">Unlock</a>
             </p>
-            <div id="commentModal" class="modal hide fade" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="commentModalLabel" aria-hidden="true">
+            <div id="commentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <h3 id="commentModalLabel">Please add a comment</h3>
                 </div>

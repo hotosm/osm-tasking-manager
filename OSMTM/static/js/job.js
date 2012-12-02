@@ -292,6 +292,7 @@ $('form').live('submit', function(e) {
     }
     if ($(form).has($('#commentModal')).length > 0) {
         $('#commentModal').modal('show');
+        $('#task_comment').focus();
         $('#commentModalCloseBtn').on('click', function() {
             if ($('#task_comment')[0].value !== '') {
                 $('#commentModal').modal('hide');
