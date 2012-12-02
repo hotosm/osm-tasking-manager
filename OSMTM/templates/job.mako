@@ -37,11 +37,9 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="description">
-                <h3><small>What and Why?</small></h3>
                 <p>${markdown.markdown(job.description)|n}</p>
             </div>
             <div class="tab-pane" id="workflow">
-                <h3><small>How?</small></h3>
                 <p>${markdown.markdown(job.workflow)|n}</p>
                 % if job.imagery:
                 <%include file="imagery.mako" />
@@ -64,7 +62,6 @@
                 % endif
             </div>
             <div class="tab-pane" id="users">
-                <h3><small>Who else is working?</small></h3>
                 <div class="row">
                     <div class="span3">
                     % if stats['contributors']:

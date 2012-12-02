@@ -20,14 +20,14 @@
         <p>
         <b>
         % if step.checkout:
-            Locked
+            <i class="icon-lock"></i> Locked
         % elif step.change:
             % if step.checkin == 0:
-                Invalidated
+                <i class="icon-thumbs-down"></i> Invalidated
             % elif step.checkin == 1:
-                Marked as done
+                <i class="icon-ok"></i> Marked as done
             % else:
-                Validated
+                <i class="icon-thumbs-up"></i> Validated
             % endif
         % endif
         </b>

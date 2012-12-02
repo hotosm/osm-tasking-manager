@@ -873,8 +873,10 @@ a{color:#417f90;}
 #job ul.contributors,#job_new ul.contributors,#task ul.contributors{margin:0;}#job ul.contributors li.online,#job_new ul.contributors li.online,#task ul.contributors li.online,#job ul.contributors li.offline,#job_new ul.contributors li.offline,#task ul.contributors li.offline{list-style-type:none;padding-left:20px;}
 #job ul.contributors li.online,#job_new ul.contributors li.online,#task ul.contributors li.online{background:url(../img/status.png) no-repeat 0 0.1em;}
 #job ul.contributors li.offline,#job_new ul.contributors li.offline,#task ul.contributors li.offline{background:url(../img/status-offline.png) no-repeat 0 0.1em;}
-#job .history,#job_new .history,#task .history{margin-bottom:4px;}#job .history p,#job_new .history p,#task .history p,#job .history blockquote,#job_new .history blockquote,#task .history blockquote{margin:0;}
+#job .history,#job_new .history,#task .history{padding:4px;background-color:transparent;border:solid #dfdfdf;border-width:0 1px 1px 1px;}#job .history p,#job_new .history p,#task .history p,#job .history blockquote,#job_new .history blockquote,#task .history blockquote{margin:0;}
 #job .history .icon-comment,#job_new .history .icon-comment,#task .history .icon-comment{filter:alpha(opacity=50);filter:alpha(opacity=20);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5;}
+#job .history.first,#job_new .history.first,#task .history.first{border-top-width:1px;-webkit-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;border-radius:5px 5px 0 0;}
+#job .history.last,#job_new .history.last,#task .history.last{-webkit-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;border-radius:0 0 5px 5px;}
 #job .hidden-link,#users .hidden-link,#licenses .hidden-link{display:none;}
 #job li:hover .hidden-link,#users li:hover .hidden-link,#licenses li:hover .hidden-link{display:inline;}
 .page-header{padding-bottom:0;margin-top:6px;}
