@@ -55,7 +55,7 @@
                         else:
                             tooltip = "Lock this task to tell others that you are currently working on it."
                     %>
-                    <a href="${request.route_url('task_take', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}"
+                    <a href="${request.route_url('task_lock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}"
                         id="lock" class="btn btn-primary ${disabled}" rel="tooltip"
                         data-original-title="${tooltip}" data-delay="200"><i class="icon-lock icon-white"></i> Lock</a>
                 % elif tile.username is not None:

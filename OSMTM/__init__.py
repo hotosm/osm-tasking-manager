@@ -57,7 +57,7 @@ def main(global_config, **settings):
     config.add_route('task', '/job/{job}/task/{x}/{y}/{zoom}', factory='OSMTM.resources.JobFactory')
     config.add_route('task_unlock', '/job/{job}/task/{x}/{y}/{zoom}/unlock', factory='OSMTM.resources.JobFactory')
     config.add_route('task_done', '/job/{job}/task/{x}/{y}/{zoom}/done', factory='OSMTM.resources.JobFactory')
-    config.add_route('task_take', '/job/{job}/task/{x}/{y}/{zoom}/take', factory='OSMTM.resources.JobFactory')
+    config.add_route('task_lock', '/job/{job}/task/{x}/{y}/{zoom}/lock', factory='OSMTM.resources.JobFactory')
     config.add_route('task_export', '/job/{job}/task/{x}/{y}/{zoom}/export.osm', factory='OSMTM.resources.JobFactory')
     config.add_route('task_split', '/job/{job}/task/{x}/{y}/{zoom}/split', factory='OSMTM.resources.JobFactory')
     config.add_route('license_new', '/license/new')

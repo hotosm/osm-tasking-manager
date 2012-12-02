@@ -100,7 +100,8 @@ def unlock(request):
     session.add(tile)
     return dict(success=True)
 
-def take(request):
+@view_config(route_name='task_lock', permission='job', renderer="json")
+def lock(request):
     job_id = request.matchdict['job']
     session = DBSession()
     username = authenticated_userid(request)
@@ -114,7 +115,7 @@ def take(request):
 
     # task is already checked out by someone else
     if tile.checkout is True and tile.username != user:
-        msg = 'You cannot take this task. Someone else is already working on it.'
+        msg = 'You cannot lock this task. Someone else is already working on it.'
         return dict(error_msg=msg)
 
     if tile.checkin >= 2:
@@ -140,7 +141,6 @@ def take(request):
         else:
             msg = 'Sorry. No task available to take.'
         return dict(job=job, error_msg=msg)
-
 
 @view_config(route_name='task_take_random', permission='job', renderer="json")
 def take_random(request):
@@ -177,9 +177,6 @@ def take_random(request):
 
     return dict(success=True, tile=dict(x=tile.x, y=tile.y, z=tile.zoom))
 
-@view_config(route_name='task_take', permission='job', renderer="json")
-def take_tile(request):
-    return take(request)
 
 @view_config(route_name='task_split', permission='job', renderer="geojson")
 def split_tile(request):
