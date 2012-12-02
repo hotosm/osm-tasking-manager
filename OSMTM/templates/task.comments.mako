@@ -51,8 +51,7 @@
     % endif
 % endfor
 % endif
-<hr />
 <%
     minx, miny, maxx, maxy = tile.to_polygon(4326).bounds
 %>
-<p>See the <a href="http://www.openstreetmap.org/history?bbox=${minx},${miny},${maxx},${maxy}" target="_blank">changesets</a> for this area.</p>
+<p><a href="http://www.openstreetmap.org/history?bbox=${minx},${miny},${maxx},${maxy}" target="_blank">OSM changesets</a></p>
