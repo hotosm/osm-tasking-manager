@@ -80,9 +80,15 @@ def done(request):
     else:
         #task is done
         tile.checkin = 1
-    tile.checkout = False
     tile.change = True
+    tile.checkout = False
+    session.add(tile)
+    session.flush()
+
+    # reset tile values
     tile.username = None
+    tile.change = False
+    tile.comment = ""
     session.add(tile)
     return dict(job=tile.job)
 
