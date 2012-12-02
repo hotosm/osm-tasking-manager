@@ -51,7 +51,9 @@ def task_xhr(request):
         time_left = (tile.update - (datetime.now() - EXPIRATION_DURATION)) \
             .seconds
     filter = and_(TileHistory.x==x, TileHistory.y==y, TileHistory.job_id==job_id)
-    history = session.query(TileHistory).filter(filter).all()
+    history = session.query(TileHistory).filter(filter)\
+        .order_by(TileHistory.update.desc())\
+        .all()
 
     current_task = get_locked_task(job_id, username)
 
@@ -88,7 +90,7 @@ def done(request):
     # reset tile values
     tile.username = None
     tile.change = False
-    tile.comment = ""
+    tile.comment = None
     session.add(tile)
     return dict(job=tile.job)
 
