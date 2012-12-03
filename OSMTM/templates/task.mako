@@ -47,7 +47,7 @@
             </form>
             % else:
             <p>
-                % if tile.checkout != True:
+                % if tile.checkout != True and tile.checkin != 2 and current_task is None:
                     <%
                         disabled = ""
                         tooltip = ""
@@ -68,6 +68,12 @@
                 % endif
                     <a id="clear" class="btn btn-small btn-link">Clear selection</a>
             </p>
+            % if current_task is not None:
+            <p>
+                <i class="icon-exclamation-sign"></i>
+                You already have a <a href="#task/${current_task.x}/${current_task.y}/${current_task.zoom}">task</a> locked.
+            </p>
+            % endif
             % endif
             <%include file="task.comments.mako" />
             <%include file="imagery.mako" />
