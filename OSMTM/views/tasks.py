@@ -106,7 +106,7 @@ def unlock(request):
     tile.checkout = False
     tile.change = False
     session.add(tile)
-    return dict(success=True)
+    return dict(success=True, tile=dict(x=tile.x, y=tile.y, z=tile.zoom))
 
 @view_config(route_name='task_lock', permission='job', renderer="json")
 def lock(request):

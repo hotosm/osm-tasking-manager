@@ -1,7 +1,6 @@
 <%
     steps = []
-    if tile.checkout:
-        steps.append(tile)
+    steps.append(tile)
     for step in history:
         steps.append(step)
 %>

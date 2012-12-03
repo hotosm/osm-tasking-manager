@@ -7,6 +7,9 @@
         <div> 
             <p id="task_error_msg" class="alert alert-error hide"></p>
             % if tile.username == user.username:
+            <p>
+            <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn">Unlock</a>
+            </p>
             <p id="export" class="well well-small">
                 <i class="icon-share-alt"></i>
                 <a class="btn btn-small" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
@@ -28,7 +31,6 @@
                     Validate
                 </button>
             % endif
-                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small btn-link">Unlock</a>
             </p>
             <div id="commentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
                 <div class="modal-header">
