@@ -3,8 +3,7 @@
     if tile.checkout:
         steps.append(tile)
     for step in history:
-        if step.change or step.checkout:
-            steps.append(step)
+        steps.append(step)
 %>
 % if len(steps) > 0:
 <%
@@ -13,7 +12,6 @@
 <hr />
 <h4>History</h4>
 % for i, step in enumerate(steps):
-    % if step.change or step.checkout:
         <%
             first = "first" if i == 0 else ""
             last = "last" if i == len(steps) - 1 else ""
@@ -31,13 +29,17 @@
             % else:
                 <i class="icon-thumbs-up"></i> Validated
             % endif
+        % else:
+            Unlocked
         % endif
         </b>
+        % if step.change or step.checkout:
         by 
             <a href="http://www.openstreetmap.org/user/${step.username}" target="_blank">
                 ${step.username}
             </a>
         </p>
+        % endif
         % if step.comment is not None:
             <blockquote>
                 <i class="icon-comment"></i> ${step.comment}
@@ -50,7 +52,6 @@
         <em>${time_ago} ago</em>
         </p>
         </div>
-    % endif
 % endfor
 % endif
 <%
