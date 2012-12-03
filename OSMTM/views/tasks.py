@@ -52,7 +52,7 @@ def task_xhr(request):
             .seconds
     filter = and_(TileHistory.x==x, TileHistory.y==y, TileHistory.job_id==job_id)
     history = session.query(TileHistory).filter(filter)\
-        .order_by(TileHistory.update.desc())\
+        .order_by(TileHistory.update)\
         .all()
 
     current_task = get_locked_task(job_id, username)
