@@ -20,7 +20,7 @@
             <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal" method="POST">
             % if tile.checkin == 0:
             <p>
-                <button class="btn btn-success" type="submit">Mark task as done</button>
+                <button class="btn btn-success btn-small" type="submit"><i class="icon-ok icon-white"></i> Mark task as done</button>
             % elif tile.checkin == 1:
                 <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input btn-danger">
                     <img src="${request.static_url('OSMTM:static/thumb.png')}" />
