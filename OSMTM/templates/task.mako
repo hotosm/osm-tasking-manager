@@ -8,7 +8,7 @@
             <p id="task_error_msg" class="alert alert-error hide"></p>
             % if tile.username == user.username:
             <p>
-            <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn">Unlock</a>
+            <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small">Unlock</a>
             </p>
             <p id="export" class="well well-small">
                 <i class="icon-share-alt"></i>
@@ -58,7 +58,7 @@
                             tooltip = "Lock this task to tell others that you are currently working on it."
                     %>
                     <a href="${request.route_url('task_lock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}"
-                        id="lock" class="btn btn-primary ${disabled}" rel="tooltip"
+                        id="lock" class="btn btn-small btn-primary ${disabled}" rel="tooltip"
                         data-original-title="${tooltip}" data-delay="200"><i class="icon-lock icon-white"></i> Lock</a>
                 % elif tile.username is not None:
                     Aready locked by <b>${tile.username}</b>. 

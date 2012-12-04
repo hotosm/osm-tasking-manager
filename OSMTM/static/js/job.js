@@ -180,27 +180,33 @@ function loadTask(x, y, zoom) {
     hideTooltips();
     // it may already be done
     location.hash = ["task", x, y, zoom].join('/');
-    $('#task').load(
-        [job_url, "task", x, y, zoom].join('/'),
-        function(responseText, textStatus, request) {
-            if (textStatus == 'error') {
-                alert(responseText);
-            } else {
-                $('#task_tab').tab('show');
-                var id = [x, y, zoom].join('-');
-                current_task = id;
-                var feature = tilesLayer.getFeatureByFid(id);
-                tilesLayer.redraw();
-                var z = map.getZoomForExtent(feature.geometry.getBounds()),
-                    centroid = feature.geometry.getCentroid(),
-                    lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
-                map.zoomTo(zoom - 1);
-                map.panTo(lonlat);
-            }
-        }
-    );
+    $('#task_tab').tab('show');
+    $('#task').slideTo([job_url, "task", x, y, zoom].join('/'));
+    var id = [x, y, zoom].join('-');
+    current_task = id;
+    var feature = tilesLayer.getFeatureByFid(id);
+    tilesLayer.redraw();
+    var z = map.getZoomForExtent(feature.geometry.getBounds()),
+        centroid = feature.geometry.getCentroid(),
+        lonlat = new OpenLayers.LonLat(centroid.x, centroid.y);
+    map.zoomTo(zoom - 1);
+    map.panTo(lonlat);
 }
 
+$.fn.slideTo = function(url) {
+    var self = this;
+    var width = parseInt(self.css('width'), 0);
+    var transfer = $('<div class="transfer"></div>').css({ 'width': (2 * width) + 'px' });
+    var current = $('<div class="current"></div>').css({ 'width': width + 'px', 'left': '0', 'float': 'left' }).html(self.html());
+    //var next = $('<div class="next"></div>').css({ 'width': width + 'px', 'left': width + 'px', 'float': 'left' }).html(data);
+    transfer.append(current);
+    self.html('').append(transfer);
+    transfer.animate({ 'margin-left': '-' + width + 'px' }, 300, function () {
+        $.get(url, function(data) {
+            self.html(data);
+        });
+    });
+};
 
 var chart_drawn = false;
 $('a[href="#chart"]').on('shown', function (e) {
