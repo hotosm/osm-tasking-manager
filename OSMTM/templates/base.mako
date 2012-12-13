@@ -13,6 +13,8 @@
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}?_cdsalt=1330087595137"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/showdown.js')}"></script>
         <script type="text/javascript"
+                src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-transition.js')}"></script>
+        <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-tooltip.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-popover.js')}"></script>

@@ -877,6 +877,16 @@ a{color:#417f90;}
 #job .history .icon-comment,#job_new .history .icon-comment,#task .history .icon-comment{filter:alpha(opacity=50);filter:alpha(opacity=20);-moz-opacity:0.5;-khtml-opacity:0.5;opacity:0.5;}
 #job .history.first,#job_new .history.first,#task .history.first{border-top-width:1px;-webkit-border-radius:5px 5px 0 0;-moz-border-radius:5px 5px 0 0;border-radius:5px 5px 0 0;}
 #job .history.last,#job_new .history.last,#task .history.last{-webkit-border-radius:0 0 5px 5px;-moz-border-radius:0 0 5px 5px;border-radius:0 0 5px 5px;}
+#job #task,#job_new #task,#task #task{overflow:hidden;}#job #task>.item,#job_new #task>.item,#task #task>.item{display:none;position:relative;-webkit-transition:left 0.6s ease-in-out,opacity 0.3s linear;-moz-transition:left 0.6s ease-in-out,opacity 0.3s linear;-o-transition:left 0.6s ease-in-out,opacity 0.3s linear;transition:left 0.6s ease-in-out,opacity 0.3s linear;}
+#job #task>.active,#job_new #task>.active,#task #task>.active,#job #task>.next,#job_new #task>.next,#task #task>.next,#job #task>.prev,#job_new #task>.prev,#task #task>.prev{display:block;}
+#job #task>.active,#job_new #task>.active,#task #task>.active{left:0;filter:alpha(opacity=100);filter:alpha(opacity=20);-moz-opacity:1;-khtml-opacity:1;opacity:1;}
+#job #task>.next,#job_new #task>.next,#task #task>.next,#job #task>.prev,#job_new #task>.prev,#task #task>.prev{position:absolute;top:0;width:100%;}
+#job #task>.next,#job_new #task>.next,#task #task>.next,#job #task>.prev,#job_new #task>.prev,#task #task>.prev{position:absolute;top:0;width:100%;}
+#job #task>.next,#job_new #task>.next,#task #task>.next{left:100%;}
+#job #task>.prev,#job_new #task>.prev,#task #task>.prev{left:-100%;}
+#job #task>.next.left,#job_new #task>.next.left,#task #task>.next.left,#job #task>.prev.right,#job_new #task>.prev.right,#task #task>.prev.right{left:0;}
+#job #task>.active.left,#job_new #task>.active.left,#task #task>.active.left{left:-100%;filter:alpha(opacity=0);filter:alpha(opacity=20);-moz-opacity:0;-khtml-opacity:0;opacity:0;}
+#job #task>.active.right,#job_new #task>.active.right,#task #task>.active.right{left:100%;}
 #job .hidden-link,#users .hidden-link,#licenses .hidden-link{display:none;}
 #job li:hover .hidden-link,#users li:hover .hidden-link,#licenses li:hover .hidden-link{display:inline;}
 .page-header{padding-bottom:0;margin-top:6px;}
