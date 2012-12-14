@@ -167,7 +167,6 @@ function loadEmptyTask() {
     tilesLayer.redraw();
     $('#task').slide('prev')
         .one('slid', function() {
-            console.log("load 1");
             $('#task').load([job_url, "task"].join('/'));
         });
 }
@@ -182,7 +181,6 @@ function loadTask(x, y, zoom, direction) {
     if (direction) {
         $('#task').slide(direction)
             .one('slid', function() {
-                console.log("load 2");
                 load();
             });
     } else {
@@ -386,7 +384,6 @@ $.fn.slide = function(type) {
         $next.offsetWidth; // force reflow
         $container.append($next);
         setTimeout(function() {
-            console.log("sliding");
             $active.addClass(direction);
             $active.one($.support.transition.end, function (e) {
                 $next.removeClass([type, direction].join(' ')).addClass('active');
