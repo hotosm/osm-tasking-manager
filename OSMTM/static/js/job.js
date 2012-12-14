@@ -165,8 +165,9 @@ var current_task;
 function loadEmptyTask() {
     current_task = null;
     tilesLayer.redraw();
-    $('#task').slide('back')
+    $('#task').slide('prev')
         .one('slid', function() {
+            console.log("load 1");
             $('#task').load([job_url, "task"].join('/'));
         });
 }
@@ -181,6 +182,7 @@ function loadTask(x, y, zoom, direction) {
     if (direction) {
         $('#task').slide(direction)
             .one('slid', function() {
+                console.log("load 2");
                 load();
             });
     } else {
@@ -342,9 +344,9 @@ function takeOrUnlock(e) {
 }
 $('#take_random').live('click', {direction: 'next'}, takeOrUnlock);
 $('#lock').live('click', {direction: 'next'}, takeOrUnlock);
-$('#unlock').live('click', {direction: 'back'}, takeOrUnlock);
+$('#unlock').live('click', {direction: 'prev'}, takeOrUnlock);
 $('#validate').live('click', {direction: 'next'}, takeOrUnlock);
-$('#split').live('click', {direction: 'back'}, takeOrUnlock);
+$('#split').live('click', {direction: 'prev'}, takeOrUnlock);
 $('#clear').live('click', loadEmptyTask);
 
 function splitTask(id, newTiles) {
@@ -371,6 +373,8 @@ $(function(){
 });
 
 $.fn.slide = function(type) {
+    // we hide tooltips since they may interact with transitions
+    hideTooltips();
     var $container = $(this);
     var $active = $('<div class="item active">');
     $active.html($container.html());
@@ -382,8 +386,9 @@ $.fn.slide = function(type) {
         $next.offsetWidth; // force reflow
         $container.append($next);
         setTimeout(function() {
+            console.log("sliding");
             $active.addClass(direction);
-            $container.one($.support.transition.end, function () {
+            $active.one($.support.transition.end, function (e) {
                 $next.removeClass([type, direction].join(' ')).addClass('active');
                 $active.remove();
                 setTimeout(
@@ -394,7 +399,7 @@ $.fn.slide = function(type) {
                     0
                 );
             });
-        }, 0);
+        }, 200); // time to hide tooltips
     } else {
         $container.trigger('slid');
     }
