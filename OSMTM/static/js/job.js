@@ -139,10 +139,10 @@ protocol = new OpenLayers.Protocol.HTTP({
             // Client-side routes
             Sammy(function() {
                 this.get('#task/:x/:y/:zoom', function() {
-                    loadTask(this.params.x, this.params.y, this.params.zoom);
+                    loadTask(this.params.x, this.params.y, this.params.zoom, 'next');
                 });
                 this.get('#task/:x/:y/:zoom/:action', function() {
-                    loadTask(this.params.x, this.params.y, this.params.zoom);
+                    loadTask(this.params.x, this.params.y, this.params.zoom, 'next');
                 });
             }).run();
         }
@@ -152,15 +152,6 @@ protocol.read();
 
 var featureControl = new OpenLayers.Control.SelectFeature(tilesLayer, {
     onSelect: function(feature) {
-        //var attr = feature.attributes;
-        //if (attr.checkin >=  2 || attr.username) {
-            //return false;
-        //}
-        // FIXME
-        //if (current_tile && current_tile.user == user) {
-            //alert("You already have a task to work on");
-            //return false;
-        //}
         var id = feature.fid.split('-');
         hideTooltips();
         location.hash = ["task", id[0], id[1], id[2]].join('/');
@@ -174,20 +165,27 @@ var current_task;
 function loadEmptyTask() {
     current_task = null;
     tilesLayer.redraw();
-    $('#task').load([job_url, "task"].join('/'));
+    $('#task').slide('back')
+        .one('slid', function() {
+            $('#task').load([job_url, "task"].join('/'));
+        });
 }
-function loadTask(x, y, zoom) {
+function loadTask(x, y, zoom, direction) {
     hideTooltips();
     // it may already be done
     location.hash = ["task", x, y, zoom].join('/');
     $('#task_tab').tab('show');
-    $('#task').slide('next')
-        .one('slid', function() {
-            var self = $(this);
-            $.get([job_url, "task", x, y, zoom].join('/'), function(data) {
-                self.html(data);
+    function load() {
+        $('#task').load([job_url, "task", x, y, zoom].join('/'));
+    }
+    if (direction) {
+        $('#task').slide(direction)
+            .one('slid', function() {
+                load();
             });
-        });
+    } else {
+        load();
+    }
     var id = [x, y, zoom].join('-');
     current_task = id;
     var feature = tilesLayer.getFeatureByFid(id);
@@ -279,7 +277,7 @@ $('form').live('submit', function(e) {
         var formData = $(form).serializeObject();
         var submitName = $("button[type=submit][clicked=true]").attr("name");
         formData[submitName] = true;
-        $('#task').load(form.action, formData, function(responseText) {
+        $.get(form.action, formData, function(responseText) {
             loadEmptyTask();
             showTilesStatus();
         });
@@ -321,11 +319,12 @@ $.fn.serializeObject = function()
 
 function takeOrUnlock(e) {
     hideTooltips();
+    var direction = e.data && e.data.direction;
     $.getJSON(this.href, function(data) {
         showTilesStatus();
         if (data.tile) {
             var tile = data.tile;
-            loadTask(tile.x, tile.y, tile.z);
+            loadTask(tile.x, tile.y, tile.z, direction);
             return;
         }
         if (data.error_msg) {
@@ -341,11 +340,11 @@ function takeOrUnlock(e) {
     });
     return false;
 }
-$('#take_random').live('click', takeOrUnlock);
-$('#lock').live('click', takeOrUnlock);
-$('#unlock').live('click', takeOrUnlock);
-$('#validate').live('click', takeOrUnlock);
-$('#split').live('click', takeOrUnlock);
+$('#take_random').live('click', {direction: 'next'}, takeOrUnlock);
+$('#lock').live('click', {direction: 'next'}, takeOrUnlock);
+$('#unlock').live('click', {direction: 'back'}, takeOrUnlock);
+$('#validate').live('click', {direction: 'next'}, takeOrUnlock);
+$('#split').live('click', {direction: 'back'}, takeOrUnlock);
 $('#clear').live('click', loadEmptyTask);
 
 function splitTask(id, newTiles) {
