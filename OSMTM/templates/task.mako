@@ -66,7 +66,7 @@
                 % if tile.checkin == 0 and (tile.zoom - job.zoom) < 1 and tile.username is None:
                 <a href="${request.route_url('task_split', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="split" class="btn btn-small"><i class="icon-split"></i>Split!</a>
                 % endif
-                    <a id="clear" class="btn btn-small btn-link">Clear selection</a>
+                    <a id="clear" class="btn btn-small btn-link"><i class="icon-remove"></i> Clear selection</a>
             </p>
             % if current_task is not None:
             <p>
