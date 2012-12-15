@@ -61,7 +61,7 @@
                         id="lock" class="btn btn-small btn-primary ${disabled}" rel="tooltip"
                         data-original-title="${tooltip}" data-delay="200"><i class="icon-lock icon-white"></i> Lock</a>
                 % elif tile.username is not None:
-                    Aready locked by <b>${tile.username}</b>. 
+                    Already locked by <b>${tile.username}</b>.<br />
                 % endif
                 % if tile.checkin == 0 and (tile.zoom - job.zoom) < 1 and tile.username is None:
                 <a href="${request.route_url('task_split', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="split" class="btn btn-small"><i class="icon-split"></i>Split!</a>
