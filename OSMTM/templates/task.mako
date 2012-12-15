@@ -1,3 +1,6 @@
+<div class="loading">
+    <span class="label">Loading</span>
+</div>
 <%!
     import markdown
 %>

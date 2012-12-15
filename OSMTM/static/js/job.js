@@ -317,10 +317,19 @@ $.fn.serializeObject = function()
     return o;
 };
 
+function startLoading() {
+    $('#task .loading').show();
+}
+function stopLoading() {
+    $('#task .loading').hide();
+}
+
 function takeOrUnlock(e) {
     hideTooltips();
     var direction = e.data && e.data.direction;
+    startLoading();
     $.getJSON(this.href, function(data) {
+        stopLoading();
         showTilesStatus();
         if (data.tile) {
             var tile = data.tile;

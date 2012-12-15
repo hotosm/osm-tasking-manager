@@ -888,6 +888,7 @@ a{color:#417f90;}
 #job #task>.active.left,#job_new #task>.active.left,#task #task>.active.left{left:-100%;filter:alpha(opacity=0);filter:alpha(opacity=20);-moz-opacity:0;-khtml-opacity:0;opacity:0;}
 #job #task>.active.right,#job_new #task>.active.right,#task #task>.active.right{left:100%;}
 #job #task>.active.left,#job_new #task>.active.left,#task #task>.active.left,#job #task>.active.right,#job_new #task>.active.right,#task #task>.active.right{filter:alpha(opacity=0);filter:alpha(opacity=20);-moz-opacity:0;-khtml-opacity:0;opacity:0;}
+#job #task .loading,#job_new #task .loading,#task #task .loading{text-align:center;display:none;}#job #task .loading .label,#job_new #task .loading .label,#task #task .loading .label{position:absolute;}
 #job .hidden-link,#users .hidden-link,#licenses .hidden-link{display:none;}
 #job li:hover .hidden-link,#users li:hover .hidden-link,#licenses li:hover .hidden-link{display:inline;}
 .page-header{padding-bottom:0;margin-top:6px;}
