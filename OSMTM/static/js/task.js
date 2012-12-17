@@ -38,8 +38,14 @@ var exportOpen = function() {
             bounds: bounds,
             protocol: 'lbrt'
         });
-        var w = window.open(url);
-        window.setTimeout(function(){w.close();}, 500);
+        $.ajax({
+            url: url,
+            complete: function(t) {
+                if (t.status != 200) {
+                    alert("JOSM remote control did not respond. Do you have JOSM running and configured to be controlled remotely?");
+                }
+            }
+        });
         break;
     case "potlatch2":
         url = getLink({
