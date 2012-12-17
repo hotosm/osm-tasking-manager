@@ -27,10 +27,10 @@ var exportOpen = function() {
         bounds = f.geometry.getBounds();
 
     bounds.transform(
-        new OpenLayers.Projection("EPSG:900913"), 
+        new OpenLayers.Projection("EPSG:900913"),
         new OpenLayers.Projection("EPSG:4326")
     );
-    
+
     switch (this.id) {
     case "josm":
         url = getLink({
@@ -53,7 +53,7 @@ var exportOpen = function() {
     case "wp":
         url = getLink({
             base: 'http://walking-papers.org/?',
-            bounds: bounds,            
+            bounds: bounds,
             protocol: 'llz'
         });
         window.open(url);
