@@ -277,8 +277,9 @@ $('form').live('submit', function(e) {
         var formData = $(form).serializeObject();
         var submitName = $("button[type=submit][clicked=true]").attr("name");
         formData[submitName] = true;
-        $.get(form.action, formData, function(responseText) {
-            loadEmptyTask();
+        $.get(form.action, formData, function(response) {
+            var tile = response.tile;
+            loadTask(tile.x, tile.y, tile.z, 'prev');
             showTilesStatus();
         });
     }

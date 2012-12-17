@@ -64,7 +64,7 @@ def task_xhr(request):
             user=user,
             job=tile.job)
 
-@view_config(route_name='task_done', permission='job', renderer='task.mako')
+@view_config(route_name='task_done', permission='job', renderer='json')
 def done(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
@@ -92,7 +92,7 @@ def done(request):
     tile.change = False
     tile.comment = None
     session.add(tile)
-    return dict(job=tile.job)
+    return dict(success=True, tile=dict(x=tile.x, y=tile.y, z=tile.zoom))
 
 @view_config(route_name='task_unlock', permission='job', renderer='json')
 def unlock(request):
