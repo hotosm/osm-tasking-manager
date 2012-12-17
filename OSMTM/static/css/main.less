@@ -265,7 +265,7 @@ a {
 }
 
 // Specific Pages
-#job, #job_new, #task {
+#job, #job_new {
     .world_map {
         float: right;
         background: url(../img/world_map.png);
@@ -356,6 +356,7 @@ a {
     }
 
     #task {
+        position: relative;
         overflow: hidden;
         > .item {
             display: none;
@@ -410,11 +411,10 @@ a {
         }
 
         .loading {
-            text-align: center;
             display: none;
-            .label {
-                position: absolute;
-            }
+            position: absolute;
+            left: 50%;
+            margin-left: -20px;
         }
     }
 }
