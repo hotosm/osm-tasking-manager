@@ -85,16 +85,30 @@ job_whitelist_table = Table('job_whitelists', Base.metadata,
     Column('user_id', Unicode, ForeignKey('users.username'))
 )
 
+users_licenses_table = Table('users_licenses', Base.metadata,
+    Column('user', Integer, ForeignKey('users.username')),
+    Column('license', Integer, ForeignKey('licenses.id'))
+)
+
+class License(Base):
+    __tablename__ = "licenses"
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode)
+    description = Column(Unicode)
+    jobs = relationship("Job", backref='license')
+
+    def __init__(self):
+        pass
+
 class User(Base):
     __tablename__ = "users"
     username = Column(Unicode, primary_key=True)
-    accepted_nextview = Column(Boolean)
     admin = Column(Boolean)
     task = relationship(Tile, backref='user')
+    accepted_licenses = relationship(License, secondary=users_licenses_table)
 
-    def __init__(self, username, admin=False, accepted_nextview=False):
+    def __init__(self, username, admin=False):
         self.username = username
-        self.accepted_nextview = accepted_nextview
         self.admin = admin
 
     def is_admin(self):
@@ -130,7 +144,6 @@ class Job(Base):
     zoom = Column(Integer)
     josm_preset = Column(Unicode)
     is_private = Column(Boolean)
-    requires_nextview = Column(Boolean)
     featured = Column(Boolean)
     # percentage done
     done = Column(Integer)
@@ -141,6 +154,7 @@ class Job(Base):
                 secondary=job_whitelist_table,
                 backref='private_jobs')
     tags = relationship(Tag, secondary=job_tags_table, backref='tags')
+    license_id = Column(Integer, ForeignKey('licenses.id'))
 
     def __init__(self, title=None,
                  geometry=None, zoom=None, author=None):

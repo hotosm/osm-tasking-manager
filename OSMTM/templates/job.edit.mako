@@ -82,13 +82,23 @@
             <div class="control-group">
                 <label for="id_imagery">Imagery</label>
                 <div class="controls">
-                    <input type="text" id="id_imagery" name="imagery" />
+                    <input type="text" id="id_imagery" name="imagery" value="${job.imagery}"/>
                 </div>
             </div>
             <div class="control-group">
-                <label for="id_requires_nextview">Requires NextView?</label>
+                <label for="id_license">Requires License</label>
                 <div class="controls">
-                    <input type="checkbox" id="id_requires_nextview" name="requires_nextview" ${'checked="checked"' if job.requires_nextview else ''} />
+                    <select id="id_license" name="license_id">
+                        <option value="" />
+                        % for l in licenses:
+                            <%
+                                selected = ""
+                                if job.license is not None and l.id == job.license.id:
+                                    selected = "selected"
+                            %>
+                            <option value="${l.id}" ${selected}>${l.name}</a>
+                        % endfor
+                    </select>
                 </div>
             </div>
             <div class="control-group">

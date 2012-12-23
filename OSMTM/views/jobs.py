@@ -12,6 +12,7 @@ from OSMTM.models import User
 from OSMTM.models import Tile
 from OSMTM.models import TileHistory
 from OSMTM.models import Tag
+from OSMTM.models import License
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 
@@ -117,6 +118,8 @@ def job_edit(request):
     session = DBSession()
     job = session.query(Job).get(id)
 
+    licenses = session.query(License).all()
+
     if 'form.submitted' in request.params:
         job.title = request.params['title']
         job.short_description = request.params['short_description']
@@ -126,13 +129,17 @@ def job_edit(request):
         josm_preset = josm_preset.value.decode('UTF-8') if josm_preset != '' else ''
         job.josm_preset = josm_preset 
         job.is_private = request.params.get('is_private') == 'on'
-        job.requires_nextview = request.params.get('requires_nextview') == 'on'
         job.imagery = request.params['imagery']
+
+        if request.params['license_id'] != "":
+            license_id = int(request.params['license_id'])
+            license = session.query(License).get(license_id)
+            job.license = license
 
         session.add(job)
         return HTTPFound(location = route_url('job', request, job=job.id))
 
-    return dict(job=job)
+    return dict(job=job, licenses=licenses)
 
 @view_config(route_name='job_archive', permission='admin')
 def job_archive(request):

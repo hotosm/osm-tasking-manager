@@ -24,23 +24,6 @@
                 % endif
             </div>
         </div>
-        <div class="control-group">
-        % if admin:
-            <label class="control-label" for="id_accepted_nextview">Acknowledged NextView license terms?</label>
-            <div class="controls">
-                <input type="checkbox" id="id_accepted_nextview" name="accepted_nextview"
-                % if user.accepted_nextview:
-                    checked="${user.accepted_nextview}"
-                % endif
-                />
-                <p class="help-block">
-                    <strong>Note:</strong> This acknowledgment will allow the user to work on jobs which require it. 
-                </p>
-            </div>
-        % elif user.accepted_nextview:
-            You have acknowledged the NextView license terms.
-        % endif
-        </div>
         <div class="form-actions">
             <input type="submit" name="form.submitted" class="btn btn-primary" value="Apply changes"/>
         </div>
