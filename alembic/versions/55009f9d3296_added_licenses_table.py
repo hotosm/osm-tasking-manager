@@ -12,6 +12,8 @@ down_revision = '173a7003596f'
 
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import Unicode, Integer
+from sqlalchemy.sql import table, column
 
 
 def upgrade():
@@ -35,3 +37,11 @@ def upgrade():
     #op.drop_column('jobs', u'requires_nextview')
     ### end Alembic commands ###
 
+    licenses = table('licenses',
+        column('name'),
+        column('description')
+    )
+    op.execute("INSERT INTO licenses (name, description)\
+        VALUES ('NextView', 'This data is licensed for use by the US Government (USG) under the NextView (NV) license and copyrighted by Digital Globe or GeoEye. The NV license allows the USG to share the imagery and Literal Imagery Derived Products (LIDP) with entities outside the USG when that entity is working directly with the USG, for the USG, or in a manner that is directly beneficial to the USG. The party receiving the data can only use the imagery or LIDP for the original purpose or only as otherwise agreed to by the USG. The party receiving the data cannot share the imagery or LIDP with a third party without express permission from the USG. At no time should this imagery or LIDP be used for other than USG-related purposes and must not be used for commercial gain. The copyright information should be maintained at all times. Your acceptance of these license terms is implied by your use.')")
+    op.execute("UPDATE jobs SET license_id = 1 WHERE requires_nextview = 1")
+    op.execute("INSERT INTO users_licenses (user, license) SELECT username, 1 FROM users WHERE accepted_nextview = 1")
