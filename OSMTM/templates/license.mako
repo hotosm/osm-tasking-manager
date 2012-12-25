@@ -6,7 +6,7 @@
         <h1>${license.name} License Acknowledgement</h1>
         <p>Access via this site to imagery identified as <em>"${license.name}"</em> is subject to the following usage terms:</p>
         <hr />
-        <p><em>${license.description}</em></p>
+        <p><em>&ldquo;${license.description}&rdquo;</em></p>
         <hr />
         <p>In other words, you may only use <em>${license.name}</em> imagery linked from this site for digitizing OpenStreetMap data for humanitarian purposes.</p>
         <div>
