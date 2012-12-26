@@ -36,6 +36,9 @@ def license(request):
 def license_new(request):
     session = DBSession()
     license = License()
+    license.name = ''
+    license.description = ''
+    license.plain_text = ''
 
     session.add(license)
     session.flush()
