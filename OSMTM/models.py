@@ -95,6 +95,7 @@ class License(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode)
     description = Column(Unicode)
+    plain_text = Column(Unicode)
     jobs = relationship("Job", backref='license')
 
     def __init__(self):

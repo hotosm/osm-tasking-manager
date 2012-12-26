@@ -22,6 +22,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.Unicode(), nullable=True),
     sa.Column('description', sa.Unicode(), nullable=True),
+    sa.Column('plain_text', sa.Unicode(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.add_column('jobs', sa.Column('license_id', sa.Integer(), nullable=True))
@@ -41,7 +42,7 @@ def upgrade():
         column('name'),
         column('description')
     )
-    op.execute("INSERT INTO licenses (name, description)\
-        VALUES ('NextView', 'This data is licensed for use by the US Government (USG) under the NextView (NV) license and copyrighted by Digital Globe or GeoEye. The NV license allows the USG to share the imagery and Literal Imagery Derived Products (LIDP) with entities outside the USG when that entity is working directly with the USG, for the USG, or in a manner that is directly beneficial to the USG. The party receiving the data can only use the imagery or LIDP for the original purpose or only as otherwise agreed to by the USG. The party receiving the data cannot share the imagery or LIDP with a third party without express permission from the USG. At no time should this imagery or LIDP be used for other than USG-related purposes and must not be used for commercial gain. The copyright information should be maintained at all times. Your acceptance of these license terms is implied by your use.')")
+    op.execute("INSERT INTO licenses (name, description, plain_text)\
+        VALUES ('NextView', 'This data is licensed for use by the US Government (USG) under the NextView (NV) license and copyrighted by Digital Globe or GeoEye. The NV license allows the USG to share the imagery and Literal Imagery Derived Products (LIDP) with entities outside the USG when that entity is working directly with the USG, for the USG, or in a manner that is directly beneficial to the USG. The party receiving the data can only use the imagery or LIDP for the original purpose or only as otherwise agreed to by the USG. The party receiving the data cannot share the imagery or LIDP with a third party without express permission from the USG. At no time should this imagery or LIDP be used for other than USG-related purposes and must not be used for commercial gain. The copyright information should be maintained at all times. Your acceptance of these license terms is implied by your use.', 'In other words, you may only use NextView imagery linked from this site for digitizing OpenStreetMap data for humanitarian purposes.')")
     op.execute("UPDATE jobs SET license_id = 1 WHERE requires_nextview = 1")
     op.execute("INSERT INTO users_licenses (user, license) SELECT username, 1 FROM users WHERE accepted_nextview = 1")

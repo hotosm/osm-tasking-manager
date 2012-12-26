@@ -20,6 +20,16 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="span7">
+                <div class="control-group">
+                    <label class="control-label" for="id_description">Plain Text</label>
+                    <div class="controls">
+                        <textarea class="text span7" id="id_description" name="description" rows="5">${license.plain_text}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-actions">
             <input type="submit" class="btn btn-primary" value="Save the modifications" id="id_submit" name="form.submitted"/>
         </div>

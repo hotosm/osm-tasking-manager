@@ -45,6 +45,7 @@ def license_edit(request):
     if 'form.submitted' in request.params:
         license.name = request.params['name']
         license.description = request.params['description']
+        license.plain_text = request.params['plain_text']
 
         session.add(license)
         request.session.flash('License updated!')
