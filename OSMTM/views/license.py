@@ -8,6 +8,12 @@ from OSMTM.models import DBSession
 from OSMTM.models import User 
 from OSMTM.models import License 
 
+@view_config(route_name='licenses', renderer='licenses.mako', permission='edit')
+def licenses(request):
+    session = DBSession()
+    licenses = session.query(License).all()
+    return dict(licenses=licenses)
+
 @view_config(route_name='license', renderer='license.mako', permission='edit')
 def license(request):
     session = DBSession()
@@ -34,6 +40,17 @@ def license_new(request):
     session.add(license)
     session.flush()
     return HTTPFound(location = route_url('license_edit', request, license=license.id))
+
+@view_config(route_name='license_delete', permission='admin')
+def license_delete(request):
+    session = DBSession()
+    id = request.matchdict['license']
+    license = session.query(License).get(id)
+
+    session.delete(license)
+    session.flush()
+    request.session.flash('License removed!')
+    return HTTPFound(location = route_url('licenses', request))
 
 @view_config(route_name='license_edit', renderer='license.edit.mako',
         permission='admin')
