@@ -10,11 +10,11 @@
 <div class="content group wrap">
     <section class="job">
         <h1>Job tags: ${job.title}</h1>
-        <form method="post" action="">
+        <form method="post" class="form-inline" action="">
             <div class="field"> 
-                <label for="tag">Add a tag:</label> 
+                <label class="control-label" for="tag">Tag to add</label> 
                 <input id="tag" name="tag" type="text" data-provide="typeahead" data-source='${tags|n}' autocomplete="off"/>
-                <input type="submit" class="submit" value="Add" id="id_submit" name="form.submitted" /> 
+                <input type="submit" class="btn btn-primary" value="Add" id="id_submit" name="form.submitted" /> 
             </div>
         </form>
         <ul>

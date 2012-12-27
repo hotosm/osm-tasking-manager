@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
     $('.delete')
         .click(function() {
             if (!confirm("Are you sure you want to delete this job?")) {
@@ -9,7 +8,9 @@ $(document).ready(function() {
 
     ko.applyBindings(new JobViewModel(jobs));
 });
-
+/**
+ * Knockout js model
+ */
 function JobViewModel(initialJobs) {
     // Data
     var self = this;

@@ -9,9 +9,9 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
         <meta name="keywords" content="HOT task server" />
         <meta name="description" content="HOT task server" />
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/jquery-1.7.1.min.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/jquery-1.7.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}?_cdsalt=1330087595137"></script>
-        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/showdown.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/showdown.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-tooltip.js')}"></script>
         <script type="text/javascript"
