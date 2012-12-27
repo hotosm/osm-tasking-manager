@@ -6,7 +6,7 @@
     <h1>New Job</h1>
     <form method="post" action="" class="form-horizontal">
         <div class="control-group">
-            <label for="id_title">Title</label> 
+            <label class="control-label" for="id_title">Title</label> 
             <div class="controls"> 
             <input type="text" class="text input-xxlarge" id="id_title" name="title" value="" /> 
             </div> 
@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="span6">
                     <div class="control-group">
-                        <label>Area</label> 
+                        <label class="control-label">Area</label> 
                         <div class="controls">
                             <div class="inline-inputs"> 
                                 <input type="radio" name="relation_type" checked value="relation"/>
@@ -45,7 +45,7 @@
                         <input type="hidden" id="geometry" name="geometry" value="" />
                     </div>
                     <div class="control-group">
-                        <label for="id_zoom">Zoom level</label> 
+                        <label class="control-label" for="id_zoom">Zoom level</label> 
                         <div class="controls">
                             <select id="id_zoom" name="zoom">
                                  <option>10</option>
@@ -77,7 +77,7 @@
         </div>
     </form>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/OpenLayers.js')}"></script>
 <script type="text/javascript">
     OpenLayers.ProxyHost = '${request.route_url('osmproxy')}?url=';
 </script>

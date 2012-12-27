@@ -18,7 +18,12 @@
         </div>
         % if admin:
         <div class="span5">
-            <a href="${request.route_url('job_new')}" class="btn btn-small pull-right">+ Create a new job</a>
+            <p>
+                <a href="${request.route_url('admin')}" >Admin page</a>
+            </p>
+            <p>
+                <a href="${request.route_url('job_new')}" class="btn btn-small">+ Create a new job</a>
+            </p>
         </div>
         % endif
     </div>
@@ -118,10 +123,9 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/OpenLayers.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/home.js')}?_cdsalt=1348670520"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/sammy-latest.min.js')}"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/knockout-2.1.0.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/sammy-latest.min.js')}"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/knockout-2.1.0.js')}"></script>
 <script type="text/javascript">
     jobs = ${jobs|n}
 </script>
