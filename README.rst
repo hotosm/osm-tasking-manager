@@ -43,6 +43,8 @@ To create a virtual Python environment::
     wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.8.tar.gz
     tar xvzf virtualenv-1.8.tar.gz
     python virtualenv-1.8/virtualenv.py --distribute --no-site-packages env
+    rm -rf distribute-0.6.28.tar.gz
+    rm -rf virtualenv-1.8*
     source env/bin/activate
 
 To install OSMTM from source (the only option at this point) in the virtual
