@@ -9,16 +9,18 @@
 % else:
         <div> 
             <p id="task_error_msg" class="alert alert-error hide"></p>
-            % if tile.username == user.username:
-            <p>
-            <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small">Unlock</a>
-            </p>
             <p id="export" class="well well-small">
                 <i class="icon-share-alt"></i>
                 <a class="btn btn-small" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
                 <a class="btn btn-small" id="potlatch2">Potlatch 2</a>
                 <a class="btn btn-small" href="javascript:void(0);" id="wp">Walking Papers</a>
                 <a class="btn btn-small btn-link" href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Tile as .osm format.<br/>Right-click on the link to save the file (JOSM) or copy its location (Potlatch).">.osm</a>
+            </p>
+        </div>
+        <div id="task_actions"> 
+            % if tile.username == user.username:
+            <p>
+            <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small">Unlock</a>
             </p>
             <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal" method="POST">
             % if tile.checkin == 0:
@@ -62,7 +64,7 @@
                     %>
                     <a href="${request.route_url('task_lock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}"
                         id="lock" class="btn btn-small btn-primary ${disabled}" rel="tooltip"
-                        data-original-title="${tooltip}" data-delay="200"><i class="icon-lock icon-white"></i> Lock</a>
+                        data-original-title="${tooltip}"><i class="icon-lock icon-white"></i> Lock</a>
                 % elif tile.username is not None:
                     Already locked by <b>${tile.username}</b>.<br />
                 % endif
@@ -79,7 +81,6 @@
             % endif
             % endif
             <%include file="task.comments.mako" />
-            <%include file="imagery.mako" />
         </div>
 
     <script type="text/javascript">

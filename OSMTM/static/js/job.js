@@ -139,7 +139,7 @@ protocol = new OpenLayers.Protocol.HTTP({
             // Client-side routes
             Sammy(function() {
                 this.get('#task/:x/:y/:zoom', function() {
-                    loadTask(this.params.x, this.params.y, this.params.zoom, 'next');
+                    loadTask(this.params.x, this.params.y, this.params.zoom);
                 });
                 this.get('#task/:x/:y/:zoom/:action', function() {
                     loadTask(this.params.x, this.params.y, this.params.zoom, 'next');
@@ -165,26 +165,28 @@ var current_task;
 function loadEmptyTask() {
     current_task = null;
     tilesLayer.redraw();
-    $('#task').slide('prev')
-        .one('slid', function() {
-            $('#task').load([job_url, "task"].join('/'));
+    $('#task').fadeOut(function() {
+        $('#task').load([job_url, "task"].join('/'), function() {
+            $(this).css('display', '');
         });
+    });
 }
 function loadTask(x, y, zoom, direction) {
     hideTooltips();
     // it may already be done
     location.hash = ["task", x, y, zoom].join('/');
     $('#task_tab').tab('show');
-    function load() {
-        $('#task').load([job_url, "task", x, y, zoom].join('/'));
-    }
     if (direction) {
-        $('#task').slide(direction)
+        $('#task_actions').slide(direction)
             .one('slid', function() {
-                load();
+                $('#task').load([job_url, "task", x, y, zoom].join('/'));
             });
     } else {
-        load();
+        $('#task').fadeOut(function() {
+            $('#task').load([job_url, "task", x, y, zoom].join('/'), function() {
+                $(this).css('display', '');
+            });
+        });
     }
     var id = [x, y, zoom].join('-');
     current_task = id;
@@ -279,7 +281,7 @@ $('form').live('submit', function(e) {
         formData[submitName] = true;
         $.get(form.action, formData, function(response) {
             var tile = response.tile;
-            loadTask(tile.x, tile.y, tile.z, 'prev');
+            loadTask(tile.x, tile.y, tile.z);
             showTilesStatus();
         });
     }
@@ -350,7 +352,7 @@ function takeOrUnlock(e) {
     });
     return false;
 }
-$('#take_random').live('click', {direction: 'next'}, takeOrUnlock);
+$('#take_random').live('click', {}, takeOrUnlock);
 $('#lock').live('click', {direction: 'next'}, takeOrUnlock);
 $('#unlock').live('click', {direction: 'prev'}, takeOrUnlock);
 $('#validate').live('click', {direction: 'next'}, takeOrUnlock);
