@@ -18,7 +18,12 @@
         </div>
         % if admin:
         <div class="span5">
-            <a href="${request.route_url('job_new')}" class="btn btn-small pull-right">+ Create a new job</a>
+            <p>
+                <a href="${request.route_url('admin')}" >Admin page</a>
+            </p>
+            <p>
+                <a href="${request.route_url('job_new')}" class="btn btn-small">+ Create a new job</a>
+            </p>
         </div>
         % endif
     </div>

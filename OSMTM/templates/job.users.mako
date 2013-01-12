@@ -12,15 +12,15 @@
         public.
         % endif
         </p>
-        <form method="post" action="">
+        <form method="post" class="form-inline" action="">
             <div class="field"> 
-                <label for="id_username">Add a user:</label> 
+                <label class="control-label" for="id_username">Add a user:</label> 
                 <select id="id_username" name="username">
                 % for user in all_users:
                 <option value="${user.username}">${user.username}</option>
                 % endfor
                 </select>
-                <input type="submit" class="submit" value="Add" id="id_submit" name="form.submitted" /> 
+                <input type="submit" class="btn btn-primary" value="Add" id="id_submit" name="form.submitted" /> 
             </div>
         </form>
         <ul>

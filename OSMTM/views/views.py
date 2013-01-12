@@ -183,18 +183,6 @@ def home(request):
 def about(request):
     return dict()
 
-@view_config(route_name='nextview', renderer='nextview.mako', permission='edit')
-def nextview(request):
-    session = DBSession()
-    username = authenticated_userid(request)
-    user = session.query(User).get(username)
-    redirect = request.params.get("redirect", request.route_url("home"))
-    if "accepted_terms" in request.params:
-        user.accepted_nextview = request.params["accepted_terms"] == "I AGREE"
-        return HTTPFound(location=redirect)
-    else:
-        return dict(user=user, redirect=redirect)
-
 @view_config(route_name='user', renderer='user.mako', permission='admin')
 def user(request):
     session = DBSession()
@@ -207,7 +195,6 @@ def user_update(request):
     user = session.query(User).get(request.matchdict["id"])
     if 'form.submitted' in request.params:
         user.admin = True if 'admin' in request.params else False
-        user.accepted_nextview = request.params.get('accepted_nextview') == 'on'
         session.flush()
         #request.session.flash('Profile correctly updated!')
     return HTTPFound(location=request.route_url('user',id=user.username))
