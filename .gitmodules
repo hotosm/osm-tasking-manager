@@ -4,3 +4,6 @@
 [submodule "OSMTM/static/bootstrap"]
 	path = OSMTM/static/bootstrap
 	url = git://github.com/twitter/bootstrap.git
+[submodule "OSMTM/static/js/lib/openlayers"]
+	path = OSMTM/static/js/lib/openlayers
+	url = git://github.com/openlayers/openlayers.git
