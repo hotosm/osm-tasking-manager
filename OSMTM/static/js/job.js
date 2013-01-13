@@ -276,7 +276,9 @@ $('a.user').live('mouseenter', function(e) {
         for (i = 0; i < data.length; i++) {
             var id = data[i].join('-');
             var feature = tilesLayer.getFeatureByFid(id);
-            feature.attributes.highlight = true;
+            if (feature) {
+                feature.attributes.highlight = true;
+            }
         }
         tilesLayer.redraw();
     });
