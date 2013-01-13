@@ -266,9 +266,11 @@ $('a[href="#users"]').on('shown', function (e) {
     });
 });
 
+var userTilesReq;
 $('a.user').live('mouseenter', function(e) {
+    userTilesReq && userTilesReq.abort();
     var username = $(e.target).text();
-    $.getJSON(job_url + '/user/' + username, function(data) {
+    userTilesReq = $.getJSON(job_url + '/user/' + username, function(data) {
         var i;
         for (i = 0; i < tilesLayer.features.length; i++) {
             tilesLayer.features[i].attributes.highlight = false;
