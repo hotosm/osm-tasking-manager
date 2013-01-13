@@ -286,6 +286,7 @@ $('a.user').live('mouseenter', function(e) {
     });
 });
 $('a.user').live('mouseleave', function(e) {
+    userTilesReq && userTilesReq.abort();
     for (var i = 0; i < tilesLayer.features.length; i++) {
         delete tilesLayer.features[i].attributes.highlight;
     }
