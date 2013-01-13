@@ -85,19 +85,6 @@
                     % endif
                     </div>
                     <div class="span3">
-                    % if stats['validators']:
-                    <strong>Validators </strong><sup><em>${len(stats['validators'])}</em></sup>
-                    <ul>
-                      % for user in sorted(stats['validators'], key=lambda user: user[0].lower()):
-                      <li>
-                        <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup class="hidden-link"><em> ${user[1]}</em></sup>
-                        % if admin:
-                        <a href="${request.route_url('user',id=user[0])}" class="hidden-link">edit</a>
-                        % endif
-                      </li>
-                      % endfor
-                    </ul>
-                    % endif
                     </div>
                 </div>
             </div>
@@ -128,7 +115,6 @@
     var job_geom = "${request.route_url('job_geom', job=job.id)}";
     var tiles_url = "${request.route_url('job_tiles', job=job.id)}";
     var chart_done = ${stats['chart_done']|n};
-    var chart_validated = ${stats['chart_validated']|n};
     var tiles_status_url = "${request.route_url('job_tiles_status', job=job.id)}";
 </script>
 <script type="text/javascript">

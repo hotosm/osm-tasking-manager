@@ -263,7 +263,6 @@ def job_preset(request):
 
 class StatUser():
     done = 0
-    validated = 0
 
 def get_stats(job):
     session = DBSession()
@@ -287,8 +286,6 @@ def get_stats(job):
 
                 if i.checkin == 1:
                     user.done += 1
-                if i.checkin == 2 or i.checkin == 0:
-                    user.validated += 1
                 """ maintain compatibility for jobs that were created before the 
                     'update' column creation """
                 date = i.update
@@ -309,38 +306,26 @@ def get_stats(job):
     read_tiles(tiles)
 
     contributors = []
-    validators = []
     for i in users:
         """ only keep users who have actually done something
             or who are currently working on a task """
         if users[i].done != 0 or i in current_users:
             contributors.append((i, users[i].done, i in current_users))
-        if users[i].validated != 0:
-            validators.append((i, users[i].validated))
 
     changes = sorted(changes, key=lambda value: value[0])
     chart_done = []
-    chart_validated = []
     done = 0
-    validated = 0
     for date, checkin in changes:
         if checkin == 1:
             done += 1
             chart_done.append([date.isoformat(), done])
-        if checkin == 2:
-            validated += 1
-            chart_validated.append([date.isoformat(), validated])
         if checkin == 0:
             done -= 1
             chart_done.append([date.isoformat(), done])
 
     return dict(current_users=current_users, contributors=contributors, 
-            validators=validators,
-            chart_done=simplejson.dumps(chart_done),
-            chart_validated=simplejson.dumps(chart_validated))
+            chart_done=simplejson.dumps(chart_done))
 
 def update_user(user, checkin):
     if checkin == 1:
         user.done += 1
-    if checkin == 2 or checkin == 3:
-        user.validated += 1

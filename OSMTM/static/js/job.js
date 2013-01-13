@@ -87,16 +87,12 @@ function showTilesStatus() {
                 });
                 var total = tilesLayer.features.length,
                     done = 0,
-                    validated = 0,
                     cur = 0;
                 $.each(response.features, function(id, val) {
                     var feature = tilesLayer.getFeatureByFid(id);
                     feature.attributes = val;
                     if (val.checkin == 1 || val.checkin == 2) {
                         done++;
-                    }
-                    if (val.checkin == 2) {
-                        validated++;
                     }
                     if (val.username) {
                         cur++;
@@ -108,7 +104,6 @@ function showTilesStatus() {
                 $('#map_legend ul').html(function() {
                     return '<li><div class=""></div>Total (' + total + ')</li>' +
                            '<li><div class="checkin1"></div>Done (' + done + ')</li>' +
-                           '<li><div class="checkin2"></div>Validated (' + validated + ')</li>' +
                            '<li><div class="checkout"></div>Curr. worked on (' + cur + ')</li>';
                 });
             }
@@ -209,20 +204,13 @@ $('a[href="#chart"]').on('shown', function (e) {
         return;
     }
     var done_values = window.chart_done,
-        validated_values = window.chart_validated,
-        date, done, validated,
+        date, done,
         data_done = [],
-        data_validated = [],
         i, len;
     for (i=0, len=done_values.length; i < len; i++) {
         date = new Date(done_values[i][0]);
         done = done_values[i][1];
         data_done.push([date.getTime(), done]);
-    }
-    for (i=0, len=validated_values.length; i < len; i++) {
-        date = new Date(validated_values[i][0]);
-        validated = validated_values[i][1];
-        data_validated.push([date.getTime(), validated]);
     }
     var chart = new Highcharts.Chart({
         title: null,
@@ -246,17 +234,6 @@ $('a[href="#chart"]').on('shown', function (e) {
         series: [{
             name: 'Done',
             data: data_done,
-            marker: {
-                enabled: false,
-                states: {
-                    hover: {
-                        enabled: true
-                    }
-                }
-            }
-        }, {
-            name: 'Validated',
-            data: data_validated,
             marker: {
                 enabled: false,
                 states: {

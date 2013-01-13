@@ -36,8 +36,6 @@
                 <i class="icon-thumbs-down"></i> Invalidated
             % elif step.checkin == 1:
                 <i class="icon-ok"></i> Marked as done
-            % else:
-                <i class="icon-thumbs-up"></i> Validated
             % endif
         % else:
             Unlocked

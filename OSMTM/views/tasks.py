@@ -76,9 +76,6 @@ def done(request):
     if 'invalidate' in request.params:
         # task goes back to the queue
         tile.checkin = 0
-    elif 'validate' in request.params:
-        # task in validated
-        tile.checkin = 2
     else:
         #task is done
         tile.checkin = 1
@@ -124,10 +121,6 @@ def lock(request):
     # task is already checked out by someone else
     if tile.checkout is True and tile.username != user:
         msg = 'You cannot lock this task. Someone else is already working on it.'
-        return dict(error_msg=msg)
-
-    if tile.checkin >= 2:
-        msg = 'This tile has already been validated.'
         return dict(error_msg=msg)
 
     # check if user has no task he's currently working on

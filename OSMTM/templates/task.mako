@@ -18,37 +18,42 @@
             </p>
         </div>
         <div id="task_actions"> 
-            % if tile.username == user.username:
-            <p>
-            <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small">Unlock</a>
-            </p>
+            % if tile.username == user.username or tile.checkin == 1:
+
+                <%
+                    if tile.username == user.username:
+                        comment_label = 'Please add a comment'
+                    else:
+                        comment_label = 'Please tell why you marked this tile as invalid so that the user can eventually correct his mistakes if any.'
+                %>
             <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal" method="POST">
-            % if tile.checkin == 0:
-            <p>
-                <button class="btn btn-success btn-small" type="submit"><i class="icon-ok icon-white"></i> Mark task as done</button>
-            % elif tile.checkin == 1:
+                % if tile.username == user.username:
+                <p>
+                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small">Unlock</a>
+                </p>
+                <p>
+                    <button class="btn btn-success btn-small" type="submit"><i class="icon-ok icon-white"></i> Mark task as done</button>
+                </p>
+                % elif tile.checkin == 1:
                 <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input btn-danger">
                     <img src="${request.static_url('OSMTM:static/thumb.png')}" />
                     Invalidate
                 </button>
-                <button type="submit" value="Validate" name="validate" class="btn thumbup btn-success">
-                    <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
-                    Validate
-                </button>
-            % endif
-            </p>
-            <div id="commentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <h3 id="commentModalLabel">Please add a comment</h3>
+                % endif
+                <div id="commentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <h3 id="commentModalLabel">Comment?
+                        </h3>
+                        <p>${comment_label}</p>
+                    </div>
+                    <div class="modal-body">
+                        <textarea id="task_comment" name="comment" class="span6" placeholder="Your comment here"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <a id="commentModalCancelBtn" data-dismiss="modal" class="btn" aria-hidden="true" >Cancel</a>
+                        <a id="commentModalCloseBtn" class="btn btn-primary" aria-hidden="true" >OK</a>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <textarea id="task_comment" name="comment" class="span6" placeholder="Your comment here"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <a id="commentModalCancelBtn" data-dismiss="modal" class="btn" aria-hidden="true" >Cancel</a>
-                    <a id="commentModalCloseBtn" class="btn btn-primary" aria-hidden="true" >OK</a>
-                </div>
-            </div>
             </form>
             % else:
             <p>
