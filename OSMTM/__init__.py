@@ -51,6 +51,7 @@ def main(global_config, **settings):
     config.add_route('job_tags', '/job/{job}/tags', factory='OSMTM.resources.JobFactory')
     config.add_route('job_export', '/job/{job}/export', factory='OSMTM.resources.JobFactory')
     config.add_route('job_preset', '/job/{job}/preset', factory='OSMTM.resources.JobFactory')
+    config.add_route('job_stats', '/job/{job}/stats', factory='OSMTM.resources.JobFactory')
     config.add_route('task_take_random', '/job/{job}/task/take/{checkin}', factory='OSMTM.resources.JobFactory')
     config.add_route('task_xhr', '/job/{job}/task/{x}/{y}/{zoom}', factory='OSMTM.resources.JobFactory', xhr=True)
     config.add_route('task_empty', '/job/{job}/task', factory='OSMTM.resources.JobFactory')

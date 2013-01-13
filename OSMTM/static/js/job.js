@@ -194,59 +194,51 @@ function loadTask(x, y, zoom, direction) {
     map.panTo(lonlat);
 }
 
-var chart_drawn = false;
 $('a[href="#chart"]').on('shown', function (e) {
-    if (chart_drawn) {
-        return false;
-    }
-
-    if ($('#chart_div').length < 1) {
-        return;
-    }
-    var done_values = window.chart_done,
-        date, done,
-        data_done = [],
-        i, len;
-    for (i=0, len=done_values.length; i < len; i++) {
-        date = new Date(done_values[i][0]);
-        done = done_values[i][1];
-        data_done.push([date.getTime(), done]);
-    }
-    var chart = new Highcharts.Chart({
-        title: null,
-        chart: {
-            renderTo: 'chart_div',
-            type: 'spline'
-        },
-        xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: {
-                month: '%e. %b',
-                year: '%b'
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Number of tasks'
+    $.getJSON(job_stats_url, function(data) {
+        var done_values = data,
+            date, done,
+            data_done = [],
+            i, len;
+        for (i=0, len=done_values.length; i < len; i++) {
+            date = new Date(done_values[i][0]);
+            done = done_values[i][1];
+            data_done.push([date.getTime(), done]);
+        }
+        var chart = new Highcharts.Chart({
+            title: null,
+            chart: {
+                renderTo: 'chart_div',
+                type: 'spline'
             },
-            min: 0
-        },
-        series: [{
-            name: 'Done',
-            data: data_done,
-            marker: {
-                enabled: false,
-                states: {
-                    hover: {
-                        enabled: true
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: {
+                    month: '%e. %b',
+                    year: '%b'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Number of tasks'
+                },
+                min: 0
+            },
+            series: [{
+                name: 'Done',
+                data: data_done,
+                marker: {
+                    enabled: false,
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
                     }
                 }
-            }
-        }],
-        colors: ['#FF4D4D', '#4DA64D']
+            }],
+            colors: ['#FF4D4D', '#4DA64D']
+        });
     });
-    // prevent multiple renderings
-    chart_drawn = true;
 });
 
 $('form').live('submit', function(e) {

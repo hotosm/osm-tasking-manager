@@ -64,27 +64,6 @@
             <div class="tab-pane" id="users">
                 <div class="row">
                     <div class="span3">
-                    % if stats['contributors']:
-                    <strong>Contributors </strong><sup><em>${len(stats['contributors'])}</em></sup>
-                    <ul class="contributors">
-                      % for user in sorted(stats['contributors'], key=lambda user: user[0].lower()):
-                      <%
-                          online = 'online' if user[2] is True else 'offline'
-                      %>
-                      <li class="${online}">
-                        <a href="http://www.openstreetmap.org/user/${user[0]}" target="_blank">${user[0]}</a><sup class="hidden-link"><em> ${user[1]}</em></sup>
-                        % if user[1] == 0:
-                            <sup class="new"><em>new</em></sup>
-                        % endif
-                        % if admin:
-                        <a href="${request.route_url('user',id=user[0])}" class="hidden-link">edit</a>
-                        % endif
-                      </li>
-                      % endfor
-                    </ul>
-                    % endif
-                    </div>
-                    <div class="span3">
                     </div>
                 </div>
             </div>
@@ -113,8 +92,8 @@
     var id = ${job.id};
     var job_url = "${request.route_url('job', job=job.id)}";
     var job_geom = "${request.route_url('job_geom', job=job.id)}";
+    var job_stats_url = "${request.route_url('job_stats', job=job.id)}";
     var tiles_url = "${request.route_url('job_tiles', job=job.id)}";
-    var chart_done = ${stats['chart_done']|n};
     var tiles_status_url = "${request.route_url('job_tiles_status', job=job.id)}";
 </script>
 <script type="text/javascript">

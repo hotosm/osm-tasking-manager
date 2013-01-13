@@ -54,7 +54,16 @@ def job(request):
             bbox=loads(job.geometry).bounds,
             tile=current_task,
             admin=admin,
-            stats=stats)
+           ) 
+
+@view_config(route_name='job_stats', renderer='json', permission='job',
+        http_cache=0)
+def job_stats(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+
+    return get_stats(job) 
 
 @view_config(route_name='job_geom', renderer='geojson', permission='edit')
 def job_geom(request):
@@ -261,35 +270,18 @@ def job_preset(request):
     response.content_type = 'application/x-josm-preset'
     return response
 
-class StatUser():
-    done = 0
-
 def get_stats(job):
     session = DBSession()
-    filter = and_(Tile.job_id==job.id, Tile.checkout==True)
-    users = session.query(Tile.username).filter(filter)
-    current_users = [user.username for user in users]
-
-    users = {}
-    user = None
 
     """ the changes (date, checkin) to create a chart with """
     changes = []
 
     def read_tiles(tiles):
         for ndx, i in enumerate(tiles):
-            if i.username is not None:
-                if not users.has_key(i.username):
-                    users[i.username] = StatUser()
-                user = users[i.username]
-                date = i.update
-
-                if i.checkin == 1:
-                    user.done += 1
-                """ maintain compatibility for jobs that were created before the 
-                    'update' column creation """
-                date = i.update
-                changes.append((date, i.checkin))
+            """ maintain compatibility for jobs that were created before the 
+                'update' column creation """
+            date = i.update
+            changes.append((date, i.checkin))
 
     """ get the tiles that changed """
     filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
@@ -305,27 +297,15 @@ def get_stats(job):
             .all()
     read_tiles(tiles)
 
-    contributors = []
-    for i in users:
-        """ only keep users who have actually done something
-            or who are currently working on a task """
-        if users[i].done != 0 or i in current_users:
-            contributors.append((i, users[i].done, i in current_users))
-
     changes = sorted(changes, key=lambda value: value[0])
-    chart_done = []
+    stats = []
     done = 0
     for date, checkin in changes:
         if checkin == 1:
             done += 1
-            chart_done.append([date.isoformat(), done])
+            stats.append([date.isoformat(), done])
         if checkin == 0:
             done -= 1
-            chart_done.append([date.isoformat(), done])
+            stats.append([date.isoformat(), done])
 
-    return dict(current_users=current_users, contributors=contributors, 
-            chart_done=simplejson.dumps(chart_done))
-
-def update_user(user, checkin):
-    if checkin == 1:
-        user.done += 1
+    return stats
