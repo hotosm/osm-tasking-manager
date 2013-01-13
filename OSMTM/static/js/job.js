@@ -62,9 +62,9 @@ var context = {
     },
     getFillOpacity: function(feature) {
         if (typeof feature.attributes.highlight != 'undefined') {
-            return feature.attributes.highlight ? 0.7 : 0.1;
+            return feature.attributes.highlight ? 0.6 : 0.1;
         }
-        return 0.5;
+        return 0.4;
     }
 };
 var template = {
