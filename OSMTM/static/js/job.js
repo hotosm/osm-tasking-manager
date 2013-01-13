@@ -45,6 +45,9 @@ var context = {
             2 : 0.3;
     },
     getStrokeOpacity: function(feature) {
+        if (typeof feature.attributes.highlight != 'undefined') {
+            return feature.attributes.highlight ? 0.8 : 0.1;
+        }
         return (feature.fid == current_task || feature.attributes.username) ?
             1 : 0.5;
     },
@@ -56,11 +59,17 @@ var context = {
             return 3;
         }
         return 1;
+    },
+    getFillOpacity: function(feature) {
+        if (typeof feature.attributes.highlight != 'undefined') {
+            return feature.attributes.highlight ? 0.7 : 0.1;
+        }
+        return 0.5;
     }
 };
 var template = {
     fillColor: "${getColor}",
-    fillOpacity: 0.5,
+    fillOpacity: "${getFillOpacity}",
     strokeColor: "${getStrokeColor}",
     strokeWidth: "${getStrokeWidth}",
     strokeOpacity: "${getStrokeOpacity}",
@@ -239,6 +248,44 @@ $('a[href="#chart"]').on('shown', function (e) {
             colors: ['#FF4D4D', '#4DA64D']
         });
     });
+});
+
+$('a[href="#users"]').on('shown', function (e) {
+    $.getJSON(job_contributors_url, function(data) {
+        var el = $('#contributors').empty();
+        for (var i = 0; i < data.length; i++) {
+            el.append($('<li>', {
+                html: $('<a>', {
+                    "class": "user",
+                    href: "http://www.openstreetmap.org/user/" + data[i],
+                    target: "_blank",
+                    html: data[i]
+                })
+            }));
+        }
+    });
+});
+
+$('a.user').live('mouseenter', function(e) {
+    var username = $(e.target).text();
+    $.getJSON(job_url + '/user/' + username, function(data) {
+        var i;
+        for (i = 0; i < tilesLayer.features.length; i++) {
+            tilesLayer.features[i].attributes.highlight = false;
+        }
+        for (i = 0; i < data.length; i++) {
+            var id = data[i].join('-');
+            var feature = tilesLayer.getFeatureByFid(id);
+            feature.attributes.highlight = true;
+        }
+        tilesLayer.redraw();
+    });
+});
+$('a.user').live('mouseleave', function(e) {
+    for (var i = 0; i < tilesLayer.features.length; i++) {
+        delete tilesLayer.features[i].attributes.highlight;
+    }
+    tilesLayer.redraw();
 });
 
 $('form').live('submit', function(e) {

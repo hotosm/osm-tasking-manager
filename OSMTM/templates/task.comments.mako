@@ -43,9 +43,7 @@
         </b>
         % if step.change or step.checkout:
         by 
-            <a href="http://www.openstreetmap.org/user/${step.username}" target="_blank">
-                ${step.username}
-            </a>
+            <a href="http://www.openstreetmap.org/user/${step.username}" target="_blank" class="user">${step.username}</a>
         </p>
         % endif
         % if step.comment is not None:

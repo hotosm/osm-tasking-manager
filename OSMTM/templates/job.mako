@@ -64,6 +64,7 @@
             <div class="tab-pane" id="users">
                 <div class="row">
                     <div class="span3">
+                        <ul id="contributors" class="contributors"></ul>
                     </div>
                 </div>
             </div>
@@ -93,6 +94,7 @@
     var job_url = "${request.route_url('job', job=job.id)}";
     var job_geom = "${request.route_url('job_geom', job=job.id)}";
     var job_stats_url = "${request.route_url('job_stats', job=job.id)}";
+    var job_contributors_url = "${request.route_url('job_contributors', job=job.id)}";
     var tiles_url = "${request.route_url('job_tiles', job=job.id)}";
     var tiles_status_url = "${request.route_url('job_tiles_status', job=job.id)}";
 </script>

@@ -65,6 +65,25 @@ def job_stats(request):
 
     return get_stats(job) 
 
+@view_config(route_name='job_contributors', renderer='json', permission='job',
+        http_cache=0)
+def job_contributors(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+
+    return get_users(job)
+
+@view_config(route_name='job_user', renderer='json', permission='job',
+        http_cache=0)
+def job_user(request):
+    id = request.matchdict['job']
+    user = request.matchdict['user']
+    session = DBSession()
+    job = session.query(Job).get(id)
+
+    return get_tiles_for_user(job, user)
+
 @view_config(route_name='job_geom', renderer='geojson', permission='edit')
 def job_geom(request):
     id = request.matchdict['job']
@@ -309,3 +328,36 @@ def get_stats(job):
             stats.append([date.isoformat(), done])
 
     return stats
+
+def get_users(job):
+    session = DBSession()
+
+    """ the changes (date, checkin) to create the list of users with """
+    users = []
+
+    def read_tiles(tiles):
+        for ndx, i in enumerate(tiles):
+            if i.checkin == 1:
+                if i.username not in users:
+                    users.append(i.username)
+
+    """ get the tiles that changed """
+    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
+    tiles = session.query(TileHistory) \
+            .filter(filter) \
+            .all()
+    read_tiles(tiles)
+
+    return users
+
+def get_tiles_for_user(job, username):
+    session = DBSession()
+
+    """ get the tiles that changed """
+    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id,
+            TileHistory.checkin==1, TileHistory.username == username)
+    tiles = session.query(TileHistory.x, TileHistory.y, TileHistory.zoom) \
+            .filter(filter) \
+            .all()
+
+    return tiles
