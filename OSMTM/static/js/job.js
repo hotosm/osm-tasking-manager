@@ -25,7 +25,7 @@ var layer = new OpenLayers.Layer.Vector("Objects", {
 
 map.addLayer(layer);
 
-var colors = ["#aaa", "red", "green"];
+var colors = ["red", "green"];
 var context = {
     getColor: function(feature) {
         var checkin = feature.attributes.checkin || 0;
