@@ -71,11 +71,13 @@ def done(request):
     y = request.matchdict['y']
     zoom = request.matchdict['zoom']
     session = DBSession()
+    username = authenticated_userid(request)
     tile = session.query(Tile).get((x, y, zoom, job_id))
     tile.comment = request.params['comment']
     if 'invalidate' in request.params:
         # task goes back to the queue
         tile.checkin = 0
+        tile.username = username
     else:
         #task is done
         tile.checkin = 1
