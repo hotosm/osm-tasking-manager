@@ -302,7 +302,7 @@ $('form').live('submit', function(e) {
         formData[submitName] = true;
         $.get(form.action, formData, function(response) {
             var tile = response.tile;
-            loadTask(tile.x, tile.y, tile.z);
+            loadEmptyTask();
             showTilesStatus();
         });
     }
