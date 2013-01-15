@@ -39,6 +39,7 @@
                     <img src="${request.static_url('OSMTM:static/thumb.png')}" />
                     Invalidate
                 </button>
+                    <a id="clear" class="btn btn-small btn-link"><i class="icon-remove"></i> Clear selection</a>
                 % endif
                 <div id="commentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
                     <div class="modal-header">
