@@ -50,11 +50,11 @@ def job(request):
 
     admin = user.is_admin() if user else False
     stats = get_stats(job)
-    return dict(job=job, user=user, 
+    return dict(job=job, user=user,
             bbox=loads(job.geometry).bounds,
             tile=current_task,
             admin=admin,
-           ) 
+           )
 
 @view_config(route_name='job_stats', renderer='json', permission='job',
         http_cache=0)
@@ -63,7 +63,7 @@ def job_stats(request):
     session = DBSession()
     job = session.query(Job).get(id)
 
-    return get_stats(job) 
+    return get_stats(job)
 
 @view_config(route_name='job_contributors', renderer='json', permission='job',
         http_cache=0)
@@ -131,7 +131,7 @@ def job_edit(request):
         job.workflow = request.params['workflow']
         josm_preset = request.params['josm_preset']
         josm_preset = josm_preset.value.decode('UTF-8') if josm_preset != '' else ''
-        job.josm_preset = josm_preset 
+        job.josm_preset = josm_preset
         job.is_private = request.params.get('is_private') == 'on'
         job.imagery = request.params['imagery']
 
@@ -175,7 +175,7 @@ def job_feature(request):
     session = DBSession()
 
     job = session.query(Job).get(id)
-    job.featured = not job.featured 
+    job.featured = not job.featured
     session.add(job)
 
     request.session.flash('Job "%s" featured status changed!' % job.title)
@@ -218,7 +218,7 @@ def job_new(request):
         session.add(job)
         session.flush()
         return HTTPFound(location = route_url('job_edit', request, job=job.id))
-    return {} 
+    return {}
 
 @view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
 def job_users(request):
@@ -297,7 +297,7 @@ def get_stats(job):
 
     def read_tiles(tiles):
         for ndx, i in enumerate(tiles):
-            """ maintain compatibility for jobs that were created before the 
+            """ maintain compatibility for jobs that were created before the
                 'update' column creation """
             date = i.update
             changes.append((date, i.checkin))
