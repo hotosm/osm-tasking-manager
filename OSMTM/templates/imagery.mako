@@ -5,7 +5,7 @@
 <h3><small>Imagery</small></h3>
 % if license_accepted or not job.license:
 <%
-    type = 'wms' if 'wms' in job.imagery.lower() else 'tms'
+    type = job.imagery.lower()[:3]
 %>
 <p><pre><a href='http://127.0.0.1:8111/imagery?title=${job.title}&type=${type}&url=${job.imagery}' target="_blank" rel="tooltip" data-original-title="If you have JOSM running and remote control activated, clicking this link should automatically load imagery.">${job.imagery}</a></pre></p>
 % endif
