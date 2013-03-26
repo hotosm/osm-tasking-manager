@@ -25,15 +25,15 @@
                         </div>
                     </div>
                 </div>
+            % if job.task_extra is not None:
+            <%include file="job.task_extra.mako" />
+            % endif
             % if tile.checkin == 0:
                 <div class="well">
                     <p>2. Trace the elements.</p>
                     <%include file="imagery.mako" />
                     <%include file="task.comments.mako" />
                 </div>
-                % if job.task_extra is not None:
-                <%include file="job.task_extra.mako" />
-                % endif
                 <div class="well">
                     <p>3. Add a comment and mark the task as done.</p>
                     <div class="control-group">
