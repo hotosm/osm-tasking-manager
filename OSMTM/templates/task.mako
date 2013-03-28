@@ -25,6 +25,9 @@
                         </div>
                     </div>
                 </div>
+            % if job.task_extra is not None:
+            <%include file="job.task_extra.mako" />
+            % endif
             % if tile.checkin == 0:
                 <div class="well">
                     <p>2. Trace the elements.</p>
