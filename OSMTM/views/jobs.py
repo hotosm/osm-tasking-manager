@@ -130,6 +130,7 @@ def job_edit(request):
         job.josm_preset = josm_preset 
         job.is_private = request.params.get('is_private') == 'on'
         job.imagery = request.params['imagery']
+        job.task_extra = request.params['task_extra']
 
         if request.params['license_id'] != "":
             license_id = int(request.params['license_id'])

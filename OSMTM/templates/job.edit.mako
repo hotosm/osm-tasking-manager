@@ -110,6 +110,22 @@
                     <input type="checkbox" id="id_is_private" name="is_private" ${'checked="checked"' if job.is_private else ''} />
                 </div>
             </div>
+            <div class="row">
+                <div class="span7">
+                    <div class="control-group">
+                        <label class="control-label" for="id_workflow">Per task extra instructions</label>
+                        <div class="controls">
+                            <textarea class="text span5" id="id_task_extra" name="task_extra" rows="10">${job.task_extra}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="span5">
+                    <p class="help-block">Put here anything that can be usefull to users while taking a task.
+                    <br /><em>{x}</em>, <em>{y}</em> and <em>{z}</em> will be replaced by the correponding parameters for each task.
+                    <p class="help-block">Ex:</p>
+                    <p class="help-block"></p>
+                </div>
+            </div>
         </fieldset>
         <div class="form-actions">
             <input type="submit" class="btn btn-primary" value="Save the modifications" id="id_submit" name="form.submitted"/>
