@@ -86,6 +86,9 @@
             </p>
             % endif
             % endif
+            % if job.task_extra is not None:
+            <%include file="job.task_extra.mako" />
+            % endif
             <%include file="task.comments.mako" />
         </div>
 

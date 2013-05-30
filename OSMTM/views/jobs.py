@@ -134,6 +134,7 @@ def job_edit(request):
         job.josm_preset = josm_preset
         job.is_private = request.params.get('is_private') == 'on'
         job.imagery = request.params['imagery']
+        job.task_extra = request.params['task_extra']
 
         if request.params['license_id'] != "":
             license_id = int(request.params['license_id'])
@@ -179,28 +180,6 @@ def job_feature(request):
     session.add(job)
 
     request.session.flash('Job "%s" featured status changed!' % job.title)
-    return HTTPFound(location = route_url('home', request))
-
-@view_config(route_name='job_delete', permission='admin')
-def job_delete(request):
-    id = request.matchdict['job']
-    session = DBSession()
-
-    # prevent integrity errors
-    tiles_history = session.query(TileHistory).filter(TileHistory.job_id==id)
-    for tile in tiles_history:
-        session.delete(tile)
-
-    job = session.query(Job).get(id)
-    title = job.title
-    session.delete(job)
-
-    # remove the tiles history twice because removing records from main table
-    # adds records in the history table
-    tiles_history = session.query(TileHistory).filter(TileHistory.job_id==id)
-    for tile in tiles_history:
-        session.delete(tile)
-    request.session.flash('Job "%s" removed!' % title)
     return HTTPFound(location = route_url('home', request))
 
 @view_config(route_name='job_new', renderer='job.new.mako',

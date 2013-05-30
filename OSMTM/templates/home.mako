@@ -105,9 +105,6 @@
                         |
                         <a data-bind="attr: {href: edit_url}" 
                             class="edit" alt="edit" title="Edit the job">edit</a>
-                        |
-                        <a data-bind="attr: {href: delete_url}"
-                            class="delete" alt="delete" title="Delete the job">delete</a>
                     </p>
                     % endif
                     <p class="updated-at">

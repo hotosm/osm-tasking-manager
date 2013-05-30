@@ -163,7 +163,6 @@ def home(request):
             archive_url=request.route_url('job_archive', job=job.id),
             publish_url=request.route_url('job_publish', job=job.id),
             edit_url=request.route_url('job_edit', job=job.id),
-            delete_url=request.route_url('job_delete', job=job.id),
             tags=[tag.tag for tag in job.tags],
             is_mine=job.id in [_job for _job in my_jobs],
             lon=centroid.x,
