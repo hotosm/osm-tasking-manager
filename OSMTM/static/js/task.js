@@ -58,8 +58,27 @@ var exportOpen = function() {
         });
         window.open(url);
         break;
+    case "id":
+        url = getLink({
+            base: 'http://www.openstreetmap.org/edit?editor=id&',
+            bounds: bounds,
+            zoom: zoom,
+            protocol: 'llz'
+        });
+        window.open(url);
+        break;
     default:
         break;
     }
 };
+var exportForID = function(jquery_obj) {
+    var convertedObject = OpenLayers.Geometry.fromWKT(jquery_obj.data('geometry'))
+    var values =  OpenLayers.Projection.transform(
+        convertedObject.getCentroid(),
+        new OpenLayers.Projection("EPSG:900913"), 
+        new OpenLayers.Projection("EPSG:4326")
+    )
+    return jquery_obj.attr('href') + values.x + "/" +values.y;
+};
 $('#export a').live('click', exportOpen);
+$('#id_imagery').attr('href', exportForID($('#id_imagery')));

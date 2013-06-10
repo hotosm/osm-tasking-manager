@@ -8,6 +8,7 @@
     type = job.imagery.lower()[:3]
 %>
 <p><pre><a href='http://127.0.0.1:8111/imagery?title=${job.title}&type=${type}&url=${job.imagery}' target="_blank" rel="tooltip" data-original-title="If you have JOSM running and remote control activated, clicking this link should automatically load imagery.">${job.imagery}</a></pre></p>
+<p><a class="btn" id="id_imagery" data-geometry="${job.geometry}" href="http://openstreetmap.us/iD/release/#background=custom:${job.imagery}&map=${job.zoom}/">View in iD</a></p>
 % endif
 % if job.license:
 <div class="alert ${'alert-error' if not license_accepted else ''}">
