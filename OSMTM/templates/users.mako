@@ -7,7 +7,7 @@
         <div class="span6">
             <ul>
             % for user in users:
-                <li>${user.username}
+                <li class="${'admin' if user.is_admin() else ''}">${user.username}
                 % if admin:
                    <a href="${request.route_url('user',id=user.username)}" class="hidden-link">edit</a>
                 % endif
