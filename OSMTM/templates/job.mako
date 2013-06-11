@@ -139,4 +139,4 @@
 </script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/highcharts.js')}"></script>
 <script type="text/javascript" src="${request.static_url('OSMTM:static/js/job.js')}?_cdsalt=1345635507"></script>
-<script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js')}?_cdsalt=1345635507"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/task.js')}?_cdsalt=1370938049386"></script>
