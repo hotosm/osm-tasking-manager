@@ -344,16 +344,18 @@ a {
     .hidden-link {
         display: none;
     }
+    li:hover {
+        .hidden-link {
+            display: inline;
+        }
+    }
+}
+#users {
     li {
         list-style-type: circle;
     }
     li.admin {
         list-style-type: disc;
-    }
-    li:hover {
-        .hidden-link {
-            display: inline;
-        }
     }
 }
 
