@@ -16,6 +16,7 @@
                                 <a class="btn btn-small btn-info" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
                                 <a class="btn btn-small btn-info" id="potlatch2">Potlatch 2</a>
                                 <a class="btn btn-small btn-info" href="javascript:void(0);" id="wp">Walking Papers</a>
+                                <a class="btn btn-small btn-info" href="javascript:void(0);" id="id">iD</a>
                             </div>
                         </div>
                     </div>
