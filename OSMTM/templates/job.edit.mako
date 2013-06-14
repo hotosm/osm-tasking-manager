@@ -77,6 +77,9 @@
                 <label class="control-label" for="id_imagery">URL to service</label>
                 <div class="controls">
                     <input type="text" id="id_imagery" name="imagery" value="${job.imagery}"/>
+                    <p class="help-block">
+                        <strong>Note:</strong> Follow this format for TMS urls.<br>tms[22]:http://hiu-maps.net/hot/1.0.0/kathmandu_flipped/{zoom}/{x}/{y}.png
+                    </p>
                 </div>
             </div>
             <div class="control-group">
