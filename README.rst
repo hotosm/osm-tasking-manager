@@ -101,6 +101,14 @@ Create a new `OSMTM.wsgi` in your virtual env directory with the following::
 You can then test config and restart Apache.
 Your application should be available at http://host.domain/OSMTM
 
+Styles
+------
+
+The CSS stylesheet are compiled using less. Launch the following command as
+soon as you change the css::
+
+    lessc OSMTM/static/css/main.less > OSMTM/static/css/main.less.min.css
+
 Run Tests
 ---------
 
