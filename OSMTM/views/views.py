@@ -23,7 +23,6 @@ from datetime import datetime, timedelta
 from sqlalchemy import desc, distinct
 from sqlalchemy.sql.expression import and_
 
-from OSMTM.resources import main
 from OSMTM.utils import transform_900913_to_4326
 
 import logging

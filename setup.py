@@ -28,8 +28,6 @@ requires = [
     'beautifulSoup',
     'pyshp==1.1.4',
     'papyrus==0.7',
-    'pyramid_fanstatic',
-    'js.lesscss',
     'alembic'
     ]
 
@@ -58,14 +56,6 @@ setup(name='OSMTM',
       entry_points = """\
       [paste.app_factory]
       main = OSMTM:main
-
-      # Fanstatic resource library
-      [fanstatic.libraries]
-      OSMTM = OSMTM.resources:library
-  
-      # A console script to serve the application and monitor static resources
-      [console_scripts]
-      pserve-fanstatic = OSMTM.resources:pserve
       """,
       paster_plugins=['pyramid'],
       )
