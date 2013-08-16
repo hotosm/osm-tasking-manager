@@ -3,7 +3,7 @@
 	url = git://github.com/openlayers/openlayers.git
 [submodule "OSMTM/static/bootstrap"]
 	path = OSMTM/static/bootstrap
-	url = git://github.com/twitter/bootstrap.git
+	url = git://github.com/twbs/bootstrap.git
 [submodule "OSMTM/static/js/lib/openlayers"]
 	path = OSMTM/static/js/lib/openlayers
 	url = git://github.com/openlayers/openlayers.git
