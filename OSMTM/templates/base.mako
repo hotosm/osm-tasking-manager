@@ -1,7 +1,3 @@
-<%
-    from OSMTM.resources import main
-    main.need()
-%>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -9,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
         <meta name="keywords" content="HOT task server" />
         <meta name="description" content="HOT task server" />
+        <link rel="stylesheet" href="${request.static_url('OSMTM:static/css/main.less.min.css')}" type="text/css" />
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/jquery-1.7.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}?_cdsalt=1330087595137"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/showdown.js')}"></script>
