@@ -81,8 +81,8 @@ Create a new Apache config file with the following::
     WSGIPassAuthorization On
     WSGIDaemonProcess OSMTM_process user=ubuntu group=ubuntu processes=1 \
        threads=4 \
-       python-path=/home/ubuntu/env/lib/python2.6/site-packages
-    WSGIScriptAlias /OSMTM /home/ubuntu/env/OSMTM.wsgi
+       python-path=/home/ubuntu/osm-tasking-manager/env/lib/python2.7/site-packages
+    WSGIScriptAlias /OSMTM /home/ubuntu/osm-tasking-manager/env/OSMTM.wsgi
     WSGIRestrictStdin Off
 
     <Location /OSMTM>
@@ -99,7 +99,7 @@ Create a new `OSMTM.wsgi` in your virtual env directory with the following::
 
     from pyramid.paster import get_app    
     application = get_app(
-        '/home/ubuntu/OSMTM/production.ini', 'main')
+        '/home/ubuntu/osm-tasking-manager/production.ini', 'main')
 
 You can then test config and restart Apache.
 Your application should be available at http://host.domain/OSMTM
