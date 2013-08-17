@@ -67,6 +67,9 @@ To run OSMTM the easiest is to use ``pserve``::
 Installation as a mod_wsgi Application
 --------------------------------------
 
+Edit the production.ini file and change the ``admin_user`` variable to match
+your OSM username.
+
 Install and enable mod_wsgi module in Apache::
 
     sudo apt-get install libapache2-mod-wsgi
