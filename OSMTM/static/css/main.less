@@ -22,15 +22,12 @@
     -khtml-opacity:@op/100;
     opacity:@op/100;
 }
-html {
-    overflow-y: scroll;
-}
 html, body {
     background-color: #FFF;
     color: #111;
-    padding-top: 30px;
     font-size: 13px;
     line-height: 18px;
+	height: 100%;
 }
 h4 {
     font-size: 14px;
@@ -41,6 +38,28 @@ h4 {
     width: @content-width;
     margin: 0 auto;
     position: relative;
+}
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -125px; /* footer height incl. padding/border */
+	overflow-y: auto;
+}
+#wrap > .container {
+	padding-top: 41px; /* navbar height */
+	padding-bottom: 65px; /* footer height (no padding) */
+}
+#push, #footer {
+	height: 64px;
+}
+@media (max-width: 767px) {
+	#footer {
+		margin-left: -20px;
+		margin-right: -20px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
 }
 // Gradients
 #gradient {
