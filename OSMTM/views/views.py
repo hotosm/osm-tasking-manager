@@ -20,7 +20,7 @@ from json import dumps
 from markdown import markdown
 from OSMTM.utils import timesince
 from datetime import datetime, timedelta
-from sqlalchemy import desc, distinct
+from sqlalchemy import desc, distinct, func
 from sqlalchemy.sql.expression import and_
 
 from OSMTM.utils import transform_900913_to_4326
@@ -185,7 +185,15 @@ def about(request):
 def user(request):
     session = DBSession()
     user = session.query(User).get(request.matchdict["id"])
-    return dict(user=user, admin=True)
+    job_info = user_job_info(user.username)
+    return dict(user=user, jobs=job_info, admin=True)
+
+def user_job_info(username):
+    session = DBSession()
+    my_jobs = session.query(Job, func.count(Tile.username)) \
+        .filter(and_(Tile.username==username, Tile.checkin==1, Job.id==Tile.job_id))
+    job_info = [{"job": job[0], "count": job[1]} for job in my_jobs]
+    return job_info
 
 @view_config(route_name='user_update', permission='admin')
 def user_update(request):
@@ -229,3 +237,5 @@ def checkTask(tile):
             tile.checkout = False
             tile.update = datetime.now()
             session.add(tile)
+
+
