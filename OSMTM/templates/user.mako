@@ -3,7 +3,11 @@
 <%def name="title()">User Profile</%def>
 <div class="container">
     % if admin:
-    <h1>Profile for ${user.username}</h1>
+    <h1>Profile for ${user.username} 
+		<a href="http://www.openstreetmap.org/user/${user.username}" title="OSM User Profile">
+			<img src="http://www.openstreetmap.org/favicon.ico" alt="[OSM]" /></a>
+	</h1>
+
     <form method="post" action="${request.route_url('user_update',id=user.username)}" class="form-horizontal">
     % else:
     <h1>Profile</h1>
