@@ -64,6 +64,15 @@ var exportOpen = function() {
         });
         window.open(url);
         break;
+    case "id":
+        url = getLink({
+            base: 'http://www.openstreetmap.org/edit?editor=id&',
+            bounds: bounds,
+            zoom: zoom,
+            protocol: 'llz'
+        });
+        window.open(url);
+        break;
     default:
         break;
     }

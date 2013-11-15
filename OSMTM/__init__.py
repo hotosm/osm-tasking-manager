@@ -27,7 +27,7 @@ def main(global_config, **settings):
     config.set_session_factory(session_factory)
 
     config.add_static_view('static', 'OSMTM:static', cache_max_age=3600)
-    config.include('pyramid_fanstatic')
+
     config.add_view('OSMTM.views.crossdomain.crossdomain_view', name='crossdomain.xml')
     config.add_route('crossdomain', '/crossdomain.xml',
                      view='OSMTM.views.crossdomain.crossdomain_view')
@@ -60,7 +60,8 @@ def main(global_config, **settings):
     config.add_route('task_unlock', '/job/{job}/task/{x}/{y}/{zoom}/unlock', factory='OSMTM.resources.JobFactory')
     config.add_route('task_done', '/job/{job}/task/{x}/{y}/{zoom}/done', factory='OSMTM.resources.JobFactory')
     config.add_route('task_lock', '/job/{job}/task/{x}/{y}/{zoom}/lock', factory='OSMTM.resources.JobFactory')
-    config.add_route('task_export', '/job/{job}/task/{x}/{y}/{zoom}/export.osm', factory='OSMTM.resources.JobFactory')
+    config.add_route('task_export_osm', '/job/{job}/task/{x}/{y}/{zoom}/export.osm', factory='OSMTM.resources.JobFactory')
+    config.add_route('task_export_gpx', '/job/{job}/task/{x}/{y}/{zoom}/export.gpx', factory='OSMTM.resources.JobFactory')
     config.add_route('task_split', '/job/{job}/task/{x}/{y}/{zoom}/split', factory='OSMTM.resources.JobFactory')
     config.add_route('license_new', '/license/new')
     config.add_route('license', '/license/{license}')

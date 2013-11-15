@@ -205,8 +205,8 @@ def split_tile(request):
     return dict(success=True, split_id="-".join([x, y, zoom]),
             new_tiles=FeatureCollection(new_tiles))
 
-@view_config(route_name="task_export", renderer="task.osm.mako")
-def task_export(request):
+@view_config(route_name="task_export_osm", renderer="task.osm.mako")
+def task_export_osm(request):
     job_id = request.matchdict['job']
     x = request.matchdict['x']
     y = request.matchdict['y']
@@ -214,6 +214,16 @@ def task_export(request):
     session = DBSession()
     tile = session.query(Tile).get((x, y, zoom, job_id))
     return dict(polygon=tile.to_polygon(4326))
+
+@view_config(route_name="task_export_gpx", renderer="task.gpx.mako")
+def task_export_gpx(request):
+    job_id = request.matchdict['job']
+    x = request.matchdict['x']
+    y = request.matchdict['y']
+    zoom = request.matchdict['zoom']
+    session = DBSession()
+    tile = session.query(Tile).get((x, y, zoom, job_id))
+    return dict(polygon=tile.to_polygon(4326), job_id=job_id)
 
 def get_locked_task(job_id, username):
     session = DBSession()

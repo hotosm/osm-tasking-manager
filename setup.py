@@ -8,7 +8,7 @@ README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'pyramid>1.2',
+    'pyramid==1.4',
     'pyramid_beaker',
     'pyramid_debugtoolbar',
     'SQLAlchemy',
@@ -28,8 +28,6 @@ requires = [
     'beautifulSoup',
     'pyshp==1.1.4',
     'papyrus==0.7',
-    'pyramid_fanstatic',
-    'js.lesscss',
     'alembic'
     ]
 
@@ -58,14 +56,6 @@ setup(name='OSMTM',
       entry_points = """\
       [paste.app_factory]
       main = OSMTM:main
-
-      # Fanstatic resource library
-      [fanstatic.libraries]
-      OSMTM = OSMTM.resources:library
-  
-      # A console script to serve the application and monitor static resources
-      [console_scripts]
-      pserve-fanstatic = OSMTM.resources:pserve
       """,
       paster_plugins=['pyramid'],
       )
