@@ -22,7 +22,7 @@
                     </div>
                     <div class="row">
                         <div class="span5">
-                            <p>Link to <a href="${request.route_url('task_export', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch)."> .osm</a> file.
+                            <p>Links to <a href="${request.route_url('task_export_osm', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (JOSM) or copy its location (Potlatch)."> .osm</a> and <a href="${request.route_url('task_export_gpx', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (iD)."> .gpx</a> files.
                         </div>
                     </div>
                 </div>
