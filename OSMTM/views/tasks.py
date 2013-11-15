@@ -208,4 +208,4 @@ def task_export_gpx(request):
     zoom = request.matchdict['zoom']
     session = DBSession()
     tile = session.query(Tile).get((x, y, zoom, job_id))
-    return dict(polygon=tile.to_polygon(4326))
+    return dict(polygon=tile.to_polygon(4326), job_id=job_id)
