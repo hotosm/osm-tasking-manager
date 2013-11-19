@@ -20,7 +20,7 @@ requires = [
     'oauth2==1.2.0',
     'imposm.parser',
     'geojson',
-    'WebTest',
+    'WebTest==2.0.9', # 2.0.10 will not install
     'sqlalchemy-migrate',
     'markdown',
     'nose',
