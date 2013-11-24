@@ -96,7 +96,7 @@
 	        Can't work on this task right now? No problem.
                 <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
             </p>
-	</div>
+        </div>
     <script type="text/javascript">
         var task_time_left = ${time_left};
         var zoom = ${tile.zoom};
