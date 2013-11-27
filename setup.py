@@ -28,6 +28,7 @@ requires = [
     'beautifulSoup',
     'pyshp==1.1.4',
     'papyrus==0.7',
+    'simplejson',
     'alembic'
     ]
 
