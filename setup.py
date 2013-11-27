@@ -12,7 +12,7 @@ requires = [
     'pyramid==1.4',
     'pyramid_beaker',
     'pyramid_debugtoolbar',
-    'SQLAlchemy',
+    'SQLAlchemy==0.7.9',
     'Shapely',
     'transaction',
     'repoze.tm2>=1.0b1', # default_commit_veto
@@ -20,8 +20,8 @@ requires = [
     'WebError',
     'oauth2==1.2.0',
     'imposm.parser',
-    'geojson',
-    'WebTest==2.0.9', # 2.0.10 will not install
+    'geojson==1.0.1',
+    'WebTest==2.0.9',
     'sqlalchemy-migrate',
     'markdown',
     'nose',
