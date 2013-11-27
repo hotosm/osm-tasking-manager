@@ -31,10 +31,9 @@
             <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal" method="POST">
                 % if tile.username == user.username:
                 <p>
-                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small">Unlock</a>
-                </p>
-                <p>
-                    <button class="btn btn-success btn-small" type="submit"><i class="icon-ok icon-white"></i> Mark task as done</button>
+                    <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small">Unlock</a>
+                    <button class="btn btn-success btn-small" type="submit"><i class="icon-ok icon-white"></i> Mark task as done</button><br />
+                    <div id="task_countdown_text" title="If you do not complete or release this task in time, it will be automatically unlocked"><span id="countdown"></span> minutes left</div>
                 </p>
                 % elif tile.checkin == 1:
                 <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input btn-danger">
@@ -92,10 +91,6 @@
             <%include file="job.task_extra.mako" />
             % endif
             <%include file="task.comments.mako" />
-            <p>
-                Can't work on this task right now? No problem.
-                <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock">Unlock it!</a>. Otherwise, it will be automatically unlocked in <span id="countdown"></span> minutes.
-            </p>
         </div>
     <script type="text/javascript">
         var task_time_left = ${time_left};
