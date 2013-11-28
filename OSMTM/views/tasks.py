@@ -101,6 +101,7 @@ def unlock(request):
     zoom = request.matchdict['zoom']
     session = DBSession()
     tile = session.query(Tile).get((x, y, zoom, job_id))
+    tile.comment = request.params['comment']
     tile.username = None 
     tile.checkout = False
     tile.change = False

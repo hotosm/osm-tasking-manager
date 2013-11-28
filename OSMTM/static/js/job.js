@@ -299,6 +299,10 @@ $('form').live('submit', function(e) {
         hideTooltips();
         var formData = $(form).serializeObject();
         var submitName = $("button[type=submit][clicked=true]").attr("name");
+        action_url = $("button[type=submit][clicked=true]").attr("action_url");
+        if (action_url != undefined) {
+            form.action = action_url;
+        }
         formData[submitName] = true;
         $.get(form.action, formData, function(response) {
             var tile = response.tile;
