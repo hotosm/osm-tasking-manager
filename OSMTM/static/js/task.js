@@ -38,8 +38,7 @@ var exportOpen = function() {
             bounds: bounds,
             protocol: 'lbrt'
         });
-        var w = window.open(url);
-        window.setTimeout(function(){w.close();}, 500);
+        $.get(url);
         break;
     case "potlatch2":
         url = getLink({
