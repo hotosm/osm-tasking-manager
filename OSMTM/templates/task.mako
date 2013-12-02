@@ -28,15 +28,15 @@
                     else:
                         comment_label = 'Please tell why you marked this tile as invalid so that the user can eventually correct his mistakes if any.'
                 %>
-            <form action="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="form-horizontal" method="POST">
+            <form class="form-horizontal" method="POST">
                 % if tile.username == user.username:
                 <p>
                     <em id="task_countdown_text" title="If you do not complete or release this task in time, it will be automatically unlocked" class="muted pull-right"><i class="icon-time" style="opacity:0.5"/> <span id="countdown"></span> min. left</em>
-                    <a href="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" id="unlock" class="btn btn-small">Unlock</a>
-                    <button class="btn btn-success btn-small" type="submit"><i class="icon-ok icon-white"></i> Mark task as done</button><br />
+                    <button data-action-url="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="btn btn-small" type="submit">Unlock</button>
+                    <button data-action-url="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="btn btn-success btn-small" type="submit"><i class="icon-ok icon-white"></i> Mark task as done</button><br />
                 </p>
                 % elif tile.checkin == 1:
-                <button type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input btn-danger">
+                <button data-action-url="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input btn-danger">
                     <img src="${request.static_url('OSMTM:static/thumb.png')}" />
                     Invalidate
                 </button>
