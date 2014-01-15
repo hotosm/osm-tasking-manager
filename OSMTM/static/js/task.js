@@ -65,7 +65,7 @@ var exportOpen = function() {
             zoom: zoom,
             protocol: 'llz'
         });
-        window.open(url);
+        window.open(url + "&gpx=" + gpx_url);
         break;
     default:
         break;

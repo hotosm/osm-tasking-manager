@@ -104,6 +104,12 @@ Create a new `OSMTM.wsgi` in your virtual env directory with the following::
 You can then test config and restart Apache.
 Your application should be available at http://host.domain/OSMTM
 
+
+You may also need to enable CORS. See http://enable-cors.org.
+Add the following to your virtual hosts::
+
+    Header set Access-Control-Allow-Origin "*"
+
 Styles
 ------
 
