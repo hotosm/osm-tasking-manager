@@ -137,6 +137,7 @@ def lock(request):
         tile.username = username
         tile.checkout = True
         tile.change = False
+        tile.comment = None
         session.add(tile)
         return dict(success=True, tile=dict(x=tile.x, y=tile.y, z=tile.zoom))
     except:
