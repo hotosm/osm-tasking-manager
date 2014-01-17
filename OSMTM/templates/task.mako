@@ -61,6 +61,12 @@
                 </div>
             </form>
             % else:
+                % if current_task is not None:
+                <p>
+                    <i class="icon-exclamation-sign"></i>
+                    You already have a <a href="#task/${current_task.x}/${current_task.y}/${current_task.zoom}">task</a> locked.
+                </p>
+                % endif
                 % if tile.checkout != True and tile.checkin != 2 and current_task is None:
                     <%
                         disabled = ""
@@ -87,12 +93,6 @@
                 % endif
                     <a id="clear" class="btn btn-small btn-link"><i class="icon-remove"></i> Clear selection</a>
                 </p>
-            % if current_task is not None:
-            <p>
-                <i class="icon-exclamation-sign"></i>
-                You already have a <a href="#task/${current_task.x}/${current_task.y}/${current_task.zoom}">task</a> locked.
-            </p>
-            % endif
             % endif
             % if job.task_extra is not None:
             <%include file="job.task_extra.mako" />
