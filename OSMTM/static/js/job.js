@@ -174,6 +174,7 @@ function loadEmptyTask() {
             $(this).css('display', '');
         });
     });
+    window.location.hash = "";
 }
 function loadTask(x, y, zoom, direction) {
     hideTooltips();
