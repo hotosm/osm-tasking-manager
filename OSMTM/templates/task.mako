@@ -7,7 +7,7 @@
 % if not tile:
     <%include file="/task.empty.mako" />
 % else:
-        <div> 
+        <div>
             <p id="task_error_msg" class="alert alert-error hide"></p>
             <p id="export" class="well well-small">
                 <i class="icon-share-alt"></i>
@@ -19,7 +19,7 @@
                 <a class="btn btn-small btn-link" href="${request.route_url('task_export_gpx', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (iD).">.gpx</a>
             </p>
         </div>
-        <div id="task_actions"> 
+        <div id="task_actions">
             % if tile.username == user.username or tile.checkin == 1:
 
                 <%
@@ -31,7 +31,9 @@
             <form class="form-horizontal" method="POST">
                 % if tile.username == user.username:
                 <p>
-                    <em id="task_countdown_text" title="If you do not complete or release this task in time, it will be automatically unlocked" class="muted pull-right"><i class="icon-time" style="opacity:0.5"/> <span id="countdown"></span> min. left</em>
+                    <em id="task_countdown_text" rel="tooltip"
+                        data-original-title="If you do not complete or release this task in time, it will be automatically unlocked"
+                        class="muted pull-right"><i class="icon-time" style="opacity:0.5"/> <span id="countdown"></span> min. left</em>
                     You locked this task.
                     <button data-action-url="${request.route_url('task_unlock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="btn btn-small" type="submit">Unlock it</button>
                 </p>
