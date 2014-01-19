@@ -193,8 +193,13 @@ function loadTask(x, y, zoom, direction) {
             });
     } else {
         $('#task').fadeOut(function() {
-            $('#task').load([job_url, "task", x, y, zoom].join('/'), function() {
-                $(this).css('display', '');
+            $('#task').load([job_url, "task", x, y, zoom].join('/'), function(text, status) {
+                if (status == 'success') {
+                    $(this).css('display', '');
+                } else {
+                    alert("This task doesn't exist.");
+                    loadEmptyTask();
+                }
             });
         });
     }
