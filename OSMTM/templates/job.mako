@@ -91,6 +91,7 @@
     %>
     var user = "${username|n}";
     var id = ${job.id};
+    var base_url = "${request.application_url}";
     var job_url = "${request.route_url('job', job=job.id)}";
     var job_geom = "${request.route_url('job_geom', job=job.id)}";
     var job_stats_url = "${request.route_url('job_stats', job=job.id)}";

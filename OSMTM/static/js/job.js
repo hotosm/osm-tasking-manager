@@ -258,8 +258,7 @@ $('a[href="#users"]').on('shown', function (e) {
             el.append($('<li>', {
                 html: $('<a>', {
                     "class": "user",
-                    href: "http://www.openstreetmap.org/user/" + data[i],
-                    target: "_blank",
+                    href: [base_url, "user", data[i]].join('/'),
                     html: data[i]
                 })
             }));

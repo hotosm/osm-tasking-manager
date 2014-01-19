@@ -2,30 +2,37 @@
 <%def name="id()">user</%def>
 <%def name="title()">User Profile</%def>
 <div class="container">
-    % if admin:
-    <h1>Profile for ${user.username}</h1>
-    <form method="post" action="${request.route_url('user_update',id=user.username)}" class="form-horizontal">
-    % else:
-    <h1>Profile</h1>
-    <form method="post" action="${request.route_url('profile_update')}" class="form-horizontal">
-    % endif
-        <div class="control-group">
-            <label class="control-label" for="admin">User role</label>
-            <div class="controls">
-                % if admin or user.is_admin():
-                    <label class="checkbox">
-                    <input type="checkbox" id="admin" name="admin" 
-                        % if user.is_admin():
-                        checked="checked"
-                        % endif
-                    />
-                    Admin
-                    </label>
-                % endif
-            </div>
-        </div>
-        <div class="form-actions">
-            <input type="submit" name="form.submitted" class="btn btn-primary" value="Apply changes"/>
-        </div>
-    </form>
+    <h2>Profile for ${user.username}
+    </h2>
+    <div class="row">
+        <p>
+        % if admin or user.is_admin():
+            This user is an administrator.
+        % endif
+
+        % if admin:
+            <a href="${request.route_url('user_edit', id=user.username)}">Edit privileges</a>
+        % endif
+        </p>
+    </div>
+    <div class="row">
+        <p>
+            <a href="http://www.openstreetmap.org/user/${user.username}" title="OSM User Profile">
+                 <img src="http://www.openstreetmap.org/favicon.ico" alt="[OSM]" /> OSM Profile</a>
+        </p>
+    </div>
+    <div class="row">
+        <h3>Jobs</h3>
+        % if jobs:
+        <ul>
+        % for job_info in jobs:
+          <li>${job_info["job"].title} (${job_info["count"]} tiles)
+            <a href="${request.route_url('job', job=job_info["job"].id)}" title="Job Details"><i class="icon-list-alt"></i></a></li>
+        % endfor
+        </ul>
+        % else:
+        User hasn't contribute yet.
+        % endif
+    </div>
+    <hr />
 </div>
