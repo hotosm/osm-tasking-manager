@@ -6,7 +6,12 @@ var map = new OpenLayers.Map('map', {
         new OpenLayers.Control.Attribution()
     ]
 });
-var osm = new OpenLayers.Layer.OSM('OSM', null, {
+var osm = new OpenLayers.Layer.OSM('OSM',
+    [
+        'http://a.tile.openstreetmap.fr/hot/${z}/${x}/${y}.png',
+        'http://b.tile.openstreetmap.fr/hot/${z}/${x}/${y}.png',
+        'http://c.tile.openstreetmap.fr/hot/${z}/${x}/${y}.png'
+    ], {
     transitionEffect: 'resize'
 });
 map.addLayer(osm);
