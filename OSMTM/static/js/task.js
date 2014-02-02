@@ -18,6 +18,9 @@ var getLink = function(options) {
             lat: roundd(c.lat,5),
             zoom: options.zoom || 15
         });
+    } else if (options.protocol === 'id') {
+        var c = options.bounds.getCenterLonLat();
+        return options.base + '#map=' + [options.zoom, c.lat, c.lon].join('/');
     }
 };
 var exportOpen = function() {
@@ -66,12 +69,12 @@ var exportOpen = function() {
         break;
     case "id":
         url = getLink({
-            base: 'http://www.openstreetmap.org/edit?editor=id&',
+            base: 'http://www.openstreetmap.org/edit?editor=id',
             bounds: bounds,
             zoom: zoom,
-            protocol: 'llz'
+            protocol: 'id'
         });
-        window.open(url);
+        window.open(url + "&gpx=" + gpx_url);
         break;
     default:
         break;
