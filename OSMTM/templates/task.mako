@@ -95,6 +95,11 @@
         %>
         var current_tile = ${feature|n};
         var gpx_url = "${request.route_url('task_export_gpx', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}";
+        % if job.imagery is not None and job.imagery != 'None' and \
+            (job.license in user.accepted_licenses or not job.license):
+        var imagery_url = "${job.imagery}";
+        % endif
+
         $(function() {
             $('#task_tab').tab('show');
         });
