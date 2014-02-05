@@ -68,7 +68,11 @@ var exportOpen = function() {
             zoom: zoom,
             protocol: 'id'
         });
-        window.open(url + "&gpx=" + gpx_url);
+        if (imagery_url.length > 0 and accepted_license) {
+          window.open(url + "&gpx=" + gpx_url + "&background=custom:" + imagery_url);
+        } else {
+          window.open(url + "&gpx=" + gpx_url);
+        }
         break;
     default:
         break;

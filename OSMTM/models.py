@@ -57,14 +57,18 @@ class Tile(Base):
     checkin = Column(Integer)
     change = Column(Boolean, default=False)
     comment = Column(Unicode)
+    geometry = Column(Unicode)
 
-    def __init__(self, x, y, zoom):
+    def __init__(self, x, y, zoom, geometry=None):
         self.x = x
         self.y = y
         self.zoom = zoom
+        self.geometry = geometry
         self.checkin = 0
 
     def to_polygon(self, srs=900913):
+        if self.geometry:
+            return loads(self.geometry)
         # tile size (in meters) at the required zoom level
         step = max/(2**(self.zoom - 1))
         tb = TileBuilder(step)
