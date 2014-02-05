@@ -78,6 +78,10 @@ def done(request):
         # task goes back to the queue
         tile.checkin = 0
         tile.username = username
+    elif 'validate' in request.params:
+        # task goes back to the queue
+        tile.checkin = 2
+        tile.username = username
     else:
         #task is done
         tile.checkin = 1

@@ -34,6 +34,8 @@
         % elif step.change:
             % if step.checkin == 0:
                 <i class="icon-thumbs-down"></i> Invalidated
+            % elif step.checkin == 2:
+                <i class="icon-thumbs-up"></i> Validated
             % elif step.checkin == 1:
                 <i class="icon-ok"></i> Marked as done
             % endif

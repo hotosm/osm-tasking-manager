@@ -20,7 +20,7 @@
             </p>
         </div>
         <div id="task_actions">
-            % if tile.username == user.username or tile.checkin == 1:
+            % if tile.username == user.username or tile.checkin >= 1:
 
                 <%
                     if tile.username == user.username:
@@ -40,11 +40,17 @@
                 <p>
                     <button data-action-url="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" class="btn btn-success btn-small" type="submit"><i class="icon-ok icon-white"></i> Mark task as done</button><br />
                 </p>
-                % elif tile.checkin == 1:
+                % elif tile.checkin >= 1:
                 <button data-action-url="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" type="submit" value="Invalidate" name="invalidate" class="btn thumbdown input btn-danger">
                     <img src="${request.static_url('OSMTM:static/thumb.png')}" />
                     Invalidate
                 </button>
+                    % if tile.checkin == 1:
+                    <button data-action-url="${request.route_url('task_done', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" type="submit" value="Validate" name="validate" class="btn thumbdown input btn-success">
+                        <img src="${request.static_url('OSMTM:static/thumb-up.png')}" />
+                        Validate
+                    </button>
+                    % endif
                     <a id="clear" class="btn btn-small btn-link"><i class="icon-remove"></i> Clear selection</a>
                 % endif
                 <div id="commentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">

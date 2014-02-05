@@ -30,7 +30,7 @@ var layer = new OpenLayers.Layer.Vector("Objects", {
 
 map.addLayer(layer);
 
-var colors = ["grey", "lime"];
+var colors = ["grey", "red", "lime"];
 var context = {
     getColor: function(feature) {
         var checkin = feature.attributes.checkin || 0;
@@ -101,12 +101,16 @@ function showTilesStatus() {
                 });
                 var total = tilesLayer.features.length,
                     done = 0,
+                    validated = 0,
                     cur = 0;
                 $.each(response.features, function(id, val) {
                     var feature = tilesLayer.getFeatureByFid(id);
                     feature.attributes = val;
                     if (val.checkin == 1 || val.checkin == 2) {
                         done++;
+                    }
+                    if (val.checkin == 2) {
+                        validated++;
                     }
                     if (val.username) {
                         cur++;
@@ -118,6 +122,7 @@ function showTilesStatus() {
                 $('#map_legend ul').html(function() {
                     return '<li><div class=""></div>Total (' + total + ')</li>' +
                            '<li><div class="checkin1"></div>Done (' + done + ')</li>' +
+                           '<li><div class="checkin2"></div>Validated (' + validated + ')</li>' +
                            '<li><div class="checkout"></div>Curr. worked on (' + cur + ')</li>';
                 });
             }
