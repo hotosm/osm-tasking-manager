@@ -68,7 +68,7 @@ var exportOpen = function() {
             zoom: zoom,
             protocol: 'id'
         });
-        window.open(url + "&gpx=" + gpx_url);
+        window.open(url + "&gpx=" + gpx_url + "&background=custom:" + imagery_url);
         break;
     default:
         break;

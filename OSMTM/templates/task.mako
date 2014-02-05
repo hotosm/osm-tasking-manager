@@ -95,6 +95,7 @@
         %>
         var current_tile = ${feature|n};
         var gpx_url = "${request.route_url('task_export_gpx', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}";
+        var imagery_url = "${job.imagery}";
         $(function() {
             $('#task_tab').tab('show');
         });
