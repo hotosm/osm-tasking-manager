@@ -1,14 +1,11 @@
-<%
-    from OSMTM.resources import main
-    main.need()
-%>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
     <head>
         <title>OSM Tasking Manager - ${self.title()}</title>
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
         <meta name="keywords" content="HOT task server" />
         <meta name="description" content="HOT task server" />
+		<link rel="stylesheet" href="${request.static_url('OSMTM:static/css/main.less.min.css')}" type="text/css">
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/jquery-1.7.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}?_cdsalt=1330087595137"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/showdown.js')}"></script>
@@ -25,7 +22,7 @@
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-tab.js')}"></script>
     </head>
-    <body id="${self.id()}">
+	<body id="${self.id()}">
         <%
             from pyramid.security import authenticated_userid
             from OSMTM.models import DBSession, User
@@ -34,12 +31,9 @@
                 user = DBSession().query(User).get(username)
             else:
                 user = None
-        %>
-        <div id="feedback-button">
-            <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dEJnSGJ2VkRaeWZDTkI1aHdGWTgzX1E6MQ#gid=0" target="_blank">
-                <img src="${request.static_url('OSMTM:static/img/feedback.png')}" title="Feedback" alt="feedback" />
-            </a>
-        </div>
+		%>
+
+		<div id="wrap">
         <!-- Topbar
         ================================================== -->
         <div class="navbar navbar-fixed-top" >
@@ -60,7 +54,15 @@
                     </ul>
                 </div>
             </div>
-        </div>
+		</div>
+
+        <div id="feedback-button">
+			<a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dEJnSGJ2VkRaeWZDTkI1aHdGWTgzX1E6MQ#gid=0" target="_blank">
+				<img src="${request.static_url('OSMTM:static/img/feedback.png')}" title="Feedback" alt="feedback" />
+			</a>
+		</div>
+
+		<div class="container">
         % if request.session.peek_flash():
             <div id="flash">
                  <% flash = request.session.pop_flash() %>
@@ -68,9 +70,16 @@
                  ${message}<br>
                  % endfor
             </div>
-        % endif
-        ${self.body()}
-        <footer class="footer">
+		% endif
+
+		${self.body()}
+
+		</div>
+
+		<div id="push"></div>
+        </div>
+
+		<footer id="footer" class="footer">
             <div class="container">
                 <p class="span6">
                 Designed and built for the 
