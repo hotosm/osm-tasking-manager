@@ -1,3 +1,16 @@
+0.2 (2014-02-09)
+----------------
+
+ - Major changes in the UI
+
+ - Task modifications history
+
+ - Deep linking
+
+ - Better iD integration (gpx and imagery auto loads)
+
+ - Fixed python packages dependency (simplejson)
+
 0.1 (2014-02-09)
 ----------------
 
