@@ -45,7 +45,7 @@
         </b>
         % if step.change or step.checkout:
         by 
-            <a href="http://www.openstreetmap.org/user/${step.username}" target="_blank" class="user">${step.username}</a>
+            <a href="${request.route_url('user', id=step.username)}" class="user">${step.username}</a>
         </p>
         % endif
         % if step.comment is not None:

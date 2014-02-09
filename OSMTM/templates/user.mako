@@ -6,8 +6,10 @@
     </h2>
     <div class="row">
         <p>
-        % if admin or user.is_admin():
+        % if user.is_admin():
             This user is an administrator.
+        % else:
+            This user has no admin privileges.
         % endif
 
         % if admin:
