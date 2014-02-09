@@ -20,7 +20,7 @@ from json import dumps
 from markdown import markdown
 from OSMTM.utils import timesince
 from datetime import datetime, timedelta
-from sqlalchemy import desc, distinct
+from sqlalchemy import desc, distinct, func
 from sqlalchemy.sql.expression import and_
 
 from OSMTM.utils import transform_900913_to_4326
@@ -57,7 +57,7 @@ def login(request):
     url = "%s?oauth_callback=%s" % (REQUEST_TOKEN_URL, oauth_callback_url)
     resp, content = client.request(url, "GET")
     if resp['status'] != '200':
-        return HTTPBadGateway('The OSM authentication server didn\'t respond correctly') 
+        return HTTPBadGateway('The OSM authentication server didn\'t respond correctly')
     request_token = dict(urlparse.parse_qsl(content))
     # store the request token in the session, we'll need in the callback
     session = request.session
@@ -115,7 +115,7 @@ def home(request):
     user = session.query(User).get(username)
     jobs = session.query(Job).order_by(desc(Job.id))
     if user is None:
-        redirect = request.params.get("redirect", request.route_url("logout")) 
+        redirect = request.params.get("redirect", request.route_url("logout"))
         return HTTPFound(location=redirect)
     if not user.is_admin():
         jobs = [job for job in jobs if not job.is_private and job.status == 1] + user.private_jobs
@@ -133,7 +133,7 @@ def home(request):
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
 
     def to_five(i):
-        return int(round(i/5)) * 5 
+        return int(round(i/5)) * 5
 
     def to_dict(job):
         centroid = job.get_centroid()
@@ -171,7 +171,7 @@ def home(request):
         )
 
     jobs = dumps([to_dict(job) for job in jobs], default=dthandler)
-    
+
     return dict(jobs=jobs,
             user=user,
             admin=user.is_admin(),
@@ -181,8 +181,19 @@ def home(request):
 def about(request):
     return dict()
 
-@view_config(route_name='user', renderer='user.mako', permission='admin')
+@view_config(route_name='user', renderer='user.mako')
 def user(request):
+    session = DBSession()
+    profile_user = session.query(User).get(request.matchdict["id"])
+    jobs = user_job_info(profile_user.username)
+
+    username = authenticated_userid(request)
+    user = session.query(User).get(username)
+    admin=user.is_admin()
+    return dict(user=profile_user, jobs=jobs, admin=admin)
+
+@view_config(route_name='user_edit', renderer='user_edit.mako', permission='admin')
+def user_edit(request):
     session = DBSession()
     user = session.query(User).get(request.matchdict["id"])
     return dict(user=user, admin=True)
@@ -204,7 +215,7 @@ def user_add(request):
     if session.query(User).get(username) is None:
         session.add(User(username))
         session.flush()
-    return HTTPFound(location=request.route_url('user', id=username)) 
+    return HTTPFound(location=request.route_url('user', id=username))
 
 @view_config(route_name='users', renderer='users.mako', permission="edit")
 def users(request):
@@ -212,6 +223,19 @@ def users(request):
     current_username = authenticated_userid(request)
     current_user = session.query(User).get(current_username)
     return dict(users = session.query(User), admin=current_user.is_admin())
+
+def user_job_info(username):
+    session = DBSession()
+
+    """ get the tiles that changed """
+    filter = and_(TileHistory.change==True, TileHistory.checkin==1,
+            TileHistory.username == username, TileHistory.job_id==Job.id)
+    user_jobs = session.query(Job, func.count(TileHistory.username)) \
+            .filter(filter) \
+            .group_by(Job.id) \
+            .all()
+    job_info = [{"job": job[0], "count": job[1]} for job in user_jobs]
+    return job_info
 
 @view_config(route_name='tour', renderer='tour.mako')
 def tour(request):
@@ -225,7 +249,7 @@ def checkTask(tile):
     session = DBSession()
     if tile.checkout is not False and tile.checkout is not None:
         if datetime.now() > tile.update + EXPIRATION_DURATION:
-            tile.username = None 
+            tile.username = None
             tile.checkout = False
             tile.update = datetime.now()
             session.add(tile)

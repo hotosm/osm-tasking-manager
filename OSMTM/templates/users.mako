@@ -9,7 +9,7 @@
             % for user in users:
                 <li class="${'admin' if user.is_admin() else ''}">${user.username}
                 % if admin:
-                   <a href="${request.route_url('user',id=user.username)}" class="hidden-link">edit</a>
+                   <a href="${request.route_url('user_edit',id=user.username)}" class="hidden-link">edit</a>
                 % endif
                 </li>
             % endfor

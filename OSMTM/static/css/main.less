@@ -284,7 +284,7 @@ a {
 }
 
 // Specific Pages
-#job, #job_new, #task {
+#job, #job_new {
     .world_map {
         float: right;
         background: url(../img/world_map.png);
@@ -324,11 +324,11 @@ a {
                 display: inline-block;
                 .opacity(50);
                 border: 1px solid rgba(0, 0, 0, 0.5);
-                background-color: #aaa;
+                background-color: grey;
                 margin-right: 5px;
             }
             div.checkin1 {
-                background-color: red;
+                background-color: #FF4D4D;
             }
             div.checkin2 {
                 background-color: lime;
@@ -338,9 +338,6 @@ a {
                 background-color: transparent;
             }
         }
-    }
-    .well {
-        padding: 10px;
     }
     ul.contributors {
         margin: 0;
@@ -355,6 +352,89 @@ a {
         }
         li.offline {
             background: url(../img/status-offline.png) no-repeat 0 0.10em;
+        }
+    }
+    .history {
+        padding: 4px;
+        background-color: transparent;
+        border: solid #dfdfdf;
+        border-width: 0 1px 1px 1px;
+        p, blockquote {
+            margin: 0;
+        }
+        .icon-comment {
+            .opacity(50)
+        }
+    }
+    .history.first {
+        border-top-width: 1px;
+        .border-radius(5px 5px 0 0);
+    }
+    .history.last {
+        .border-radius(0 0 5px 5px);
+    }
+
+    #task_actions {
+        overflow: hidden;
+        > .item {
+            display: none;
+            position: relative;
+          -webkit-transition: all 0.4s ease-in-out;
+             -moz-transition: all 0.4s ease-in-out;
+               -o-transition: all 0.4s ease-in-out;
+                  transition: all 0.4s ease-in-out;
+        }
+
+        > .active,
+        > .next,
+        > .prev { display: block; }
+        > .active {
+            left: 0;
+            .opacity(100);
+        }
+        > .next,
+        > .prev {
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+        > .next,
+        > .prev {
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        > .next {
+            left: 100%;
+        }
+        > .prev {
+            left: -100%;
+        }
+        > .next.left,
+        > .prev.right {
+            left: 0;
+        }
+
+        > .active.left {
+            left: -100%;
+            .opacity(0);
+        }
+        > .active.right {
+            left: 100%;
+        }
+        > .active.left,
+        > .active.right {
+            .opacity(0);
+        }
+    }
+
+    #task {
+        .loading {
+            display: none;
+            position: absolute;
+            left: 50%;
+            margin-left: -20px;
         }
     }
 }

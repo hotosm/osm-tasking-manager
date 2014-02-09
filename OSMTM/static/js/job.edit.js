@@ -21,5 +21,4 @@ $(document).ready(function() {
         var html = converter.makeHtml(workflow.val());
         workflow_preview.html(html);
     }).trigger('keyup');
-    resetMap();
 });

@@ -15,6 +15,7 @@ from OSMTM.models import Tag
 from OSMTM.models import License
 
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
+from OSMTM.views.tasks import get_locked_task
 
 from shapely.wkt import loads
 
@@ -23,7 +24,6 @@ from geojson import dumps
 
 import simplejson
 
-from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import and_
 
 from pyramid.security import authenticated_userid
@@ -45,40 +45,44 @@ def job(request):
 
     username = authenticated_userid(request)
     user = session.query(User).get(username)
-    try:
-        filter = and_(Tile.username==username, Tile.checkout==True, Tile.job_id==job.id)
-        current_task = session.query(Tile).filter(filter).one()
-    except NoResultFound, e:
-        current_task = None
 
-    # search for a previously taken task
-    prev_task = None
-    if current_task is None:
-        # first find task taken by the user
-        filter = and_(TileHistory.username==username, TileHistory.job_id==job.id)
-        task = session.query(TileHistory)\
-                       .filter(filter)\
-                       .order_by(TileHistory.update.desc())\
-                       .first()
-        if task is not None:
-            version = task.version
-            filter = and_(TileHistory.x==task.x, TileHistory.y==task.y,
-                    TileHistory.job_id==job.id)
-            task = session.query(TileHistory)\
-                       .filter(filter)\
-                       .order_by(TileHistory.version.desc())\
-                       .first()
-            if task is not None and version == task.version:
-                prev_task = session.query(Tile).get((task.x, task.y, task.job_id, task.zoom))
+    current_task = get_locked_task(id, username)
 
     admin = user.is_admin() if user else False
     stats = get_stats(job)
-    return dict(job=job, user=user, 
+    return dict(job=job, user=user,
             bbox=loads(job.geometry).bounds,
             tile=current_task,
-            prev_task=prev_task,
             admin=admin,
-            stats=stats)
+           )
+
+@view_config(route_name='job_stats', renderer='json', permission='job',
+        http_cache=0)
+def job_stats(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+
+    return get_stats(job)
+
+@view_config(route_name='job_contributors', renderer='json', permission='job',
+        http_cache=0)
+def job_contributors(request):
+    id = request.matchdict['job']
+    session = DBSession()
+    job = session.query(Job).get(id)
+
+    return get_users(job)
+
+@view_config(route_name='job_user', renderer='json', permission='job',
+        http_cache=0)
+def job_user(request):
+    id = request.matchdict['job']
+    user = request.matchdict['user']
+    session = DBSession()
+    job = session.query(Job).get(id)
+
+    return get_tiles_for_user(job, user)
 
 @view_config(route_name='job_geom', renderer='geojson', permission='edit')
 def job_geom(request):
@@ -127,7 +131,7 @@ def job_edit(request):
         job.workflow = request.params['workflow']
         josm_preset = request.params['josm_preset']
         josm_preset = josm_preset.value.decode('UTF-8') if josm_preset != '' else ''
-        job.josm_preset = josm_preset 
+        job.josm_preset = josm_preset
         job.is_private = request.params.get('is_private') == 'on'
         job.imagery = request.params['imagery']
         job.task_extra = request.params['task_extra']
@@ -172,7 +176,7 @@ def job_feature(request):
     session = DBSession()
 
     job = session.query(Job).get(id)
-    job.featured = not job.featured 
+    job.featured = not job.featured
     session.add(job)
 
     request.session.flash('Job "%s" featured status changed!' % job.title)
@@ -193,7 +197,7 @@ def job_new(request):
         session.add(job)
         session.flush()
         return HTTPFound(location = route_url('job_edit', request, job=job.id))
-    return {} 
+    return {}
 
 @view_config(route_name='job_users', renderer='job.users.mako', permission='admin')
 def job_users(request):
@@ -264,38 +268,18 @@ def job_preset(request):
     response.content_type = 'application/x-josm-preset'
     return response
 
-class StatUser():
-    done = 0
-    validated = 0
-
 def get_stats(job):
     session = DBSession()
-    filter = and_(Tile.job_id==job.id, Tile.checkout==True)
-    users = session.query(Tile.username).filter(filter)
-    current_users = [user.username for user in users]
-
-    users = {}
-    user = None
 
     """ the changes (date, checkin) to create a chart with """
     changes = []
 
     def read_tiles(tiles):
         for ndx, i in enumerate(tiles):
-            if i.username is not None:
-                if not users.has_key(i.username):
-                    users[i.username] = StatUser()
-                user = users[i.username]
-                date = i.update
-
-                if i.checkin == 1:
-                    user.done += 1
-                if i.checkin == 2 or i.checkin == 0:
-                    user.validated += 1
-                """ maintain compatibility for jobs that were created before the 
-                    'update' column creation """
-                date = i.update
-                changes.append((date, i.checkin))
+            """ maintain compatibility for jobs that were created before the
+                'update' column creation """
+            date = i.update
+            changes.append((date, i.checkin))
 
     """ get the tiles that changed """
     filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
@@ -311,39 +295,48 @@ def get_stats(job):
             .all()
     read_tiles(tiles)
 
-    contributors = []
-    validators = []
-    for i in users:
-        """ only keep users who have actually done something
-            or who are currently working on a task """
-        if users[i].done != 0 or i in current_users:
-            contributors.append((i, users[i].done, i in current_users))
-        if users[i].validated != 0:
-            validators.append((i, users[i].validated))
-
     changes = sorted(changes, key=lambda value: value[0])
-    chart_done = []
-    chart_validated = []
+    stats = []
     done = 0
-    validated = 0
     for date, checkin in changes:
         if checkin == 1:
             done += 1
-            chart_done.append([date.isoformat(), done])
-        if checkin == 2:
-            validated += 1
-            chart_validated.append([date.isoformat(), validated])
+            stats.append([date.isoformat(), done])
         if checkin == 0:
             done -= 1
-            chart_done.append([date.isoformat(), done])
+            stats.append([date.isoformat(), done])
 
-    return dict(current_users=current_users, contributors=contributors, 
-            validators=validators,
-            chart_done=simplejson.dumps(chart_done),
-            chart_validated=simplejson.dumps(chart_validated))
+    return stats
 
-def update_user(user, checkin):
-    if checkin == 1:
-        user.done += 1
-    if checkin == 2 or checkin == 3:
-        user.validated += 1
+def get_users(job):
+    session = DBSession()
+
+    """ the changes (date, checkin) to create the list of users with """
+    users = []
+
+    def read_tiles(tiles):
+        for ndx, i in enumerate(tiles):
+            if i.checkin == 1:
+                if i.username not in users:
+                    users.append(i.username)
+
+    """ get the tiles that changed """
+    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
+    tiles = session.query(TileHistory) \
+            .filter(filter) \
+            .all()
+    read_tiles(tiles)
+
+    return users
+
+def get_tiles_for_user(job, username):
+    session = DBSession()
+
+    """ get the tiles that changed """
+    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id,
+            TileHistory.checkin==1, TileHistory.username == username)
+    tiles = session.query(TileHistory.x, TileHistory.y, TileHistory.zoom) \
+            .filter(filter) \
+            .all()
+
+    return tiles

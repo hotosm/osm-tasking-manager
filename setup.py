@@ -11,7 +11,7 @@ requires = [
     'pyramid==1.4',
     'pyramid_beaker',
     'pyramid_debugtoolbar',
-    'SQLAlchemy',
+    'SQLAlchemy==0.7.9',
     'Shapely',
     'transaction',
     'repoze.tm2>=1.0b1', # default_commit_veto
@@ -19,8 +19,8 @@ requires = [
     'WebError',
     'oauth2==1.2.0',
     'imposm.parser',
-    'geojson',
-    'WebTest',
+    'geojson==1.0.1',
+    'WebTest==2.0.9',
     'sqlalchemy-migrate',
     'markdown',
     'nose',
@@ -28,6 +28,7 @@ requires = [
     'beautifulSoup',
     'pyshp==1.1.4',
     'papyrus==0.7',
+    'simplejson',
     'alembic'
     ]
 
@@ -35,7 +36,7 @@ if sys.version_info[:3] < (2,5,0):
     requires.append('pysqlite')
 
 setup(name='OSMTM',
-      version='0.0',
+      version='0.1',
       description='OSMTM',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[

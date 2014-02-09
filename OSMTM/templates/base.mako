@@ -5,10 +5,12 @@
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
         <meta name="keywords" content="HOT task server" />
         <meta name="description" content="HOT task server" />
-		<link rel="stylesheet" href="${request.static_url('OSMTM:static/css/main.less.min.css')}" type="text/css">
+		<link rel="stylesheet" href="${request.static_url('OSMTM:static/css/main.less.min.css')}?_cdsalt=1" type="text/css">
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/jquery-1.7.1.min.js')}"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/main.js')}?_cdsalt=1330087595137"></script>
         <script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/showdown.js')}"></script>
+        <script type="text/javascript"
+                src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-transition.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-tooltip.js')}"></script>
         <script type="text/javascript"
@@ -21,6 +23,8 @@
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-typeahead.js')}"></script>
         <script type="text/javascript"
                 src="${request.static_url('OSMTM:static/bootstrap/js/bootstrap-tab.js')}"></script>
+        <script type="text/javascript"
+                src="${request.static_url('OSMTM:static/js/lib/sammy-latest.min.js')}"></script>
     </head>
 	<body id="${self.id()}">
         <%

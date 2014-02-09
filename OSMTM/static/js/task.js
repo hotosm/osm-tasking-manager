@@ -30,10 +30,10 @@ var exportOpen = function() {
         bounds = f.geometry.getBounds();
 
     bounds.transform(
-        new OpenLayers.Projection("EPSG:900913"), 
+        new OpenLayers.Projection("EPSG:900913"),
         new OpenLayers.Projection("EPSG:4326")
     );
-    
+
     switch (this.id) {
     case "josm":
         url = getLink({
@@ -41,8 +41,14 @@ var exportOpen = function() {
             bounds: bounds,
             protocol: 'lbrt'
         });
-        var w = window.open(url);
-        window.setTimeout(function(){w.close();}, 500);
+        $.ajax({
+            url: url,
+            complete: function(t) {
+                if (t.status != 200) {
+                    alert("JOSM remote control did not respond. Do you have JOSM running and configured to be controlled remotely?");
+                }
+            }
+        });
         break;
     case "potlatch2":
         url = getLink({
@@ -56,7 +62,7 @@ var exportOpen = function() {
     case "wp":
         url = getLink({
             base: 'http://walking-papers.org/?',
-            bounds: bounds,            
+            bounds: bounds,
             protocol: 'llz'
         });
         window.open(url);
