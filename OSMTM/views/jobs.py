@@ -334,7 +334,7 @@ def get_tiles_for_user(job, username):
 
     """ get the tiles that changed """
     filter = and_(TileHistory.change==True, TileHistory.job_id==job.id,
-            TileHistory.checkin==1, TileHistory.username == username)
+            TileHistory.checkin>=1, TileHistory.username == username)
     tiles = session.query(TileHistory.x, TileHistory.y, TileHistory.zoom) \
             .filter(filter) \
             .all()
