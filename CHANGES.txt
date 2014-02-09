@@ -1,3 +1,8 @@
+0.2.1 (2014-02-09)
+------------------
+
+ - Fixing minor bugs (link to user page, per user map)
+
 0.2 (2014-02-09)
 ----------------
 
