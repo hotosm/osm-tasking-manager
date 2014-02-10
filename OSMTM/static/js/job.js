@@ -12,8 +12,10 @@ var osm = new OpenLayers.Layer.OSM('OSM',
         'http://b.tile.openstreetmap.fr/hot/${z}/${x}/${y}.png',
         'http://c.tile.openstreetmap.fr/hot/${z}/${x}/${y}.png'
     ], {
-    transitionEffect: 'resize'
-});
+        "tileOptions": { "crossOriginKeyword": null },
+        transitionEffect: 'resize'
+    }
+);
 map.addLayer(osm);
 var layer = new OpenLayers.Layer.Vector("Objects", {
     style: {
