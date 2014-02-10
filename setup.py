@@ -22,6 +22,7 @@ requires = [
     'geojson==1.0.1',
     'WebTest==2.0.9',
     'sqlalchemy-migrate',
+    'simplejson',
     'markdown',
     'nose',
     'coverage',
