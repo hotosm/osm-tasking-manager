@@ -266,46 +266,46 @@ $('a[href="#chart"]').on('shown', function (e) {
     });
 });
 
-$('a[href="#users"]').on('shown', function (e) {
-    $.getJSON(job_contributors_url, function(data) {
-        var el = $('#contributors').empty();
-        for (var i = 0; i < data.length; i++) {
-            el.append($('<li>', {
-                html: $('<a>', {
-                    "class": "user",
-                    href: [base_url, "user", data[i]].join('/'),
-                    html: data[i]
-                })
-            }));
+function showUserTiles(tiles) {
+    var i,
+        feature,
+        ids = [];
+    for (i = 0; i < tiles.length; i++) {
+        ids.push(tiles[i].join('-'));
+    }
+    for (i = 0; i < tilesLayer.features.length; i++) {
+        feature = tilesLayer.features[i];
+        feature.attributes.highlight = false;
+        if (ids.indexOf(feature.fid) != -1) {
+            feature.attributes.highlight = true;
         }
-    });
-});
+    }
+    tilesLayer.redraw();
+}
 
-var userTilesReq;
-$('a.user').live('mouseenter', function(e) {
-    userTilesReq && userTilesReq.abort();
-    var username = $(e.target).text();
-    userTilesReq = $.getJSON(job_url + '/user/' + username, function(data) {
-        var i;
-        for (i = 0; i < tilesLayer.features.length; i++) {
-            tilesLayer.features[i].attributes.highlight = false;
-        }
-        for (i = 0; i < data.length; i++) {
-            var id = data[i].join('-');
-            var feature = tilesLayer.getFeatureByFid(id);
-            if (feature) {
-                feature.attributes.highlight = true;
-            }
-        }
-        tilesLayer.redraw();
-    });
-});
-$('a.user').live('mouseleave', function(e) {
-    userTilesReq && userTilesReq.abort();
+function resetUserTiles() {
     for (var i = 0; i < tilesLayer.features.length; i++) {
         delete tilesLayer.features[i].attributes.highlight;
     }
     tilesLayer.redraw();
+}
+
+$('a[href="#users"]').on('shown', function (e) {
+    $.getJSON(job_contributors_url, function(data) {
+        var el = $('#contributors').empty();
+        for (var i in data) {
+            var tiles = data[i];
+            el.append($('<li>', {
+                html: $('<a>', {
+                    "class": "user",
+                    href: [base_url, "user", i].join('/'),
+                    html: i
+                })
+                .on('mouseenter', $.proxy(showUserTiles, null, tiles))
+                .on('mouseleave', resetUserTiles)
+            }));
+        }
+    });
 });
 
 $('form').live('submit', function(e) {
