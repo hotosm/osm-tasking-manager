@@ -295,15 +295,17 @@ $('a[href="#users"]').on('shown', function (e) {
         var el = $('#contributors').empty();
         for (var i in data) {
             var tiles = data[i];
+            var user = $('<a>', {
+                "class": "user",
+                href: [base_url, "user", i].join('/'),
+                html: i
+            })
+            .on('mouseenter', $.proxy(showUserTiles, null, tiles))
+            .on('mouseleave', resetUserTiles)
+
             el.append($('<li>', {
-                html: $('<a>', {
-                    "class": "user",
-                    href: [base_url, "user", i].join('/'),
-                    html: i
-                })
-                .on('mouseenter', $.proxy(showUserTiles, null, tiles))
-                .on('mouseleave', resetUserTiles)
-            }));
+                html: " <sup>" + tiles.length + "</sup>"
+            }).prepend(user));
         }
     });
 });

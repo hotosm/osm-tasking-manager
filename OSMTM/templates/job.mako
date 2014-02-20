@@ -64,7 +64,9 @@
             <div class="tab-pane" id="users">
                 <div class="row">
                     <div class="span3">
-                        <ul id="contributors" class="contributors"></ul>
+                        <ul id="contributors" class="contributors">
+                            Loading...
+                        </ul>
                     </div>
                 </div>
             </div>
