@@ -6032,6 +6032,10 @@ a {
 #licenses li:hover .hidden-link {
   display: inline;
 }
+#users {
+  max-height: 350px;
+  overflow: auto;
+}
 #users li {
   list-style-type: circle;
 }
