@@ -312,13 +312,13 @@ def get_users(job):
     session = DBSession()
 
     """ the changes (date, checkin) to create the list of users with """
-    users = []
+    users = {}
 
     def read_tiles(tiles):
         for ndx, i in enumerate(tiles):
             if i.checkin == 1:
-                if i.username not in users:
-                    users.append(i.username)
+                if i.username is not None and not i.username in users:
+                    users[i.username] = get_tiles_for_user(job, i.username)
 
     """ get the tiles that changed """
     filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
