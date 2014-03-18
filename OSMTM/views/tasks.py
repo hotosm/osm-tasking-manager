@@ -21,7 +21,7 @@ import random
 from pyramid.security import authenticated_userid
 
 import logging
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 @view_config(route_name="task_empty", renderer="task.empty.mako", permission="job")
 def task_empty(request):
@@ -56,7 +56,10 @@ def task_xhr(request):
         .all()
 
     current_task = get_locked_task(job_id, username)
-
+    log.debug(
+        'Tile username: %s, checkout: %s, checkin: %s',
+        tile.username, tile.checkout, tile.checkin
+    )
     return dict(tile=tile,
             current_task=current_task,
             history=history,
