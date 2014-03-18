@@ -1,4 +1,5 @@
 import tempfile
+import itertools
 
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
@@ -29,6 +30,9 @@ from sqlalchemy.sql.expression import and_
 from pyramid.security import authenticated_userid
 
 from paste.fileapp import FileApp
+
+import logging
+log = logging.getLogger(__name__)
 
 @view_config(route_name='job', renderer='job.mako', permission='job',
         http_cache=0)
@@ -308,35 +312,37 @@ def get_stats(job):
 
     return stats
 
+
 def get_users(job):
-    session = DBSession()
-
     """ the changes (date, checkin) to create the list of users with """
-    users = {}
-
-    def read_tiles(tiles):
-        for ndx, i in enumerate(tiles):
-            if i.checkin == 1:
-                if i.username is not None and not i.username in users:
-                    users[i.username] = get_tiles_for_user(job, i.username)
-
     """ get the tiles that changed """
-    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
-    tiles = session.query(TileHistory) \
-            .filter(filter) \
-            .all()
-    read_tiles(tiles)
-
-    return users
-
-def get_tiles_for_user(job, username):
     session = DBSession()
+    # filter on tiles with changes, for this job, that have a username and have
+    # checkin status == 1 (validation)
+    filter = and_(
+        TileHistory.change == True, TileHistory.job_id == job.id,
+        TileHistory.username != None, TileHistory.checkin == 1)
+    # get the users, and order by username (IMPORTANT for group_by later)
+    working_users = (
+        session.query(
+            TileHistory.username, TileHistory.x, TileHistory.y,
+            TileHistory.zoom
+        )
+        .filter(filter)
+        .order_by(TileHistory.username)
+        .all()
+    )
 
-    """ get the tiles that changed """
-    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id,
-            TileHistory.checkin>=1, TileHistory.username == username)
-    tiles = session.query(TileHistory.x, TileHistory.y, TileHistory.zoom) \
-            .filter(filter) \
-            .all()
+    # create a dictionary of users, grouped by username (aggregate tiles)
+    # groupby will produce a key: grouper_object dictionary, so we use a list
+    # comprehension to evaluate and expand every grouper_object
+    users_grouped = {
+        user[0]: [
+            tile[1:] for tile in user[1]
+        ]
+        for user in itertools.groupby(working_users, key=lambda user: user[0])
+    }
 
-    return tiles
+    log.debug('Users worked on job %s: %s', job.id, len(users_grouped))
+
+    return users_grouped
