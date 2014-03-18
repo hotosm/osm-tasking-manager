@@ -4,6 +4,13 @@
 <%!
     import markdown
 %>
+<%
+# allow editing only if a task is taken by a user or wating for validation
+if (tile.checkout and tile.user == user) or tile.checkin == 1:
+    disabled = ''
+else:
+    disabled = 'disabled'
+%>
 % if not tile:
     <%include file="/task.empty.mako" />
 % else:
@@ -11,12 +18,12 @@
             <p id="task_error_msg" class="alert alert-error hide"></p>
             <p id="export" class="well well-small">
                 <i class="icon-share-alt"></i>
-                <a class="btn btn-small" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
-                <a class="btn btn-small" href="javascript:void(0);" id="id">iD Editor</a>
-                <a class="btn btn-small" id="potlatch2">Potlatch 2</a>
-                <a class="btn btn-small" href="javascript:void(0);" id="wp">Walking Papers</a>
-                <a class="btn btn-small btn-link" href="${request.route_url('task_export_osm', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Tile as .osm format.<br/>Right-click on the link to save the file (JOSM) or copy its location (Potlatch).">.osm</a>
-                <a class="btn btn-small btn-link" href="${request.route_url('task_export_gpx', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (iD).">.gpx</a>
+                <a class="btn btn-small ${disabled}" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
+                <a class="btn btn-small ${disabled}" href="javascript:void(0);" id="id">iD Editor</a>
+                <a class="btn btn-small ${disabled}" id="potlatch2">Potlatch 2</a>
+                <a class="btn btn-small ${disabled}" href="javascript:void(0);" id="wp">Walking Papers</a>
+                <a class="btn btn-small btn-link ${disabled}" href="${request.route_url('task_export_osm', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Tile as .osm format.<br/>Right-click on the link to save the file (JOSM) or copy its location (Potlatch).">.osm</a>
+                <a class="btn btn-small btn-link ${disabled}" href="${request.route_url('task_export_gpx', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}" target="_blank" rel="tooltip" data-original-title="Right-click on the link to save the file (iD).">.gpx</a>
             </p>
         </div>
         <div id="task_actions">
