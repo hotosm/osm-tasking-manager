@@ -1,3 +1,4 @@
+var clearTilesTimeout, loadTilesTimeout;
 var map = new OpenLayers.Map('map', {
     theme: null,
     controls: [
@@ -21,11 +22,12 @@ var layer = new OpenLayers.Layer.Vector("Objects", {
     style: {
         strokeColor: "blue",
         strokeWidth: 3,
-        strokeOpacity: 0.5,
+        strokeOpacity: 1,
         fillOpacity: 0.2,
         fillColor: "lightblue",
         pointRadius: 6
     },
+    renderers: ["Canvas", "SVG", "VML"],
     projection: new OpenLayers.Projection("EPSG:4326"),
     displayInLayerSwitcher: false
 });
@@ -89,6 +91,7 @@ var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
     rendererOptions: {
         zIndexing: true
     }
+    ,renderers: ["Canvas", "SVG", "VML"]
 });
 map.addLayer(tilesLayer);
 
@@ -302,8 +305,11 @@ $('a[href="#users"]').on('shown', function (e) {
                 href: [base_url, "user", i].join('/'),
                 html: i
             })
-            .on('mouseenter', $.proxy(showUserTiles, null, tiles))
-            .on('mouseleave', resetUserTiles)
+            .on('mouseenter', $.proxy(utilShowUserTiles, null, tiles))
+            .on('mouseleave', function() {
+                clearTimeout(loadTilesTimeout);
+                clearTilesTimeout = setTimeout(function(){ resetUserTiles(); }, 200 );
+            });
 
             el.append($('<li>', {
                 html: " <sup>" + tiles.length + "</sup>"
@@ -311,6 +317,11 @@ $('a[href="#users"]').on('shown', function (e) {
         }
     });
 });
+
+function utilShowUserTiles(tiles) {
+    clearTimeout(clearTilesTimeout);
+    loadTilesTimeout = setTimeout(function(){ showUserTiles(tiles); }, 75 );
+}
 
 $('form').live('submit', function(e) {
     var form = this;
