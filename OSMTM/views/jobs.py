@@ -53,7 +53,6 @@ def job(request):
     current_task = get_locked_task(id, username)
 
     admin = user.is_admin() if user else False
-    stats = get_stats(job)
     return dict(job=job, user=user,
             bbox=loads(job.geometry).bounds,
             tile=current_task,
@@ -282,7 +281,7 @@ def get_stats(job):
 
     filter = and_(
         TileHistory.change == True, TileHistory.job_id == job.id,
-        TileHistory.username is not None
+        TileHistory.username is not None, TileHistory.version > 0
     )
     tiles = (
         session.query(
@@ -294,6 +293,7 @@ def get_stats(job):
         .all()
     )
 
+    log.debug('Number of tiles: %s', len(tiles))
     stats = []
     done = 0
     tile_changes = []
@@ -326,7 +326,9 @@ def get_users(job):
     # checkin status == 1 (validation)
     filter = and_(
         TileHistory.change == True, TileHistory.job_id == job.id,
-        TileHistory.username != None, TileHistory.checkin == 1)
+        TileHistory.username != None, TileHistory.checkin == 1,
+        TileHistory.version > 0
+    )
     # get the users, and order by username (IMPORTANT for group_by later)
     working_users = (
         session.query(
