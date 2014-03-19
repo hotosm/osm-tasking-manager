@@ -1,4 +1,7 @@
+// variables that hold timeout objects
 var clearTilesTimeout, loadTilesTimeout;
+
+
 var map = new OpenLayers.Map('map', {
     theme: null,
     controls: [
@@ -22,11 +25,12 @@ var layer = new OpenLayers.Layer.Vector("Objects", {
     style: {
         strokeColor: "blue",
         strokeWidth: 3,
-        strokeOpacity: 1,
+        strokeOpacity: 0.5,
         fillOpacity: 0.2,
         fillColor: "lightblue",
         pointRadius: 6
     },
+    // rendering handlers, if Canvas is not supported, gracefully fallback to SVG
     renderers: ["Canvas", "SVG", "VML"],
     projection: new OpenLayers.Projection("EPSG:4326"),
     displayInLayerSwitcher: false
@@ -90,8 +94,9 @@ var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
     styleMap: new OpenLayers.StyleMap(style),
     rendererOptions: {
         zIndexing: true
-    }
-    ,renderers: ["Canvas", "SVG", "VML"]
+    },
+    // rendering handlers, if Canvas is not supported, gracefully fallback to SVG
+    renderers: ["Canvas", "SVG", "VML"]
 });
 map.addLayer(tilesLayer);
 
@@ -307,7 +312,9 @@ $('a[href="#users"]').on('shown', function (e) {
             })
             .on('mouseenter', $.proxy(utilShowUserTiles, null, tiles))
             .on('mouseleave', function() {
+                // this will clear call to previous showUserTiles if user just passed it with the mouse
                 clearTimeout(loadTilesTimeout);
+                // set timout object and wait to see if user will hover over next user
                 clearTilesTimeout = setTimeout(function(){ resetUserTiles(); }, 200 );
             });
 
@@ -319,7 +326,9 @@ $('a[href="#users"]').on('shown', function (e) {
 });
 
 function utilShowUserTiles(tiles) {
+    // this will clear call to reset Tiles on mouse out, as we are loading tiles for currently hovered user
     clearTimeout(clearTilesTimeout);
+    // set timeout object we can clear if user is just passing current object with mouse pointer
     loadTilesTimeout = setTimeout(function(){ showUserTiles(tiles); }, 75 );
 }
 
