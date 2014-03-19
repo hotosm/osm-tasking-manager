@@ -296,6 +296,7 @@ def get_stats(job):
 
     stats = []
     done = 0
+    tile_changes = []
 
     # group by days
     days_with_changes = (
@@ -303,14 +304,16 @@ def get_stats(job):
     )
     # for every day count number of changes and aggregate changed tiles
     for day in days_with_changes:
-        tile_changes = []
         for change in [change for change in day[1]]:
             if change.checkin == 1:
                 done += 1
             if change.checkin == 0:
                 done -= 1
             tile_changes.append([change.x, change.y, change.zoom])
-        stats.append([day[0].isoformat(), done, tile_changes])
+
+        # append a day to the stats and add total number of 'done' tiles and a
+        # copy of a current tile_changes list
+        stats.append([day[0].isoformat(), done, tile_changes[:]])
 
     return stats
 
