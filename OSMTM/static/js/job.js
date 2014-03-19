@@ -230,7 +230,7 @@ $('a[href="#chart"]').on('shown', function (e) {
         for (i=0, len=done_values.length; i < len; i++) {
             date = new Date(done_values[i][0]);
             done = done_values[i][1];
-            data_done.push([date.getTime(), done]);
+            data_done.push([date.getTime(), done, done_values[i][2]]);
         }
         var chart = new Highcharts.Chart({
             title: null,
@@ -251,11 +251,24 @@ $('a[href="#chart"]').on('shown', function (e) {
                 },
                 min: 0
             },
+            plotOptions: {
+                series: {
+                    point: {
+                        events: {
+                            mouseOver: function(evt) {
+                                var tiles = evt.target.config[2];
+                                showUserTiles(tiles);
+                            },
+                            mouseOut: resetUserTiles
+                        }
+                    }
+                }
+            },
             series: [{
                 name: 'Done',
                 data: data_done,
                 marker: {
-                    enabled: false,
+                    symbol: 'square',
                     states: {
                         hover: {
                             enabled: true

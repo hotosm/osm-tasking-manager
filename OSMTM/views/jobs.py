@@ -272,43 +272,45 @@ def job_preset(request):
     response.content_type = 'application/x-josm-preset'
     return response
 
+
 def get_stats(job):
+    """
+    the changes (date, checkin) to create a chart with
+    get the tiles that changed
+    """
     session = DBSession()
 
-    """ the changes (date, checkin) to create a chart with """
-    changes = []
+    filter = and_(
+        TileHistory.change == True, TileHistory.job_id == job.id,
+        TileHistory.username is not None
+    )
+    tiles = (
+        session.query(
+            TileHistory.update, TileHistory.checkin, TileHistory.x,
+            TileHistory.y, TileHistory.zoom
+        )
+        .filter(filter)
+        .order_by(TileHistory.update)
+        .all()
+    )
 
-    def read_tiles(tiles):
-        for ndx, i in enumerate(tiles):
-            """ maintain compatibility for jobs that were created before the
-                'update' column creation """
-            date = i.update
-            changes.append((date, i.checkin))
-
-    """ get the tiles that changed """
-    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
-    tiles = session.query(TileHistory) \
-            .filter(filter) \
-            .all()
-    read_tiles(tiles)
-
-    """ same for tiles """
-    filter = and_(Tile.change==True, Tile.job_id==job.id, Tile.username is not None)
-    tiles = session.query(Tile) \
-            .filter(filter) \
-            .all()
-    read_tiles(tiles)
-
-    changes = sorted(changes, key=lambda value: value[0])
     stats = []
     done = 0
-    for date, checkin in changes:
-        if checkin == 1:
-            done += 1
-            stats.append([date.isoformat(), done])
-        if checkin == 0:
-            done -= 1
-            stats.append([date.isoformat(), done])
+
+    # group by days
+    days_with_changes = (
+        tile for tile in itertools.groupby(tiles, key=lambda t: t[0].date())
+    )
+    # for every day count number of changes and aggregate changed tiles
+    for day in days_with_changes:
+        tile_changes = []
+        for change in [change for change in day[1]]:
+            if change.checkin == 1:
+                done += 1
+            if change.checkin == 0:
+                done -= 1
+            tile_changes.append([change.x, change.y, change.zoom])
+        stats.append([day[0].isoformat(), done, tile_changes])
 
     return stats
 
