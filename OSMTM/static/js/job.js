@@ -1,3 +1,7 @@
+// variables that hold timeout objects
+var clearTilesTimeout, loadTilesTimeout;
+
+
 var map = new OpenLayers.Map('map', {
     theme: null,
     controls: [
@@ -26,6 +30,8 @@ var layer = new OpenLayers.Layer.Vector("Objects", {
         fillColor: "lightblue",
         pointRadius: 6
     },
+    // rendering handlers, if Canvas is not supported, gracefully fallback to SVG
+    renderers: ["Canvas", "SVG"],
     projection: new OpenLayers.Projection("EPSG:4326"),
     displayInLayerSwitcher: false
 });
@@ -88,7 +94,9 @@ var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
     styleMap: new OpenLayers.StyleMap(style),
     rendererOptions: {
         zIndexing: true
-    }
+    },
+    // rendering handlers, if Canvas is not supported, gracefully fallback to SVG
+    renderers: ["Canvas", "SVG"]
 });
 map.addLayer(tilesLayer);
 
@@ -315,8 +323,13 @@ $('a[href="#users"]').on('shown', function (e) {
                 href: [base_url, "user", i].join('/'),
                 html: i
             })
-            .on('mouseenter', $.proxy(showUserTiles, null, tiles))
-            .on('mouseleave', resetUserTiles)
+            .on('mouseenter', $.proxy(utilShowUserTiles, null, tiles))
+            .on('mouseleave', function() {
+                // this will clear call to previous showUserTiles if user just passed it with the mouse
+                clearTimeout(loadTilesTimeout);
+                // set timout object and wait to see if user will hover over next user
+                clearTilesTimeout = setTimeout(function(){ resetUserTiles(); }, 200 );
+            });
 
             el.append($('<li>', {
                 html: " <sup>" + tiles.length + "</sup>"
@@ -324,6 +337,13 @@ $('a[href="#users"]').on('shown', function (e) {
         }
     });
 });
+
+function utilShowUserTiles(tiles) {
+    // this will clear call to reset Tiles on mouse out, as we are loading tiles for currently hovered user
+    clearTimeout(clearTilesTimeout);
+    // set timeout object we can clear if user is just passing current object with mouse pointer
+    loadTilesTimeout = setTimeout(function(){ showUserTiles(tiles); }, 75 );
+}
 
 $('form').live('submit', function(e) {
     var form = this;
