@@ -84,8 +84,7 @@
     </div>
     </div>
 </div>
-## Openlayers CDN for latest stabile version. For some reason lastest dev version doesn't work with canvas render
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
+<script type="text/javascript" src="${request.static_url('OSMTM:static/js/lib/OpenLayers.js')}"></script>
 <script type="text/javascript">
     <%
         from pyramid.security import authenticated_userid

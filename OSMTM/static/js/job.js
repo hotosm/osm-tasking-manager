@@ -31,7 +31,7 @@ var layer = new OpenLayers.Layer.Vector("Objects", {
         pointRadius: 6
     },
     // rendering handlers, if Canvas is not supported, gracefully fallback to SVG
-    renderers: ["Canvas", "SVG", "VML"],
+    renderers: ["Canvas", "SVG"],
     projection: new OpenLayers.Projection("EPSG:4326"),
     displayInLayerSwitcher: false
 });
@@ -96,7 +96,7 @@ var tilesLayer = new OpenLayers.Layer.Vector("Tiles Layers", {
         zIndexing: true
     },
     // rendering handlers, if Canvas is not supported, gracefully fallback to SVG
-    renderers: ["Canvas", "SVG", "VML"]
+    renderers: ["Canvas", "SVG"]
 });
 map.addLayer(tilesLayer);
 
