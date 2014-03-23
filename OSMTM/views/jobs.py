@@ -1,4 +1,5 @@
 import tempfile
+import itertools
 
 from pyramid.httpexceptions import HTTPFound
 from pyramid.view import view_config
@@ -30,6 +31,9 @@ from pyramid.security import authenticated_userid
 
 from paste.fileapp import FileApp
 
+import logging
+log = logging.getLogger(__name__)
+
 @view_config(route_name='job', renderer='job.mako', permission='job',
         http_cache=0)
 def job(request):
@@ -49,7 +53,6 @@ def job(request):
     current_task = get_locked_task(id, username)
 
     admin = user.is_admin() if user else False
-    stats = get_stats(job)
     return dict(job=job, user=user,
             bbox=loads(job.geometry).bounds,
             tile=current_task,
@@ -268,75 +271,85 @@ def job_preset(request):
     response.content_type = 'application/x-josm-preset'
     return response
 
+
 def get_stats(job):
+    """
+    the changes (date, checkin) to create a chart with
+    get the tiles that changed
+    """
     session = DBSession()
 
-    """ the changes (date, checkin) to create a chart with """
-    changes = []
+    filter = and_(
+        TileHistory.change == True, TileHistory.job_id == job.id,
+        TileHistory.username is not None, TileHistory.version > 0
+    )
+    tiles = (
+        session.query(
+            TileHistory.update, TileHistory.checkin, TileHistory.x,
+            TileHistory.y, TileHistory.zoom
+        )
+        .filter(filter)
+        .order_by(TileHistory.update)
+        .all()
+    )
 
-    def read_tiles(tiles):
-        for ndx, i in enumerate(tiles):
-            """ maintain compatibility for jobs that were created before the
-                'update' column creation """
-            date = i.update
-            changes.append((date, i.checkin))
-
-    """ get the tiles that changed """
-    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
-    tiles = session.query(TileHistory) \
-            .filter(filter) \
-            .all()
-    read_tiles(tiles)
-
-    """ same for tiles """
-    filter = and_(Tile.change==True, Tile.job_id==job.id, Tile.username is not None)
-    tiles = session.query(Tile) \
-            .filter(filter) \
-            .all()
-    read_tiles(tiles)
-
-    changes = sorted(changes, key=lambda value: value[0])
+    log.debug('Number of tiles: %s', len(tiles))
     stats = []
     done = 0
-    for date, checkin in changes:
-        if checkin == 1:
-            done += 1
-            stats.append([date.isoformat(), done])
-        if checkin == 0:
-            done -= 1
-            stats.append([date.isoformat(), done])
+    tile_changes = []
+
+    # group by days
+    days_with_changes = (
+        tile for tile in itertools.groupby(tiles, key=lambda t: t[0].date())
+    )
+    # for every day count number of changes and aggregate changed tiles
+    for day in days_with_changes:
+        for change in [change for change in day[1]]:
+            if change.checkin == 1:
+                done += 1
+            if change.checkin == 0:
+                done -= 1
+            tile_changes.append([change.x, change.y, change.zoom])
+
+        # append a day to the stats and add total number of 'done' tiles and a
+        # copy of a current tile_changes list
+        stats.append([day[0].isoformat(), done, tile_changes[:]])
 
     return stats
 
+
 def get_users(job):
-    session = DBSession()
-
     """ the changes (date, checkin) to create the list of users with """
-    users = {}
-
-    def read_tiles(tiles):
-        for ndx, i in enumerate(tiles):
-            if i.checkin == 1:
-                if i.username is not None and not i.username in users:
-                    users[i.username] = get_tiles_for_user(job, i.username)
-
     """ get the tiles that changed """
-    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id, TileHistory.username is not None)
-    tiles = session.query(TileHistory) \
-            .filter(filter) \
-            .all()
-    read_tiles(tiles)
-
-    return users
-
-def get_tiles_for_user(job, username):
     session = DBSession()
+    # filter on tiles with changes, for this job, that have a username and have
+    # checkin status == 1 (validation)
+    filter = and_(
+        TileHistory.change == True, TileHistory.job_id == job.id,
+        TileHistory.username != None, TileHistory.checkin == 1,
+        TileHistory.version > 0
+    )
+    # get the users, and order by username (IMPORTANT for group_by later)
+    working_users = (
+        session.query(
+            TileHistory.username, TileHistory.x, TileHistory.y,
+            TileHistory.zoom
+        )
+        .filter(filter)
+        .order_by(TileHistory.username)
+        .all()
+    )
 
-    """ get the tiles that changed """
-    filter = and_(TileHistory.change==True, TileHistory.job_id==job.id,
-            TileHistory.checkin>=1, TileHistory.username == username)
-    tiles = session.query(TileHistory.x, TileHistory.y, TileHistory.zoom) \
-            .filter(filter) \
-            .all()
+    # create a dictionary of users, grouped by username (aggregate tiles)
+    # groupby will produce a key: grouper_object dictionary, so we use a list
+    # comprehension to evaluate and expand every grouper_object
+    users_grouped = {
+        user[0]: [
+            tile[1:] for tile in user[1]
+        ]
+        for user in itertools.groupby(working_users, key=lambda user: user[0])
+    }
 
-    return tiles
+    log.debug('Users worked on job %s: %s', job.id, len(users_grouped))
+
+    return users_grouped

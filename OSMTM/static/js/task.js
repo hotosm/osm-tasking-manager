@@ -23,7 +23,13 @@ var getLink = function(options) {
         return options.base + '#map=' + [options.zoom, c.lat, c.lon].join('/');
     }
 };
-var exportOpen = function() {
+var exportOpen = function(evt) {
+
+    // if the clicked link has 'disabled' class stop event processing
+    if ($(evt.target).hasClass('disabled')) {
+        return false;
+    };
+
     var url,
         format = new OpenLayers.Format.GeoJSON(),
         f = format.read(current_tile)[0],

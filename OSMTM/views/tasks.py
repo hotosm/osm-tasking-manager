@@ -21,7 +21,7 @@ import random
 from pyramid.security import authenticated_userid
 
 import logging
-log = logging.getLogger(__file__)
+log = logging.getLogger(__name__)
 
 @view_config(route_name="task_empty", renderer="task.empty.mako", permission="job")
 def task_empty(request):
@@ -56,7 +56,10 @@ def task_xhr(request):
         .all()
 
     current_task = get_locked_task(job_id, username)
-
+    log.debug(
+        'Tile username: %s, checkout: %s, checkin: %s',
+        tile.username, tile.checkout, tile.checkin
+    )
     return dict(tile=tile,
             current_task=current_task,
             history=history,
@@ -189,6 +192,9 @@ def take_random(request):
 
 @view_config(route_name='task_split', permission='job', renderer="geojson")
 def split_tile(request):
+    """
+    Split the tile and copy history of the parent tile
+    """
     job_id = request.matchdict['job']
     x = request.matchdict['x']
     y = request.matchdict['y']
@@ -198,18 +204,55 @@ def split_tile(request):
     tile = session.query(Tile).get((x, y, zoom, job_id))
     session.delete(tile)
 
+    # reference tile history
+    tileHistory = (
+        session.query(TileHistory)
+        .filter_by(x=x, y=y, zoom=zoom, job_id=job_id)
+        .order_by(TileHistory.update)
+        .all()
+    )
+
     new_tiles = []
     t = []
     for i in range(0, 2):
         for j in range(0, 2):
-            tile = Tile(int(x)*2 + i, int(y)*2 + j, int(zoom)+1)
-            tile.job = job
-            t.append(tile)
+            # add new tile
+            X = int(x) * 2 + i
+            Y = int(y) * 2 + j
+            Zoom = int(zoom) + 1
+            newTile = Tile(X, Y, Zoom)
+            newTile.job = job
+
+            for idx, historyRecord in enumerate(tileHistory):
+                # copy tileHistory... use negative versions to prevent unique
+                # key conflicts, and enable filtering (exclusion) when
+                # generating stats
+                newTileHistory = TileHistory(
+                    x=newTile.x,
+                    y=newTile.y,
+                    zoom=newTile.zoom,
+                    username=historyRecord.username,
+                    update=historyRecord.update,
+                    checkout=historyRecord.checkout,
+                    checkin=historyRecord.checkin,
+                    change=historyRecord.change,
+                    comment=historyRecord.comment,
+                    job_id=job.id,
+                    version=-idx
+                )
+                session.add(newTileHistory)
+
+            t.append(newTile)
     for tile in t:
-        new_tiles.append(Feature(geometry=tile.to_polygon(),
-            id=str(tile.x) + '-' + str(tile.y) + '-' + str(tile.zoom)))
-    return dict(success=True, split_id="-".join([x, y, zoom]),
-            new_tiles=FeatureCollection(new_tiles))
+        new_tiles.append(
+            Feature(
+                geometry=tile.to_polygon(),
+                id=str(tile.x) + '-' + str(tile.y) + '-' + str(tile.zoom)))
+    return dict(
+        success=True, split_id="-".join([x, y, zoom]),
+        new_tiles=FeatureCollection(new_tiles)
+    )
+
 
 @view_config(route_name="task_export_osm", renderer="task.osm.mako")
 def task_export_osm(request):
