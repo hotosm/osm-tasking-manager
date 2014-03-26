@@ -137,6 +137,14 @@ def job_edit(request):
         job.josm_preset = josm_preset
         job.is_private = request.params.get('is_private') == 'on'
         job.imagery = request.params['imagery']
+        try:
+            job.imagery_offset_x = float(request.params['imagery_offset_x'])
+        except:
+            job.imagery_offset_x = 0
+        try:
+            job.imagery_offset_y = float(request.params['imagery_offset_y'])
+        except:
+            job.imagery_offset_y = 0
         job.task_extra = request.params['task_extra']
 
         if request.params['license_id'] != "":

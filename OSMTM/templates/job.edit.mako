@@ -83,6 +83,18 @@
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label" for="id_imagery_offset_x">Imagery offet X</label>
+                <div class="controls">
+                    <input type="number" id="id_imagery_offset_x" name="imagery_offset_x" value="${job.imagery_offset_x}"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="id_imagery_offset_x">Imagery offet Y</label>
+                <div class="controls">
+                    <input type="number" id="id_imagery_offset_y" name="imagery_offset_y" value="${job.imagery_offset_y}"/>
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label" for="id_license">Required License</label>
                 <div class="controls">
                     <select id="id_license" name="license_id">

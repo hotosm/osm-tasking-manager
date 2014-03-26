@@ -2,6 +2,7 @@ import transaction
 
 from sqlalchemy import Column
 from sqlalchemy import Integer
+from sqlalchemy import Float
 from sqlalchemy import Unicode
 from sqlalchemy import Boolean
 from sqlalchemy import DateTime
@@ -143,6 +144,8 @@ class Job(Base):
     geometry = Column(Unicode)
     workflow = Column(Unicode)
     imagery = Column(Unicode)
+    imagery_offset_x = Column(Float, default=0)
+    imagery_offset_y = Column(Float, default=0)
     zoom = Column(Integer)
     josm_preset = Column(Unicode)
     is_private = Column(Boolean)

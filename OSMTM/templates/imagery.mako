@@ -8,6 +8,10 @@
     type = job.imagery.lower()[:3]
 %>
 <p><pre><a href='http://127.0.0.1:8111/imagery?title=${job.title}&type=${type}&url=${job.imagery}' target="_blank" rel="tooltip" data-original-title="If you have JOSM running and remote control activated, clicking this link should automatically load imagery.">${job.imagery}</a></pre></p>
+
+% if job.imagery_offset_x or job.imagery_offset_y:
+<b>Offset</b>: Please beware that the image aligment needs to be modified by the given offset: <pre>${job.imagery_offset_x}:${job.imagery_offset_y}</pre>
+% endif
 % endif
 % if job.license:
 <div class="alert ${'alert-error' if not license_accepted else ''}">
