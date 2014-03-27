@@ -18,6 +18,8 @@ from OSMTM.models import License
 from OSMTM.views.views import EXPIRATION_DURATION, checkTask
 from OSMTM.views.tasks import get_locked_task
 
+from OSMTM.utils import parse_float
+
 from shapely.wkt import loads
 
 from geojson import Feature, FeatureCollection
@@ -137,14 +139,8 @@ def job_edit(request):
         job.josm_preset = josm_preset
         job.is_private = request.params.get('is_private') == 'on'
         job.imagery = request.params['imagery']
-        try:
-            job.imagery_offset_x = float(request.params['imagery_offset_x'])
-        except:
-            job.imagery_offset_x = 0
-        try:
-            job.imagery_offset_y = float(request.params['imagery_offset_y'])
-        except:
-            job.imagery_offset_y = 0
+        job.imagery_offset_x = parse_float(request.params['imagery_offset_x'])
+        job.imagery_offset_y = parse_float(request.params['imagery_offset_y'])
         job.task_extra = request.params['task_extra']
 
         if request.params['license_id'] != "":

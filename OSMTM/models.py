@@ -25,7 +25,7 @@ from pyramid.security import Everyone
 from pyramid.security import Authenticated
 
 from OSMTM.utils import TileBuilder
-from OSMTM.utils import max 
+from OSMTM.utils import max_limit
 from OSMTM.utils import get_tiles_in_geom
 from shapely.wkt import loads
 
@@ -67,7 +67,7 @@ class Tile(Base):
 
     def to_polygon(self, srs=900913):
         # tile size (in meters) at the required zoom level
-        step = max/(2**(self.zoom - 1))
+        step = max_limit/(2**(self.zoom - 1))
         tb = TileBuilder(step)
         return tb.create_square(self.x, self.y, srs)
 
