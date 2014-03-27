@@ -16,7 +16,11 @@ else:
 % else:
         <div>
             <p id="task_error_msg" class="alert alert-error hide"></p>
-            <p id="export" class="well well-small">
+            % if (tile.checkout and tile.user == user) or tile.checkin == 1:
+                <p id="export" class="well well-small">                
+            % else:
+                <p id="export" class="well well-small" rel="tooltip" data-original-title="To access edit options please first lock the tile">
+            % endif
                 <i class="icon-share-alt"></i>
                 <a class="btn btn-small ${disabled}" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
                 <a class="btn btn-small ${disabled}" href="javascript:void(0);" id="id">iD Editor</a>
@@ -33,7 +37,7 @@ else:
                     if tile.username == user.username:
                         comment_label = 'Please add a comment'
                     else:
-                        comment_label = 'Please tell why you marked this tile as invalid so that the user can eventually correct his mistakes if any.'
+                        comment_label = 'Please write why you marked this tile as invalid so that the user may eventually correct his mistakes if any.'
                 %>
             <form class="form-horizontal" method="POST">
                 % if tile.username == user.username:
@@ -90,7 +94,7 @@ else:
                             disabled = "disabled"
                             tooltip = "You cannot lock more than one task"
                         else:
-                            tooltip = "Lock this task to tell others that you are currently working on it."
+                            tooltip = "Lock this task to notify others that you are currently working on it."
                     %>
                     <p>
                     <a href="${request.route_url('task_lock', job=tile.job_id, x=tile.x, y=tile.y, zoom=tile.zoom)}"

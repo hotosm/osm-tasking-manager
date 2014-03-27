@@ -346,7 +346,7 @@ function utilShowUserTiles(tiles) {
 }
 
 $('form').live('submit', function(e) {
-    var form = this;
+    form = this;
     function load() {
         hideTooltips();
         var formData = $(form).serializeObject();
@@ -365,7 +365,8 @@ $('form').live('submit', function(e) {
     if ($(form).has($('#commentModal')).length > 0) {
         $('#commentModal').modal('show');
         $('#task_comment').focus();
-        $('#commentModalCloseBtn').on('click', function() {
+        // we need to be sure there is only one click event binded
+        $('#commentModalCloseBtn').off("click").on('click', function() {
             if ($('#task_comment')[0].value !== '') {
                 $('#commentModal').modal('hide');
                 load();
