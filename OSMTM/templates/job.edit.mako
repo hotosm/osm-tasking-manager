@@ -83,13 +83,13 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="id_imagery_offset_x">Imagery offet X</label>
+                <label class="control-label" for="id_imagery_offset_x">Imagery offset X</label>
                 <div class="controls">
                     <input type="number" id="id_imagery_offset_x" name="imagery_offset_x" value="${job.imagery_offset_x}"/>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="id_imagery_offset_x">Imagery offet Y</label>
+                <label class="control-label" for="id_imagery_offset_x">Imagery offset Y</label>
                 <div class="controls">
                     <input type="number" id="id_imagery_offset_y" name="imagery_offset_y" value="${job.imagery_offset_y}"/>
                 </div>
