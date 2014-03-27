@@ -16,7 +16,11 @@ else:
 % else:
         <div>
             <p id="task_error_msg" class="alert alert-error hide"></p>
-            <p id="export" class="well well-small">
+            % if (tile.checkout and tile.user == user) or tile.checkin == 1:
+                <p id="export" class="well well-small">                
+            % else:
+                <p id="export" class="well well-small" rel="tooltip" data-original-title="To access edit options please first lock the tile">
+            % endif
                 <i class="icon-share-alt"></i>
                 <a class="btn btn-small ${disabled}" id="josm" rel="tooltip" data-original-title="If you have JOSM already running, click this button should load data for the area of the current task,">JOSM</a>
                 <a class="btn btn-small ${disabled}" href="javascript:void(0);" id="id">iD Editor</a>
