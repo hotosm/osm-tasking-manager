@@ -346,7 +346,7 @@ function utilShowUserTiles(tiles) {
 }
 
 $('form').live('submit', function(e) {
-    form = this;
+    var form = this;
     function load() {
         hideTooltips();
         var formData = $(form).serializeObject();
