@@ -4,6 +4,9 @@ from shapely.geometry import MultiPolygon
 from math import floor, ceil, pi, atan, exp
 
 
+import logging
+log = logging.getLogger(__name__)
+
 # Maximum resolution
 MAXRESOLUTION = 156543.0339
 
@@ -130,3 +133,27 @@ def timesince(d, now=None):
             s += ugettext(', %(number)d %(type)s') % {'number': count2, 'type': name2(count2)}
     return s
 
+
+def parse_float(input_value, default_output=0):
+    """
+    Float parsing utility function
+
+    :arg input_value: the value to parse
+    :type input_value: string
+
+    :arg default_output: returned value if input is not parsable
+    :type default_output: float
+
+    :returns: a float number
+    :rtype: float
+    """
+    try:
+        output = float(input_value)
+    except Exception, e:
+        # catch all exceptions
+        log.debug('Could not parse float value, argument %s', input_value)
+        log.debug('Exception: %s', e.message)
+
+        output = default_output
+
+    return output
