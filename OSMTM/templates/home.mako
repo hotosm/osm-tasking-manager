@@ -100,7 +100,7 @@
                         <!-- /ko -->
                         <!-- ko if: status == 0 -->
                         <a data-bind="attr: {href: publish_url}"
-                            class="publish" alt="publish" title="Archive the job">publish</a>
+                            class="publish" alt="publish" title="Publish the job">publish</a>
                         <!-- /ko -->
                         |
                         <a data-bind="attr: {href: edit_url}" 
