@@ -1,3 +1,14 @@
+Deprecated
+==========
+
+**This repo is now deprecated in favor of** osm-tasking-manager2_
+
+.. _osm-tasking-manager2: https://github.com/hotosm/osm-tasking-manager2
+
+
+
+
+
 OpenStreetMap Tasking Manager
 =============================
 
