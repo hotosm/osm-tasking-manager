@@ -37,7 +37,8 @@ else:
                     if tile.username == user.username:
                         comment_label = 'Please add a comment'
                     else:
-                        comment_label = 'Please write why you marked this tile as invalid so that the user may eventually correct his mistakes if any.'
+                        comment_label = 'Please add a comment'
+                        invalidate_label = 'Please write why you marked this tile as invalid so that the user may eventually correct his mistakes if any.'
                 %>
             <form class="form-horizontal" method="POST">
                 % if tile.username == user.username:
@@ -68,7 +69,10 @@ else:
                     <div class="modal-header">
                         <h3 id="commentModalLabel">Comment?
                         </h3>
-                        <p>${comment_label}</p>
+                        <p class="comment">${comment_label}</p>
+                        % if invalidate_label is not UNDEFINED:
+                          <p class="invalidate">${invalidate_label}</p>
+                        % endif
                     </div>
                     <div class="modal-body">
                         <textarea id="task_comment" name="comment" class="span6" placeholder="Your comment here"></textarea>

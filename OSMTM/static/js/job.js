@@ -363,6 +363,14 @@ $('form').live('submit', function(e) {
         });
     }
     if ($(form).has($('#commentModal')).length > 0) {
+        if($("button[type=submit][clicked=true]").val() == "Validate"){
+          $(form).find(".comment").show();
+          $(form).find(".invalidate").hide();
+        }
+        else if($("button[type=submit][clicked=true]").val() == "Invalidate"){
+          $(form).find(".comment").hide();
+          $(form).find(".invalidate").show();
+        }
         $('#commentModal').modal('show');
         $('#task_comment').focus();
         // we need to be sure there is only one click event binded
