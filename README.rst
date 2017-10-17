@@ -1,16 +1,20 @@
 Deprecated
 ==========
 
-**This repo is now deprecated in favor of** osm-tasking-manager2_
+**This repo was deprecated in favor of** osm-tasking-manager2_ (version 2)
 
-.. _osm-tasking-manager2: https://github.com/hotosm/osm-tasking-manager2
+.. _osm-tasking-manager2: https://github.com/hotosm/osm-tasking-manager2 
+
+**...and more recently** tasking-manager_ (version 3)
+
+.. _tasking-manager: https://github.com/hotosm/tasking-manager
 
 
 
 
 
-OpenStreetMap Tasking Manager
-=============================
+OpenStreetMap Tasking Manager v1
+===============================
 
 About
 -----
